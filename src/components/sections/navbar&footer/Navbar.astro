@@ -30,6 +30,7 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
         aria-label="Brand"
       >
         <img src="/logokw.png" class="h-auto w-24" alt="Logo" />
+
       </a>
       <!-- Collapse toggle for smaller screens -->
       <div class="ml-auto mr-5 md:hidden">
@@ -91,7 +92,7 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
         ))}
 
         <Authentication />
-        <LanguagePicker />
+        <!-- <LanguagePicker /> -->
         <!-- ThemeIcon component specifically for larger screens -->
         <span class="hidden md:inline-block">
           <ThemeIcon />
