@@ -28,13 +28,12 @@ interface Props {
   <div
     class="relative h-[350px] w-full shrink-0 overflow-hidden rounded-xl before:absolute before:inset-x-0 before:z-1 before:size-full before:bg-linear-to-t before:from-neutral-900/[.7]"
   >
-    <Image
+    <img
       class="absolute start-0 top-0 size-full object-cover transition duration-500 group-hover:scale-110"
-      src={blogEntry.data.cardImage}
+      src={typeof blogEntry.data.cardImage === 'string' ? blogEntry.data.cardImage : blogEntry.data.cardImage.src}
       alt={blogEntry.data.cardImageAlt}
-      draggable={"false"}
-      loading={"eager"}
-      format={"avif"}
+      draggable={false}
+      loading="eager"
     />
   </div>
   <!-- The container for the blog author's avatar and associated metadata (author name and publication date) -->
