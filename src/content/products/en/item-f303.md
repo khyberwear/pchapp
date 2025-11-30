@@ -1,4 +1,3 @@
-```yaml
 ---
 title: "Norozi Chappal"
 description: "Rugged & Durable"
@@ -53,4 +52,3 @@ blueprints:
   first: "@/images/blueprint-1.avif"
   second: "@/images/blueprint-2.avif"
 ---
-```
