@@ -33,15 +33,24 @@ descriptionList:
   - title: "Durable Stitching"
     subTitle: "Reinforced stitching ensures the chappal withstands daily wear and tear."
 specificationsLeft:
-  - title: "Thread Details"
-    subTitle: "Engineered with precision-cut threads for a secure fit and easy installation."
-  - title: "Mechanical Properties"
-    subTitle: "Each bolt and nut is designed to meet specific load rating or strength grades, suitable for structural applications."
-  - title: "Standards and Certifications"
-    subTitle: "Complies with relevant industry standards and certifications, ensuring consistent quality and safety."
-  - title: "Suitable Applications"
-    subTitle: "Ideal for a wide array of uses, from construction environments to mechanical assemblies that demand strong and secure joints."
+  - title: "Material"
+    subTitle: "Genuine Leather"
+  - title: "Sole"
+    subTitle: "Rubber"
+  - title: "Origin"
+    subTitle: "Peshawar, Pakistan"
+  - title: "Color"
+    subTitle: "Brown"
+tableData:
+  - feature: ["Feature", "Detail"]
+    description:
+      - ["Upper Material", "Leather"]
+      - ["Sole Material", "Rubber"]
+      - ["Stitching", "Single Stitch"]
+      - ["Weight", "Medium"]
+      - ["Warranty", "6 Months"]
 blueprints:
   first: "@/images/blueprint-1.avif"
-  second: "@/images/blueprint-2.avif"  
+  second: "@/images/blueprint-2.avif"
 ---
+```

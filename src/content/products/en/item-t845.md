@@ -33,15 +33,24 @@ descriptionList:
   - title: "Traditional Look"
     subTitle: "Features the classic T-strap design that has been loved for generations."
 specificationsLeft:
-  - title: "Thread Specifications"
-    subTitle: "Precision-engineered threads ensure optimal grip and reliability, even in high-vibration environments."
-  - title: "Load Capacity"
-    subTitle: "Designed to meet or exceed industry standards for load-bearing capacity, ensuring safe and reliable operation."
-  - title: "Certifications"
-    subTitle: "Compliant with relevant industry standards and certifications, guaranteeing quality and reliability."
-  - title: "Applications"
-    subTitle: "Ideal for use in a wide range of industrial machinery, equipment, and assemblies that demand precise and secure fastening."
+  - title: "Material"
+    subTitle: "Soft Cowhide"
+  - title: "Sole"
+    subTitle: "Rubber Sheet"
+  - title: "Origin"
+    subTitle: "Charsadda"
+  - title: "Color"
+    subTitle: "Tan/Mustard"
+tableData:
+  - feature: ["Feature", "Detail"]
+    description:
+      - ["Upper Material", "Soft Leather"]
+      - ["Sole Material", "Rubber Sheet"]
+      - ["Stitching", "Fine Stitch"]
+      - ["Weight", "Ultra Light"]
+      - ["Warranty", "3 Months"]
 blueprints:
   first: "@/images/blueprint-1.avif"
-  second: "@/images/blueprint-2.avif"   
+  second: "@/images/blueprint-2.avif"
 ---
+```

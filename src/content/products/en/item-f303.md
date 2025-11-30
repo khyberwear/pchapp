@@ -1,4 +1,5 @@
-```
+```yaml
+---
 title: "Norozi Chappal"
 description: "Rugged & Durable"
 main:
@@ -33,15 +34,23 @@ descriptionList:
     subTitle: "A statement piece that stands out with its robust construction."
 specificationsLeft:
   - title: "Material"
-  - title: "Finish"
-    subTitle: "Finished with a protective coating to enhance corrosion resistance and extend service life."
-  - title: "Load Capacity"
-    subTitle: "Designed to meet or exceed industry standards for load-bearing capacity, ensuring reliable performance under heavy loads."
-  - title: "Certifications"
-    subTitle: "Compliant with relevant industry standards and certifications, guaranteeing quality and reliability."
-  - title: "Applications"
-    subTitle: "Ideal for use in construction, machinery, automotive, and other heavy-duty applications that demand strong and reliable fastening."
+    subTitle: "Hard Leather"
+  - title: "Sole"
+    subTitle: "Heavy Rubber"
+  - title: "Origin"
+    subTitle: "Quetta/Peshawar"
+  - title: "Color"
+    subTitle: "Dark Brown/Black"
+tableData:
+  - feature: ["Feature", "Detail"]
+    description:
+      - ["Upper Material", "Hard Leather"]
+      - ["Sole Material", "Heavy Rubber"]
+      - ["Stitching", "Triple Stitch"]
+      - ["Weight", "Heavy"]
+      - ["Warranty", "1 Year"]
 blueprints:
   first: "@/images/blueprint-1.avif"
-  second: "@/images/blueprint-2.avif"  
+  second: "@/images/blueprint-2.avif"
 ---
+```

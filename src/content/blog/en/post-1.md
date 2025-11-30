@@ -4,6 +4,8 @@ description: "Exploring the rich heritage behind the iconic footwear of the Pash
 cardImage: "@/images/blog/blog-post-1.avif"
 cardImageAlt: "Artisan crafting a Peshawari Chappal"
 author: "Peshawari Team"
+authorImage: "@/images/blog/jacob.avif"
+authorImageAlt: "Peshawari Team"
 pubDate: 2024-03-10
 readTime: 5
 tags: ["Heritage", "Culture", "Footwear"]
