@@ -5,8 +5,8 @@ main:
   id: 3
   content: |
     The Norozi Chappal is known for its rugged durability and distinct style. Featuring a thick sole and sturdy leather construction, it's built to last.
-  imgCard: "@/images/product-image-3.avif"
-  imgMain: "@/images/product-image-main-3.avif"
+  imgCard: "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?w=400&h=300&fit=crop"
+  imgMain: "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?w=800&h=600&fit=crop"
   imgAlt: "Norozi Chappal"
 tabs:
   - id: "tabs-with-card-item-1"
@@ -49,6 +49,6 @@ tableData:
       - ["Weight", "Heavy"]
       - ["Warranty", "1 Year"]
 blueprints:
-  first: "@/images/blueprint-1.avif"
-  second: "@/images/blueprint-2.avif"
+  first: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=400&fit=crop"
+  second: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&h=400&fit=crop"
 ---

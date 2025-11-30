@@ -1,10 +1,10 @@
 ---
 title: "Styling Your Peshawari Chappal"
 description: "From traditional to modern, learn how to style your chappals for any occasion."
-cardImage: "@/images/blog/post-3.avif"
+cardImage: "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?w=800&h=500&fit=crop"
 cardImageAlt: "Man wearing Peshawari Chappal with Jeans"
 author: "Peshawari Team"
-authorImage: "@/images/blog/jacob.avif"
+authorImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop"
 authorImageAlt: "Peshawari Team"
 pubDate: 2024-03-20
 readTime: 3

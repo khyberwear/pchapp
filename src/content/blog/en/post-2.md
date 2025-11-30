@@ -1,10 +1,10 @@
 ---
 title: "How to Care for Your Leather Chappals"
 description: "Tips and tricks to keep your Peshawari Chappals looking new for years."
-cardImage: "@/images/blog/post-2.avif"
+cardImage: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=500&fit=crop"
 cardImageAlt: "Polishing leather shoes"
 author: "Peshawari Team"
-authorImage: "@/images/blog/jacob.avif"
+authorImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop"
 authorImageAlt: "Peshawari Team"
 pubDate: 2024-03-15
 readTime: 4

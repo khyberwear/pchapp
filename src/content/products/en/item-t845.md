@@ -5,8 +5,8 @@ main:
   id: 4
   content: |
     The Classic Peshawari Chappal embodies the true spirit of Pashtun culture. Simple, elegant, and comfortable, it's the perfect everyday footwear.
-  imgCard: "@/images/product-image-4.avif"
-  imgMain: "@/images/product-image-main-4.avif"
+  imgCard: "https://images.unsplash.com/photo-1603808033587-d2ffdbd50ed6?w=400&h=300&fit=crop"
+  imgMain: "https://images.unsplash.com/photo-1603808033587-d2ffdbd50ed6?w=800&h=600&fit=crop"
   imgAlt: "Classic Peshawari Chappal"
 tabs:
   - id: "tabs-with-card-item-1"
@@ -49,6 +49,6 @@ tableData:
       - ["Weight", "Ultra Light"]
       - ["Warranty", "3 Months"]
 blueprints:
-  first: "@/images/blueprint-1.avif"
-  second: "@/images/blueprint-2.avif"
+  first: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=400&fit=crop"
+  second: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&h=400&fit=crop"
 ---

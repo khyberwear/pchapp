@@ -5,8 +5,8 @@ main:
   id: 2
   content: |
     The Zalmi Chappal combines modern style with traditional craftsmanship. Made from rich brown leather, it offers a sophisticated look suitable for any wardrobe.
-  imgCard: "@/images/product-image-2.avif"
-  imgMain: "@/images/product-image-main-2.avif"
+  imgCard: "https://images.unsplash.com/photo-1562183241-b937e95585b6?w=400&h=300&fit=crop"
+  imgMain: "https://images.unsplash.com/photo-1562183241-b937e95585b6?w=800&h=600&fit=crop"
   imgAlt: "Zalmi Chappal in Brown Leather"
 tabs:
   - id: "tabs-with-card-item-1"
@@ -49,6 +49,6 @@ tableData:
       - ["Weight", "Medium"]
       - ["Warranty", "6 Months"]
 blueprints:
-  first: "@/images/blueprint-1.avif"
-  second: "@/images/blueprint-2.avif"
+  first: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=400&fit=crop"
+  second: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&h=400&fit=crop"
 ---

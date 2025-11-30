@@ -5,8 +5,8 @@ main:
   id: 1
   content: |
     The Kaptaan Chappal is a symbol of elegance and tradition. Handcrafted from premium quality leather, this chappal features a double tire sole for durability and comfort. Perfect for both casual and formal occasions.
-  imgCard: "@/images/product-image-1.avif"
-  imgMain: "@/images/product-image-main-1.avif"
+  imgCard: "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&h=300&fit=crop"
+  imgMain: "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=800&h=600&fit=crop"
   imgAlt: "Kaptaan Chappal in Black Leather"
 tabs:
   - id: "tabs-with-card-item-1"
@@ -49,6 +49,6 @@ tableData:
       - ["Weight", "Lightweight"]
       - ["Warranty", "6 Months"]
 blueprints:
-  first: "@/images/blueprint-1.avif"
-  second: "@/images/blueprint-2.avif"
+  first: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=400&fit=crop"
+  second: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&h=400&fit=crop"
 ---

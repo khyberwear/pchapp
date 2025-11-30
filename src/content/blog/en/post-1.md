@@ -1,10 +1,10 @@
 ---
 title: "The History of Peshawari Chappal"
 description: "Exploring the rich heritage behind the iconic footwear of the Pashtuns."
-cardImage: "@/images/blog/post-1.avif"
+cardImage: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=800&h=500&fit=crop"
 cardImageAlt: "Artisan crafting a Peshawari Chappal"
 author: "Peshawari Team"
-authorImage: "@/images/blog/jacob.avif"
+authorImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop"
 authorImageAlt: "Peshawari Team"
 pubDate: 2024-03-10
 readTime: 5
