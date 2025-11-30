@@ -26,7 +26,7 @@ const imageClass =
 >
   <!-- The product's main image -->
   <img
-    src={product.data.main.imgCard}
+    src={typeof product.data.main.imgCard === 'string' ? product.data.main.imgCard : product.data.main.imgCard.src}
     alt={product.data.main.imgAlt}
     draggable={false}
     class={imageClass}

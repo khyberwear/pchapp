@@ -82,7 +82,7 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
       <div>
         <img
           id="fadeInMoveRight"
-          src={product.data.main.imgMain}
+          src={typeof product.data.main.imgMain === 'string' ? product.data.main.imgMain : product.data.main.imgMain.src}
           class="w-[600px]"
           alt={product.data.main.imgAlt}
           loading="eager"
