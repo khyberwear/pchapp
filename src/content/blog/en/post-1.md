@@ -1,7 +1,7 @@
 ---
 title: "The History of Peshawari Chappal"
 description: "Exploring the rich heritage behind the iconic footwear of the Pashtuns."
-cardImage: "@/images/blog/blog-post-1.avif"
+cardImage: "@/images/blog/post-1.avif"
 cardImageAlt: "Artisan crafting a Peshawari Chappal"
 author: "Peshawari Team"
 authorImage: "@/images/blog/jacob.avif"
