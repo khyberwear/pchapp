@@ -7,6 +7,7 @@ import enStrings from "@utils/navigation.ts";
 import frStrings from "@utils/fr/navigation.ts";
 import BrandLogo from "@components/BrandLogo.astro";
 import LanguagePicker from "@components/ui/LanguagePicker.astro";
+import CartDrawer from "@components/cart/CartDrawer.astro";
 
 // Select the correct translation based on the page's lang prop:
 const strings = Astro.currentLocale === "fr" ? frStrings : enStrings;
@@ -92,6 +93,17 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
         ))}
 
         <Authentication />
+        
+        <!-- Cart Button -->
+        <button
+          type="button"
+          class="inline-flex items-center gap-x-2 rounded-lg border border-transparent text-sm font-semibold text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+          data-hs-overlay="#cart-drawer"
+        >
+          <svg class="h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span id="cart-count" class="inline-flex items-center justify-center rounded-full bg-orange-500 px-2 py-1 text-xs font-bold text-white leading-none">0</span>
+        </button>
+
         <!-- <LanguagePicker /> -->
         <!-- ThemeIcon component specifically for larger screens -->
         <span class="hidden md:inline-block">
@@ -101,6 +113,19 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
     </div>
   </nav>
 </header>
+<CartDrawer />
+
+<script>
+  import { $cart } from "@stores/cartStore";
+  const cartCount = document.getElementById("cart-count");
+
+  $cart.subscribe((cart) => {
+    if (cartCount) {
+      const count = Object.values(cart).reduce((acc, item) => acc + item.quantity, 0);
+      cartCount.textContent = count.toString();
+    }
+  });
+</script>
 <!-- Theme Appearance script to manage light/dark modes -->
 <script is:inline>
   const HSThemeAppearance = {

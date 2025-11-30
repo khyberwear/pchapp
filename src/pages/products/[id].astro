@@ -88,9 +88,47 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
           format={"avif"}
           loading={"eager"}
         />
+        <div class="mt-8 flex justify-center md:justify-start">
+          <button
+            id="add-to-cart-btn"
+            data-id={product.data.main.id}
+            data-title={product.data.title}
+            data-price="50.00" 
+            data-image={product.data.main.imgCard.src}
+            class="rounded-lg bg-orange-500 px-6 py-3 text-lg font-bold text-white transition hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800"
+          >
+            Add to Cart - $50.00
+          </button>
+        </div>
       </div>
     </div>
   </section>
+
+<script>
+  import { addToCart } from "@stores/cartStore";
+
+  const addToCartBtn = document.getElementById("add-to-cart-btn");
+
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener("click", () => {
+      const item = {
+        id: addToCartBtn.dataset.id || "0",
+        title: addToCartBtn.dataset.title || "Product",
+        price: parseFloat(addToCartBtn.dataset.price || "0"),
+        image: addToCartBtn.dataset.image || "",
+      };
+      
+      addToCart(item);
+      
+      // Open cart drawer
+      const cartDrawer = document.getElementById("cart-drawer");
+      if (cartDrawer) {
+        // @ts-ignore
+        window.HSOverlay.open(cartDrawer);
+      }
+    });
+  }
+</script>
 
   <div class="mx-auto max-w-[85rem] px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14">
     <nav
