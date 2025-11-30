@@ -279,11 +279,10 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
       >
         {
           product.data.blueprints.first && (
-            <Image
-              src={product.data.blueprints.first}
+            <img
+              src={typeof product.data.blueprints.first === 'string' ? product.data.blueprints.first : product.data.blueprints.first.src}
               class="h-full w-full object-cover object-center"
               alt="Blueprint Illustration"
-              format={"avif"}
             />
           )
         }
@@ -292,11 +291,10 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
       <div class="relative right-12 overflow-hidden rounded-xl shadow-xl">
         {
           product.data.blueprints.second && (
-            <Image
-              src={product.data.blueprints.second}
+            <img
+              src={typeof product.data.blueprints.second === 'string' ? product.data.blueprints.second : product.data.blueprints.second.src}
               class="h-full w-full object-cover object-center"
               alt="Blueprint Illustration"
-              format={"avif"}
             />
           )
         }
