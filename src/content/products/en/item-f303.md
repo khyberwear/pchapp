@@ -1,46 +1,38 @@
----
-title: "SF-FN F303"
-description: "Hex Bolts"
+```
+title: "Norozi Chappal"
+description: "Rugged & Durable"
 main:
-  id: 4
+  id: 3
   content: |
-    Introducing the SF-FN F303 Hex Bolts – the perfect choice for heavy-duty fastening applications. Crafted with precision and durability in mind, these hex bolts provide the strength and reliability you need for your toughest projects.
-  imgCard: "@/images/product-image-4.avif"
-  imgMain: "@/images/product-image-main-4.avif"
-  imgAlt: "Mockup boxes of hex bolts"
+    The Norozi Chappal is known for its rugged durability and distinct style. Featuring a thick sole and sturdy leather construction, it's built to last.
+  imgCard: "@/images/product-image-3.avif"
+  imgMain: "@/images/product-image-main-3.avif"
+  imgAlt: "Norozi Chappal"
 tabs:
   - id: "tabs-with-card-item-1"
     dataTab: "#tabs-with-card-1"
     title: "Description"
   - id: "tabs-with-card-item-2"
     dataTab: "#tabs-with-card-2"
-    title: "Specifications"
+    title: "Details"
   - id: "tabs-with-card-item-3"
     dataTab: "#tabs-with-card-3"
-    title: "Blueprints"
+    title: "Sizing"
 longDescription:
-  title: "Heavy-Duty Fastening Solutions"
+  title: "Built for Toughness"
   subTitle: |
-    The SF-FN F303 Hex Bolts are designed to handle the toughest fastening challenges with ease. Whether you're working on construction projects or heavy machinery, these hex bolts deliver the strength and reliability you need.
-  btnTitle: "Contact sales to learn more"
+    Originating from the Norozi style, this chappal is perfect for those who demand durability without compromising on style. The thick sole provides extra height and presence.
+  btnTitle: "Contact for Custom Orders"
   btnURL: "#"
 descriptionList:
-  - title: "Strength and Durability"
-    subTitle: "Constructed from high-quality materials, these hex bolts are built to withstand heavy loads and tough conditions."
-  - title: "Precision Engineering"
-    subTitle: "Engineered with precision-cut threads and exact specifications, ensuring a tight and secure fit every time."
-  - title: "Versatility"
-    subTitle: "Suitable for a wide range of applications, from construction to machinery, providing versatile fastening solutions."
+  - title: "Heavy Duty Sole"
+    subTitle: "The signature thick sole offers unmatched durability and a commanding stance."
+  - title: "Premium Stitching"
+    subTitle: "Intricate stitching details add to the aesthetic appeal and structural integrity."
+  - title: "Bold Design"
+    subTitle: "A statement piece that stands out with its robust construction."
 specificationsLeft:
   - title: "Material"
-    subTitle: "Made from premium-grade steel or alloy, offering exceptional strength and corrosion resistance."
-  - title: "Thread Design"
-    subTitle: "Precision-cut threads ensure optimal grip and reliability, even in high-stress environments."
-  - title: "Quantity"
-    subTitle: "Each set includes a sufficient quantity of hex bolts to tackle various projects and applications."
-  - title: "Sizes"
-    subTitle: "Available in a range of sizes to accommodate different project requirements, ensuring versatility and compatibility."
-specificationsRight:
   - title: "Finish"
     subTitle: "Finished with a protective coating to enhance corrosion resistance and extend service life."
   - title: "Load Capacity"

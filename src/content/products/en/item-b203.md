@@ -1,46 +1,38 @@
+```
 ---
-title: "SF-BN B203"
-description: "Tap Bolts and Nuts Set"
+title: "Zalmi Chappal"
+description: "Premium Brown Leather"
 main:
-  id: 3
+  id: 2
   content: |
-    Meet the SF-BN B203 – your reliable companion for professional-grade fastening. This comprehensive box set comes with a versatile selection of tap bolts and nuts, meticulously crafted to provide the strongest hold for your construction and assembly projects.
-  imgCard: "@/images/product-image-3.avif"
-  imgMain: "@/images/product-image-main-3.avif"
-  imgAlt: "Mockup boxes of a tap bolts and nuts set"
+    The Zalmi Chappal combines modern style with traditional craftsmanship. Made from rich brown leather, it offers a sophisticated look suitable for any wardrobe.
+  imgCard: "@/images/product-image-2.avif"
+  imgMain: "@/images/product-image-main-2.avif"
+  imgAlt: "Zalmi Chappal in Brown Leather"
 tabs:
   - id: "tabs-with-card-item-1"
     dataTab: "#tabs-with-card-1"
     title: "Description"
   - id: "tabs-with-card-item-2"
     dataTab: "#tabs-with-card-2"
-    title: "Specifications"
+    title: "Details"
   - id: "tabs-with-card-item-3"
     dataTab: "#tabs-with-card-3"
-    title: "Blueprints"
+    title: "Sizing"
 longDescription:
-  title: "Strength Meets Precision"
+  title: "Modern Elegance"
   subTitle: |
-    The SF-BN B203 Tap Bolts and Nuts Set offers robust durability and precision for construction professionals, ensuring reliable performance in every application, from house framing to machinery assembly.
-  btnTitle: "Contact sales to learn more"
+    The Zalmi Chappal is designed for the modern man who values tradition. Its sleek design and comfortable fit make it a versatile choice for daily wear or special events.
+  btnTitle: "Contact for Custom Orders"
   btnURL: "#"
 descriptionList:
-  - title: "Corrosion Resistance"
-    subTitle: "Zinc coating not only provides a polished look but also shields against corrosion, ensuring longevity."
-  - title: "Improved Safety"
-    subTitle: "A secure fitting translates to safer structures with reduced risk of component failure."
-  - title: "Convenience"
-    subTitle: "This all-in-one set means you have the right size on hand, cutting down on project delays and additional trips to the hardware store."
+  - title: "Rich Brown Leather"
+    subTitle: "Selected for its texture and durability, the brown leather ages beautifully over time."
+  - title: "Comfort Fit"
+    subTitle: "Designed with a cushioned insole to provide all-day comfort."
+  - title: "Durable Stitching"
+    subTitle: "Reinforced stitching ensures the chappal withstands daily wear and tear."
 specificationsLeft:
-  - title: "Material Composition"
-    subTitle: "Manufactured from high-grade steel, delivering strength and reliability for demanding applications."
-  - title: "Surface Finish"
-    subTitle: "Protected with a zinc coating to offer enhanced corrosion resistance and longevity."
-  - title: "Quantity Per Set"
-    subTitle: "The set includes a balanced selection of 25 tap bolts and 25 matching nuts."
-  - title: "Size Assortment"
-    subTitle: "Features a comprehensive range of sizes to cater to various project requirements, ensuring compatibility and versatility."
-specificationsRight:
   - title: "Thread Details"
     subTitle: "Engineered with precision-cut threads for a secure fit and easy installation."
   - title: "Mechanical Properties"

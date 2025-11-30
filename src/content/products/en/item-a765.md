@@ -1,53 +1,53 @@
 ---
-title: "Smart Zalmi"
-description: "Assorted Screw Set" 
+title: "Kaptaan Chappal"
+description: "Classic Black Leather" 
 main:
-  id: 2
+  id: 1
   content: |
-    Introducing the SF-AB A765 Assorted Screw Set – the ultimate solution for your screw fastening needs. This comprehensive set includes a wide variety of screws meticulously curated to tackle various projects with ease and precision.
-  imgCard: "@/images/product-image-2.avif"
-  imgMain: "@/images/product-image-main-2.avif"
-  imgAlt: "Mockup boxes of assorted screw set"
+    The Kaptaan Chappal is a symbol of elegance and tradition. Handcrafted from premium quality leather, this chappal features a double tire sole for durability and comfort. Perfect for both casual and formal occasions.
+  imgCard: "@/images/product-image-1.avif"
+  imgMain: "@/images/product-image-main-1.avif"
+  imgAlt: "Kaptaan Chappal in Black Leather"
 tabs:
   - id: "tabs-with-card-item-1"
     dataTab: "#tabs-with-card-1"
     title: "Description"
   - id: "tabs-with-card-item-2"
     dataTab: "#tabs-with-card-2"
-    title: "Specifications"
+    title: "Details"
   - id: "tabs-with-card-item-3"
     dataTab: "#tabs-with-card-3"
-    title: "Blueprints"
+    title: "Sizing"
 longDescription:
-  title: "Versatile Screw Fastening Solutions"
+  title: "A Timeless Classic"
   subTitle: |
-    The SF-AB A765 Assorted Screw Set offers unmatched versatility and convenience, making it the perfect choice for DIY enthusiasts and professionals alike. With a comprehensive selection of screws, you'll always have the right fastener for the job.
-  btnTitle: "Contact sales to learn more"
+    Our Kaptaan Chappal is made with meticulous attention to detail. The high-quality leather upper ensures breathability, while the tire sole provides excellent grip and longevity. Experience the comfort of traditional craftsmanship.
+  btnTitle: "Contact for Custom Orders"
   btnURL: "#"
 descriptionList:
-  - title: "Wide Variety"
-    subTitle: "Includes a diverse range of screw types and sizes to accommodate various applications and materials."
-  - title: "Ease of Use"
-    subTitle: "Each screw is designed for effortless installation, ensuring hassle-free fastening every time."
-  - title: "Convenience"
-    subTitle: "Eliminates the need for multiple trips to the hardware store, saving time and effort on your projects."
+  - title: "Premium Leather"
+    subTitle: "Made from 100% genuine cowhide leather for a luxurious feel and long-lasting wear."
+  - title: "Double Tire Sole"
+    subTitle: "Features a durable double tire sole that offers superior traction and shock absorption."
+  - title: "Handcrafted"
+    subTitle: "Each pair is stitched by skilled artisans in Peshawar, preserving the authentic heritage."
 specificationsLeft:
   - title: "Material"
-    subTitle: "Constructed from high-quality materials such as stainless steel, ensuring durability and corrosion resistance."
-  - title: "Assortment"
-    subTitle: "Contains a generous assortment of screws, including wood screws, machine screws, and sheet metal screws."
-  - title: "Quantity"
-    subTitle: "Each set includes a sufficient quantity of screws to handle a wide range of projects and tasks."
-  - title: "Sizes"
-    subTitle: "Available in various sizes to suit different project requirements, ensuring compatibility and versatility."
+    subTitle: "Genuine Cowhide Leather"
+  - title: "Sole"
+    subTitle: "Recycled Tire Rubber"
+  - title: "Origin"
+    subTitle: "Peshawar, Pakistan"
+  - title: "Color"
+    subTitle: "Black"
 tableData:
-  - feature: ["Specification", "Value"]
+  - feature: ["Feature", "Detail"]
     description:
-      - ["Length (mm)", "Various"]
-      - ["Weight (g)", "N/A"]
-      - ["Material", "Stainless Steel"]
-      - ["Finish", "Assorted"]
-      - ["Package Contents", "Various screws in a set"]
+      - ["Upper Material", "Leather"]
+      - ["Sole Material", "Tire Rubber"]
+      - ["Stitching", "Double Stitch"]
+      - ["Weight", "Lightweight"]
+      - ["Warranty", "6 Months"]
 blueprints:
   first: "@/images/blueprint-1.avif"
   second: "@/images/blueprint-2.avif"
