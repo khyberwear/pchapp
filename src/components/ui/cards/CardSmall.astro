@@ -25,12 +25,11 @@ const imageClass =
   class="group relative flex h-48 items-end overflow-hidden rounded-xl shadow-lg outline-hidden ring-zinc-500 focus-visible:ring-3 dark:ring-zinc-200 dark:focus:outline-hidden md:h-80"
 >
   <!-- The product's main image -->
-  <Image
+  <img
     src={product.data.main.imgCard}
     alt={product.data.main.imgAlt}
-    draggable={"false"}
+    draggable={false}
     class={imageClass}
-    inferSize={true}
   />
   <!-- An overlay gradient that sits on top of the product image-->
   <div
