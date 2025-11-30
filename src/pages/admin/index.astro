@@ -47,12 +47,18 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
 <script>
   import { $user } from "@stores/authStore";
 
-  // Protect Route
-  $user.subscribe(user => {
+  // Protect Route - Check immediately on load
+  const checkAuth = () => {
+    const user = $user.get();
     if (!user || user.role !== 'admin') {
       window.location.href = '/';
+      return false;
     }
-  });
+    return true;
+  };
+
+  // Check auth before loading orders
+  if (checkAuth()) {
 
   const tableBody = document.getElementById("orders-table-body");
 
@@ -92,4 +98,5 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
   }
 
   loadOrders();
+  }
 </script>
