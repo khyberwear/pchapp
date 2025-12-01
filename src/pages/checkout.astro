@@ -94,29 +94,43 @@ const pageTitle = `Checkout | ${SITE.title}`;
         return;
       }
 
-      // Mock Order Placement
+      // Prepare order data for API
       const formData = new FormData(e.target as HTMLFormElement);
-      const order = {
-        id: Math.floor(Math.random() * 10000),
-        date: new Date().toISOString(),
-        customer: {
-          name: formData.get("full-name"),
-          email: formData.get("email"),
-          address: formData.get("address"),
-        },
+      const orderData = {
+        customerName: formData.get("full-name") as string,
+        customerEmail: formData.get("email") as string,
+        customerPhone: formData.get("phone") as string,
+        shippingAddress: formData.get("address") as string,
+        shippingCity: formData.get("city") as string,
+        shippingPostalCode: formData.get("postal-code") as string,
         items: currentCart,
         total: parseFloat(orderTotalElement?.textContent?.replace("$", "") || "0"),
-        status: "Pending"
       };
 
-      // Save order to localStorage for Admin Dashboard
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-      orders.push(order);
-      localStorage.setItem("orders", JSON.stringify(orders));
+      try {
+        // Submit order to API
+        const response = await fetch("/api/orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        });
 
-      clearCart();
-      alert("Order placed successfully!");
-      window.location.href = "/";
+        const result = await response.json();
+
+        if (response.ok) {
+          // Clear cart on success
+          clearCart();
+          alert(`Order placed successfully! Order Number: ${result.orderNumber}\n\nYou will receive a confirmation email shortly.`);
+          window.location.href = "/";
+        } else {
+          alert(`Order failed: ${result.error}`);
+        }
+      } catch (error) {
+        console.error("Order submission error:", error);
+        alert("Failed to place order. Please try again.");
+      }
     });
   }
 </script>
