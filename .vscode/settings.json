@@ -2,14 +2,23 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "search.exclude": {
     "**/.vercel": true,
-    "**/.vercel/**": true
+    "**/.vercel/**": true,
+    "**/node_modules": true,
+    "**/dist": true
   },
   "files.exclude": {
     "**/.vercel": true
   },
   "files.watcherExclude": {
-    "**/.vercel/**": true
+    "**/.vercel/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true
   },
   "typescript.preferences.importModuleSpecifier": "relative",
-  "typescript.tsserver.experimental.enableProjectDiagnostics": false
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "typescript.exclude": [
+    ".vercel/**",
+    "dist/**",
+    "node_modules/**"
+  ]
 }
