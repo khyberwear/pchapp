@@ -1,13 +1,10 @@
 {
-  "files.exclude": {
-    ".vercel": true,
-    "dist": true,
-    "node_modules": true
-  },
+  "typescript.tsdk": "node_modules/typescript/lib",
   "search.exclude": {
-    ".vercel": true,
-    "dist": true,
-    "node_modules": true
+    "**/.vercel": true
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "files.exclude": {
+    "**/.vercel": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative"
 }
