@@ -51,14 +51,20 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
   const checkAuth = () => {
     const user = $user.get();
     if (!user || user.role !== 'admin') {
-      window.location.href = '/';
+      // Give a brief moment for localStorage to load
+      setTimeout(() => {
+        const userCheck = $user.get();
+        if (!userCheck || userCheck.role !== 'admin') {
+          window.location.href = '/';
+        }
+      }, 100);
       return false;
     }
     return true;
   };
 
   // Check auth before loading orders
-  if (checkAuth()) {
+  if (checkAuth() || $user.get()?.role === 'admin') {
 
   const tableBody = document.getElementById("orders-table-body");
 
