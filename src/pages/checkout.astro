@@ -86,7 +86,7 @@ const pageTitle = `Checkout | ${SITE.title}`;
   });
 
   if (checkoutForm) {
-    checkoutForm.addEventListener("submit", (e) => {
+    checkoutForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       
       if (Object.keys(currentCart).length === 0) {
