@@ -68,7 +68,7 @@
     
     if (items.length === 0) {
       cartItemsContainer.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400">Your cart is empty.</p>';
-      cartTotalElement.textContent = "$0.00";
+      cartTotalElement.textContent = "Rs 0.00";
       return;
     }
 
@@ -77,28 +77,78 @@
       total += item.price * item.quantity;
       return `
         <div class="flex gap-x-4 rounded-lg border p-3 dark:border-neutral-700">
-          <div class="flex-1">
-            <h4 class="text-sm font-medium text-gray-800 dark:text-white">${item.title}</h4>
-            <p class="text-xs text-gray-500 dark:text-gray-400">Qty: ${item.quantity}</p>
-            <p class="text-sm font-semibold text-gray-800 dark:text-white">$${(item.price * item.quantity).toFixed(2)}</p>
+          <img src="${item.image}" alt="${item.title}" class="w-16 h-16 object-cover rounded-md">
+          <div class="flex-1 min-w-0">
+            <h4 class="text-sm font-medium text-gray-800 dark:text-white truncate">${item.title}</h4>
+            <p class="text-sm font-semibold text-gray-800 dark:text-white">Rs ${(item.price * item.quantity).toFixed(2)}</p>
+            
+            <!-- Quantity Controls -->
+            <div class="flex items-center gap-2 mt-2">
+              <button 
+                data-id="${item.id}" 
+                class="decrease-btn flex h-6 w-6 items-center justify-center rounded border border-gray-300 text-xs hover:bg-gray-50 dark:border-neutral-600 dark:hover:bg-neutral-700"
+              >
+                -
+              </button>
+              <span class="text-sm font-medium text-gray-800 dark:text-white min-w-[2rem] text-center">${item.quantity}</span>
+              <button 
+                data-id="${item.id}" 
+                class="increase-btn flex h-6 w-6 items-center justify-center rounded border border-gray-300 text-xs hover:bg-gray-50 dark:border-neutral-600 dark:hover:bg-neutral-700"
+              >
+                +
+              </button>
+            </div>
           </div>
           <button 
             data-id="${item.id}" 
-            class="remove-btn text-sm text-red-600 hover:text-red-800 dark:text-red-500 dark:hover:text-red-400"
+            class="remove-btn text-sm text-red-600 hover:text-red-800 dark:text-red-500 dark:hover:text-red-400 self-start"
           >
-            Remove
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
           </button>
         </div>
       `;
     }).join("");
 
-    cartTotalElement.textContent = `$${total.toFixed(2)}`;
+    cartTotalElement.textContent = `Rs ${total.toFixed(2)}`;
 
     // Add event listeners to remove buttons
     document.querySelectorAll(".remove-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const id = (e.target as HTMLElement).dataset.id;
         if (id) removeFromCart(id);
+      });
+    });
+
+    // Add event listeners to quantity buttons
+    document.querySelectorAll(".increase-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const id = (e.target as HTMLElement).dataset.id;
+        if (id) {
+          const cart = $cart.get();
+          const item = cart[id];
+          if (item) {
+            $cart.setKey(id, { ...item, quantity: item.quantity + 1 });
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll(".decrease-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const id = (e.target as HTMLElement).dataset.id;
+        if (id) {
+          const cart = $cart.get();
+          const item = cart[id];
+          if (item) {
+            if (item.quantity > 1) {
+              $cart.setKey(id, { ...item, quantity: item.quantity - 1 });
+            } else {
+              removeFromCart(id);
+            }
+          }
+        }
       });
     });
   });

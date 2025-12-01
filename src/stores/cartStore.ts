@@ -51,3 +51,47 @@ export function removeFromCart(itemId: string) {
 export function clearCart() {
     $cart.set({});
 }
+
+export function updateQuantity(itemId: string, quantity: number) {
+    const cart = $cart.get();
+    const existingItem = cart[itemId];
+
+    if (existingItem) {
+        if (quantity <= 0) {
+            removeFromCart(itemId);
+        } else {
+            $cart.setKey(itemId, {
+                ...existingItem,
+                quantity: quantity,
+            });
+        }
+    }
+}
+
+export function increaseQuantity(itemId: string) {
+    const cart = $cart.get();
+    const existingItem = cart[itemId];
+
+    if (existingItem) {
+        $cart.setKey(itemId, {
+            ...existingItem,
+            quantity: existingItem.quantity + 1,
+        });
+    }
+}
+
+export function decreaseQuantity(itemId: string) {
+    const cart = $cart.get();
+    const existingItem = cart[itemId];
+
+    if (existingItem) {
+        if (existingItem.quantity > 1) {
+            $cart.setKey(itemId, {
+                ...existingItem,
+                quantity: existingItem.quantity - 1,
+            });
+        } else {
+            removeFromCart(itemId);
+        }
+    }
+}

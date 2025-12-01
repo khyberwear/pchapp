@@ -1,0 +1,34 @@
+import { a as createComponent, r as renderComponent, e as renderScript, d as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_B5Ll6kUe.mjs';
+import 'kleur/colors';
+import { a as $$MainLayout, S as SITE } from '../chunks/MainLayout_C6IBl8V9.mjs';
+export { renderers } from '../renderers.mjs';
+
+const $$Login = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "MainLayout", $$MainLayout, { "title": `Login | ${SITE.title}` }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="min-h-[80vh] flex items-center justify-center py-12 px-4"> <div class="w-full max-w-md"> <!-- Login Card --> <div class="relative overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-xl shadow-orange-100/20 dark:border-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-900/50"> <!-- Top accent bar --> <div class="h-1.5 w-full bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600"></div> <div class="p-8 sm:p-10"> <!-- Logo Section --> <div class="mb-8 text-center"> <a href="/" class="inline-block"> <img src="/logokw.png" alt="Logo" class="mx-auto h-auto w-32"> </a> <h1 class="mt-4 text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+Welcome Back
+</h1> <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+Sign in to your account to continue
+</p> </div> <!-- Login Form --> <form id="login-form" class="space-y-5"> <!-- Email Input --> <div> <label for="email" class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+Email Address
+</label> <div class="relative"> <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4"> <svg class="h-5 w-5 text-neutral-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path> </svg> </div> <input type="email" id="email" name="email" required class="block w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3 pl-11 pr-4 text-neutral-800 placeholder-neutral-400 transition-all duration-300 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-400/20 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100 dark:placeholder-neutral-500 dark:focus:border-orange-500 dark:focus:bg-neutral-600" placeholder="you@example.com"> </div> </div> <!-- Password Input --> <div> <label for="password" class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+Password
+</label> <div class="relative"> <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4"> <svg class="h-5 w-5 text-neutral-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"></path> </svg> </div> <input type="password" id="password" name="password" required class="block w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3 pl-11 pr-12 text-neutral-800 placeholder-neutral-400 transition-all duration-300 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-400/20 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100 dark:placeholder-neutral-500 dark:focus:border-orange-500 dark:focus:bg-neutral-600" placeholder="••••••••"> <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 flex items-center pr-4 text-neutral-400 transition-colors hover:text-neutral-600 dark:hover:text-neutral-300"> <svg id="eye-open" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path> <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path> </svg> <svg id="eye-closed" class="hidden h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path> </svg> </button> </div> </div> <!-- Submit Button --> <button type="submit" class="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-orange-500/25 transition-all duration-300 hover:from-orange-600 hover:to-orange-700 hover:shadow-xl hover:shadow-orange-500/30 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 dark:focus:ring-offset-neutral-800"> <span class="relative z-10 flex items-center justify-center gap-2">
+Sign In
+<svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path> </svg> </span> </button> </form> <!-- Error Message --> <div id="error-message" class="mt-4 hidden rounded-lg bg-red-50 p-3 text-center text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+Invalid email or password. Please try again.
+</div> </div> </div> </div> </div> ` })} ${renderScript($$result, "/Users/atifjan/PC/pchapp/src/pages/login.astro?astro&type=script&index=0&lang.ts")}`;
+}, "/Users/atifjan/PC/pchapp/src/pages/login.astro", void 0);
+
+const $$file = "/Users/atifjan/PC/pchapp/src/pages/login.astro";
+const $$url = "/login";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$Login,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };

@@ -55,61 +55,299 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
     },
   }}
 >
-  <div id="overlay" class="fixed inset-0 bg-neutral-200 dark:bg-neutral-800">
-  </div>
-
-  <section
-    class="mx-auto flex max-w-[85rem] flex-col px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
-  >
-    <div>
-      <p
-        id="fadeText"
-        class="mb-8 max-w-prose font-light text-pretty text-neutral-700 sm:text-xl dark:text-neutral-300"
-      >
-        {product.data.main.content}
-      </p>
+  <!-- Product Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-neutral-50 via-white to-neutral-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <pattern id="product-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="10" cy="10" r="1" fill="currentColor" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#product-pattern)" />
+      </svg>
     </div>
-    <div
-      class="flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0"
-    >
-      <div id="fadeInUp">
-        <h1
-          class="block text-4xl font-bold tracking-tighter text-neutral-800 sm:text-5xl md:text-6xl lg:text-7xl dark:text-neutral-200"
-        >
-          {product.data.title}
-        </h1>
-        <p class="text-lg text-neutral-600 dark:text-neutral-400">
-          {product.data.description}
-        </p>
-      </div>
-      <div>
-        <img
-          id="fadeInMoveRight"
-          src={typeof product.data.main.imgMain === 'string' ? product.data.main.imgMain : product.data.main.imgMain.src}
-          class="w-[600px]"
-          alt={product.data.main.imgAlt}
-          loading="eager"
-        />
-        <div class="mt-8 flex justify-center md:justify-start">
-          <button
-            id="add-to-cart-btn"
-            data-id={product.data.main.id}
-            data-title={product.data.title}
-            data-price="50.00" 
-            data-image={product.data.main.imgCard.src}
-            class="rounded-lg bg-orange-500 px-6 py-3 text-lg font-bold text-white transition hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800"
-          >
-            Add to Cart - Rs 50.00
-          </button>
+
+    <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <!-- Product Images -->
+        <div class="space-y-4">
+          <div class="aspect-square overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
+            <img
+              id="main-product-image"
+              src={typeof product.data.main.imgMain === 'string' ? product.data.main.imgMain : product.data.main.imgMain.src}
+              alt={product.data.main.imgAlt}
+              class="h-full w-full object-cover object-center transition-transform duration-300 hover:scale-105"
+              loading="eager"
+            />
+          </div>
+          <!-- Thumbnail images if available -->
+          <div class="flex gap-4">
+            <div class="aspect-square w-20 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+              <img
+                src={typeof product.data.main.imgMain === 'string' ? product.data.main.imgMain : product.data.main.imgMain.src}
+                alt={product.data.main.imgAlt}
+                class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75"
+              />
+            </div>
+            {product.data.blueprints?.first && (
+              <div class="aspect-square w-20 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+                <img
+                  src={typeof product.data.blueprints.first === 'string' ? product.data.blueprints.first : product.data.blueprints.first.src}
+                  alt="Product detail"
+                  class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75"
+                />
+              </div>
+            )}
+            {product.data.blueprints?.second && (
+              <div class="aspect-square w-20 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+                <img
+                  src={typeof product.data.blueprints.second === 'string' ? product.data.blueprints.second : product.data.blueprints.second.src}
+                  alt="Product detail"
+                  class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="flex flex-col justify-center space-y-8">
+          <div>
+            <h1 class="text-4xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-5xl">
+              {product.data.title}
+            </h1>
+            <p class="mt-4 text-xl text-neutral-600 dark:text-neutral-300">
+              {product.data.description}
+            </p>
+            <p class="mt-6 text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed">
+              {product.data.main.content}
+            </p>
+          </div>
+
+          <!-- Price and Add to Cart -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-4">
+              <span class="text-3xl font-bold text-neutral-900 dark:text-white">Rs 50.00</span>
+              <span class="text-lg text-neutral-500 line-through">Rs 65.00</span>
+              <span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-green-900 dark:text-green-200">
+                Save 23%
+              </span>
+            </div>
+
+            <button
+              id="add-to-cart-btn"
+              data-id={product.data.main.id}
+              data-title={product.data.title}
+              data-price="50.00"
+              data-image={product.data.main.imgCard}
+              class="w-full rounded-xl bg-orange-600 px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-orange-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900"
+            >
+              <span class="flex items-center justify-center gap-2">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H19M7 13v8a2 2 0 002 2h10a2 2 0 002-2v-3" />
+                </svg>
+                Add to Cart
+              </span>
+            </button>
+
+            <button
+              id="order-whatsapp-btn"
+              class="w-full rounded-xl bg-green-600 px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-green-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900"
+            >
+              <span class="flex items-center justify-center gap-2">
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                </svg>
+                Order on WhatsApp
+              </span>
+            </button>
+          </div>
+
+          <!-- Key Features -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">Key Features</h3>
+            <div class="grid gap-3">
+              {product.data.descriptionList.slice(0, 3).map((feature) => (
+                <div class="flex items-center gap-3">
+                  <div class="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
+                    <svg class="h-4 w-4 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span class="text-neutral-700 dark:text-neutral-300">{feature.title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Product Details Tabs -->
+  <section class="bg-neutral-50 dark:bg-neutral-800/50">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <nav class="flex space-x-8 border-b border-neutral-200 dark:border-neutral-700" aria-label="Tabs" role="tablist">
+        {product.data.tabs.map((tab, index) => (
+          <button
+            id={tab.id}
+            data-target={tab.dataTab}
+            type="button"
+            class={`whitespace-nowrap border-b-2 py-2 px-1 text-sm font-medium transition-colors ${
+              index === 0
+                ? 'border-orange-500 text-orange-600 dark:text-orange-400'
+                : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300'
+            }`}
+            aria-controls={tab.dataTab.slice(1)}
+            role="tab"
+          >
+            {tab.title}
+          </button>
+        ))}
+      </nav>
+
+      <div class="mt-12">
+        <!-- Description Tab -->
+        <div id="tabs-with-card-1" role="tabpanel" class={product.data.tabs[0]?.dataTab === '#tabs-with-card-1' ? '' : 'hidden'}>
+          <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <h2 class="text-3xl font-bold text-neutral-900 dark:text-white lg:text-4xl">
+                {product.data.longDescription.title}
+              </h2>
+              <p class="mt-6 text-lg text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                {product.data.longDescription.subTitle}
+              </p>
+              <div class="mt-8">
+                <a
+                  href={product.data.longDescription.btnURL}
+                  class="inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-6 py-3 text-white transition-colors hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100"
+                >
+                  {product.data.longDescription.btnTitle}
+                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              {product.data.descriptionList.map((feature) => (
+                <div class="rounded-lg border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-800">
+                  <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">{feature.title}</h3>
+                  <p class="mt-2 text-neutral-600 dark:text-neutral-300">{feature.subTitle}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Specifications Tab -->
+        <div id="tabs-with-card-2" role="tabpanel" class="hidden">
+          <div class="grid gap-12 lg:grid-cols-2">
+            <div class="space-y-8">
+              <div>
+                <h3 class="text-2xl font-bold text-neutral-900 dark:text-white">Specifications</h3>
+                <p class="mt-4 text-neutral-600 dark:text-neutral-300">
+                  Detailed specifications and materials used in crafting this traditional footwear.
+                </p>
+              </div>
+
+              <div class="space-y-6">
+                {product.data.specificationsLeft?.map((spec) => (
+                  <div class="flex justify-between items-center py-3 border-b border-neutral-200 dark:border-neutral-700">
+                    <span class="font-medium text-neutral-900 dark:text-white">{spec.title}</span>
+                    <span class="text-neutral-600 dark:text-neutral-300">{spec.subTitle}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {product.data.specificationsRight ? (
+              <div class="space-y-6">
+                {product.data.specificationsRight.map((spec) => (
+                  <div class="flex justify-between items-center py-3 border-b border-neutral-200 dark:border-neutral-700">
+                    <span class="font-medium text-neutral-900 dark:text-white">{spec.title}</span>
+                    <span class="text-neutral-600 dark:text-neutral-300">{spec.subTitle}</span>
+                  </div>
+                ))}
+              </div>
+            ) : product.data.tableData ? (
+              <div class="rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
+                    <thead class="bg-neutral-50 dark:bg-neutral-800">
+                      <tr>
+                        {product.data.tableData[0].feature?.map((header) => (
+                          <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider dark:text-neutral-400">
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
+                      {product.data.tableData.map((row) =>
+                        row.description.map((rowData) => (
+                          <tr>
+                            {rowData.map((cellValue) => (
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-900 dark:text-white">
+                                {cellValue}
+                              </td>
+                            ))}
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        <!-- Sizing Tab -->
+        <div id="tabs-with-card-3" role="tabpanel" class="hidden">
+          <div class="text-center">
+            <h3 class="text-2xl font-bold text-neutral-900 dark:text-white">Size Guide</h3>
+            <p class="mt-4 text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
+              Our traditional sizing ensures the perfect fit. Use this guide to find your ideal size.
+            </p>
+          </div>
+
+          <div class="mt-12 flex justify-center">
+            <div class="relative">
+              {product.data.blueprints?.first && (
+                <div class="overflow-hidden rounded-xl shadow-2xl">
+                  <img
+                    src={typeof product.data.blueprints.first === 'string' ? product.data.blueprints.first : product.data.blueprints.first.src}
+                    alt="Size guide"
+                    class="w-full max-w-lg"
+                  />
+                </div>
+              )}
+              {product.data.blueprints?.second && (
+                <div class="absolute -bottom-6 -right-6 overflow-hidden rounded-xl shadow-2xl">
+                  <img
+                    src={typeof product.data.blueprints.second === 'string' ? product.data.blueprints.second : product.data.blueprints.second.src}
+                    alt="Size guide detail"
+                    class="w-48"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
 <script>
   import { addToCart } from "@stores/cartStore";
 
   const addToCartBtn = document.getElementById("add-to-cart-btn");
+  const whatsappBtn = document.getElementById("order-whatsapp-btn");
 
   if (addToCartBtn) {
     addToCartBtn.addEventListener("click", () => {
@@ -119,9 +357,9 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
         price: parseFloat(addToCartBtn.dataset.price || "0"),
         image: addToCartBtn.dataset.image || "",
       };
-      
+
       addToCart(item);
-      
+
       // Open cart drawer
       const cartDrawer = document.getElementById("cart-drawer");
       if (cartDrawer) {
@@ -130,317 +368,54 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
       }
     });
   }
-</script>
 
-  <div class="mx-auto max-w-[85rem] px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14">
-    <nav
-      class="mx-auto grid max-w-6xl gap-y-px sm:flex sm:gap-x-4 sm:gap-y-0"
-      aria-label="Tabs"
-      role="tablist"
-    >
-      {
-        product.data.tabs.map((tab, index) => (
-          <ProductTabBtn
-            title={tab.title}
-            id={tab.id}
-            dataTab={tab.dataTab}
-            first={index === 0}
-          />
-        ))
-      }
-    </nav>
-
-    <div class="mt-12 md:mt-16">
-      <div id="tabs-with-card-1" role="tabpanel">
-        <div class="mx-auto max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14">
-          <div class="grid gap-12 md:grid-cols-2">
-            <div class="lg:w-3/4">
-              <h2
-                class="text-3xl font-bold tracking-tight text-balance text-neutral-800 md:leading-tight lg:text-4xl dark:text-neutral-200"
-              >
-                {product.data.longDescription.title}
-              </h2>
-              <p
-                class="mt-3 text-pretty text-neutral-600 dark:text-neutral-400"
-              >
-                {product.data.longDescription.subTitle}
-              </p>
-              <p class="mt-5">
-                <PrimaryCTA
-                  title={product.data.longDescription.btnTitle}
-                  url={product.data.longDescription.btnURL}
-                />
-              </p>
-            </div>
-
-            <div class="space-y-6 lg:space-y-10">
-              {
-                product.data.descriptionList.map((list) => (
-                  <div class="flex">
-                    <div>
-                      <h3 class="text-base font-bold text-neutral-800 sm:text-lg dark:text-neutral-200">
-                        {list.title}
-                      </h3>
-                      <p class="mt-1 text-neutral-600 dark:text-neutral-400">
-                        {list.subTitle}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="tabs-with-card-2" class="hidden" role="tabpanel">
-        <div class="mx-auto max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14">
-          <div class="grid w-full grid-cols-1 gap-x-16 md:grid-cols-2">
-            <div class="max-w-md space-y-6">
-              {
-                product.data.specificationsLeft.map((spec) => (
-                  <div>
-                    <h3 class="block font-bold text-neutral-800 dark:text-neutral-200">
-                      {spec.title}
-                    </h3>
-                    <p class="text-neutral-600 dark:text-neutral-400">
-                      {spec.subTitle}
-                    </p>
-                  </div>
-                ))
-              }
-            </div>
-            {
-              product.data.specificationsRight ? (
-                <div class="mt-6 max-w-md space-y-6 md:mt-0 md:ml-auto">
-                  {product.data.specificationsRight?.map((spec) => (
-                    <div>
-                      <h3 class="block font-bold text-neutral-800 dark:text-neutral-200">
-                        {spec.title}
-                      </h3>
-                      <p class="text-neutral-600 dark:text-neutral-400">
-                        {spec.subTitle}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              ) : product.data.tableData ? (
-                <div class="mt-6 space-y-6 md:mt-0 md:ml-auto">
-                  <div class="flex flex-col">
-                    <div class="-m-1.5 overflow-x-auto">
-                      <div class="inline-block min-w-full p-1.5 align-middle">
-                        <div class="overflow-hidden">
-                          <table class="min-w-full divide-y divide-neutral-300 dark:divide-neutral-700">
-                            <thead>
-                              <tr>
-                                {product.data.tableData?.[0].feature?.map(
-                                  (header) => (
-                                    <th
-                                      scope="col"
-                                      class="px-6 py-3 text-start text-xs font-medium text-neutral-500 uppercase dark:text-neutral-500"
-                                    >
-                                      {header}
-                                    </th>
-                                  )
-                                )}
-                              </tr>
-                            </thead>
-                            <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
-                              {product.data.tableData?.map((row) =>
-                                // Wrap each row's content in a separate <tr> element
-                                row.description.map((rowData) => (
-                                  <tr>
-                                    {/* Iterate through each cell value in the row's description array */}
-                                    {rowData.map((cellValue) => (
-                                      // Render each cell value in its own <td> element
-                                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap text-neutral-600 dark:text-neutral-400">
-                                        {cellValue}
-                                      </td>
-                                    ))}
-                                  </tr>
-                                ))
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : null
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tabs-with-card-3" class="hidden" role="tabpanel">
-    <div class="mx-auto mb-20 flex w-full md:mb-28 2xl:w-4/5">
-      <div
-        class="relative top-12 left-12 z-10 overflow-hidden rounded-xl shadow-lg md:top-16 md:left-12 md:-ml-12 lg:ml-0"
-      >
-        {
-          product.data.blueprints.first && (
-            <img
-              src={typeof product.data.blueprints.first === 'string' ? product.data.blueprints.first : product.data.blueprints.first.src}
-              class="h-full w-full object-cover object-center"
-              alt="Blueprint Illustration"
-            />
-          )
-        }
-      </div>
-
-      <div class="relative right-12 overflow-hidden rounded-xl shadow-xl">
-        {
-          product.data.blueprints.second && (
-            <img
-              src={typeof product.data.blueprints.second === 'string' ? product.data.blueprints.second : product.data.blueprints.second.src}
-              class="h-full w-full object-cover object-center"
-              alt="Blueprint Illustration"
-            />
-          )
-        }
-      </div>
-    </div>
-  </div>
-</MainLayout>
-
-<script>
-  import { gsap } from "gsap";
-
-  type AnimationSettings = {
-    autoAlpha?: number;
-    y?: number;
-    x?: number;
-    willChange?: string;
-  };
-
-  function setElementAnimationDefaults(
-    id: string,
-    settings: AnimationSettings
-  ) {
-    gsap.set(id, settings);
+  if (whatsappBtn) {
+    whatsappBtn.addEventListener("click", () => {
+      const productTitle = addToCartBtn?.dataset.title || "Product";
+      const productPrice = addToCartBtn?.dataset.price || "0";
+      const message = encodeURIComponent(`Hi, I want to order: ${productTitle}\nPrice: Rs ${productPrice}`);
+      const whatsappUrl = `https://wa.me/923001234567?text=${message}`;
+      window.open(whatsappUrl, "_blank");
+    });
   }
-
-  setElementAnimationDefaults("#fadeText", {
-    autoAlpha: 0,
-    y: 50,
-    willChange: "transform, opacity",
-  });
-
-  setElementAnimationDefaults("#fadeInUp", {
-    autoAlpha: 0,
-    y: 50,
-    willChange: "transform, opacity",
-  });
-
-  setElementAnimationDefaults("#fadeInMoveRight", {
-    autoAlpha: 0,
-    x: 300,
-    willChange: "transform, opacity",
-  });
-
-  let timeline = gsap.timeline({ defaults: { overwrite: "auto" } });
-
-  timeline.to("#fadeText", {
-    duration: 1.5,
-    autoAlpha: 1,
-    y: 0,
-    delay: 1,
-    ease: "power2.out",
-  });
-
-  timeline.to(
-    "#fadeInUp",
-    { duration: 1.5, autoAlpha: 1, y: 0, ease: "power2.out" },
-    "-=1.2"
-  );
-
-  timeline.to(
-    "#fadeInMoveRight",
-    { duration: 1.5, autoAlpha: 1, x: 0, ease: "power2.inOut" },
-    "-=1.4"
-  );
-
-  timeline.to("#overlay", { duration: 1, autoAlpha: 0, delay: 0.2 });
 </script>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    function setButtonInactive(btn: any, activeButton: any) {
-      if (btn !== activeButton) {
-        btn.classList.remove(
-          "active",
-          "bg-neutral-100",
-          "hover:border-transparent",
-          "dark:bg-white/[.05]"
-        );
+    const tabButtons = document.querySelectorAll("[data-target]");
 
+    function setActiveTab(activeButton: Element) {
+      tabButtons.forEach((btn) => {
+        const isActive = btn === activeButton;
         const tabId = btn.getAttribute("data-target");
+
+        // Update button styles
+        btn.classList.toggle("border-orange-500", isActive);
+        btn.classList.toggle("text-orange-600", isActive);
+        btn.classList.toggle("dark:text-orange-400", isActive);
+        btn.classList.toggle("border-transparent", !isActive);
+        btn.classList.toggle("text-neutral-500", !isActive);
+        btn.classList.toggle("dark:text-neutral-400", !isActive);
+
+        // Show/hide content
         if (tabId) {
           const contentElement = document.querySelector(tabId);
           if (contentElement) {
-            contentElement.classList.add("hidden");
+            contentElement.classList.toggle("hidden", !isActive);
           }
         }
-
-        changeHeadingStyle(
-          btn,
-          ["text-neutral-800", "dark:text-neutral-200"],
-          ["text-orange-400", "dark:text-orange-300"]
-        );
-      }
+      });
     }
 
-    function activateButton(button: any) {
-      button.classList.add(
-        "active",
-        "bg-neutral-100",
-        ",hover:border-transparent",
-        "dark:bg-white/[.05]"
-      );
-
-      const tabId = button.getAttribute("data-target");
-      if (tabId) {
-        const contentElementToShow = document.querySelector(tabId);
-        if (contentElementToShow) {
-          contentElementToShow.classList.remove("hidden");
-        }
-      }
-
-      changeHeadingStyle(
-        button,
-        ["text-orange-400", "dark:text-orange-300"],
-        ["text-neutral-800", "dark:text-neutral-200"]
-      );
-    }
-
-    function changeHeadingStyle(
-      button: any,
-      addClasses: any,
-      removeClasses: any
-    ) {
-      let heading = button.querySelector("span");
-      if (heading) {
-        heading.classList.remove(...removeClasses);
-        heading.classList.add(...addClasses);
-      }
-    }
-
-    const tabButtons = document.querySelectorAll("[data-target]");
-
+    // Set first tab as active by default
     if (tabButtons.length > 0) {
-      changeHeadingStyle(
-        tabButtons[0],
-        ["text-orange-400", "dark:text-orange-300"],
-        []
-      );
+      setActiveTab(tabButtons[0]);
     }
 
+    // Add click handlers
     tabButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        tabButtons.forEach((btn) => setButtonInactive(btn, button));
-        activateButton(button);
+        setActiveTab(button);
       });
     });
   });
