@@ -1,0 +1,1 @@
+import{a as n}from"./index.daetGfa_.js";const o=typeof localStorage<"u"?localStorage.getItem("user"):null,a=o?JSON.parse(o):null,r=n(a);function i(e,s="user"){const t={email:e,name:e.split("@")[0],role:s};r.set(t),typeof localStorage<"u"&&localStorage.setItem("user",JSON.stringify(t))}export{r as $,i as l};

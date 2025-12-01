@@ -1,4 +1,4 @@
-import { g as getCollection } from '../chunks/_astro_content_Dci-qtBb.mjs';
+import { g as getCollection } from '../chunks/_astro_content_Bs25cIIi.mjs';
 export { renderers } from '../renderers.mjs';
 
 const site = "https://peshawarichappal.store";

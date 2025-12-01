@@ -1,6 +1,6 @@
-import { c as createAstro, a as createComponent, m as maybeRenderHead, b as addAttribute, d as renderComponent, r as renderTemplate, e as renderScript } from '../chunks/astro/server_DLiYjd8-.mjs';
+import { c as createAstro, a as createComponent, m as maybeRenderHead, b as addAttribute, r as renderComponent, d as renderTemplate, e as renderScript } from '../chunks/astro/server_B5Ll6kUe.mjs';
 import 'kleur/colors';
-import { $ as $$Icon, S as SITE, a as $$MainLayout } from '../chunks/MainLayout_CpB-AcgO.mjs';
+import { $ as $$Icon, S as SITE, a as $$MainLayout } from '../chunks/MainLayout_-cIOTyUD.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$1 = createAstro("https://peshawarichappal.store");

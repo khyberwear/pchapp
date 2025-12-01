@@ -1,7 +1,7 @@
-import { a as createComponent, d as renderComponent, r as renderTemplate, m as maybeRenderHead, b as addAttribute } from '../chunks/astro/server_DLiYjd8-.mjs';
+import { a as createComponent, r as renderComponent, d as renderTemplate, m as maybeRenderHead, b as addAttribute } from '../chunks/astro/server_B5Ll6kUe.mjs';
 import 'kleur/colors';
-import { a as $$MainLayout, S as SITE } from '../chunks/MainLayout_CpB-AcgO.mjs';
-import { g as getCollection } from '../chunks/_astro_content_Dci-qtBb.mjs';
+import { a as $$MainLayout, S as SITE } from '../chunks/MainLayout_-cIOTyUD.mjs';
+import { g as getCollection } from '../chunks/_astro_content_Bs25cIIi.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Sitemap = createComponent(async ($$result, $$props, $$slots) => {

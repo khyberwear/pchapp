@@ -6,118 +6,134 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
 ---
 
 <MainLayout title={pageTitle}>
-  <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-    <!-- Dashboard Header -->
-    <div class="mb-8">
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-800 dark:text-white sm:text-3xl">Order Management</h1>
-          <p class="mt-1 text-sm text-gray-500 dark:text-neutral-400">Manage and track all customer orders</p>
-        </div>
-        <div class="flex gap-3">
-          <button id="refresh-orders" class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700">
-            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
-            Refresh
-          </button>
-        </div>
-      </div>
+  <!-- Auth Guard - This div shows while checking auth -->
+  <div id="auth-loading" class="flex min-h-[60vh] items-center justify-center">
+    <div class="text-center">
+      <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-orange-500 border-t-transparent"></div>
+      <p class="mt-4 text-neutral-600 dark:text-neutral-400">Checking authentication...</p>
     </div>
+  </div>
 
-    <!-- Stats Cards -->
-    <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
-        <div class="flex items-center gap-x-4">
-          <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-900/30">
-            <svg class="h-6 w-6 text-yellow-600 dark:text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          </div>
+  <!-- Main Content - Hidden until auth is verified -->
+  <div id="admin-content" class="hidden">
+    <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+      <!-- Dashboard Header -->
+      <div class="mb-8">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p class="text-sm text-gray-500 dark:text-neutral-400">Pending</p>
-            <p id="stat-pending" class="text-2xl font-bold text-gray-800 dark:text-white">0</p>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white sm:text-3xl">Order Management</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-neutral-400">Manage and track all customer orders</p>
+          </div>
+          <div class="flex gap-3">
+            <button id="refresh-orders" class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700">
+              <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+              Refresh
+            </button>
+            <button id="logout-btn" class="inline-flex items-center gap-x-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 shadow-sm hover:bg-red-100 dark:border-red-700 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50">
+              <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+              Logout
+            </button>
           </div>
         </div>
       </div>
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
-        <div class="flex items-center gap-x-4">
-          <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
-            <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500 dark:text-neutral-400">Processing</p>
-            <p id="stat-processing" class="text-2xl font-bold text-gray-800 dark:text-white">0</p>
-          </div>
-        </div>
-      </div>
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
-        <div class="flex items-center gap-x-4">
-          <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
-            <svg class="h-6 w-6 text-purple-600 dark:text-purple-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500 dark:text-neutral-400">Dispatched</p>
-            <p id="stat-dispatched" class="text-2xl font-bold text-gray-800 dark:text-white">0</p>
-          </div>
-        </div>
-      </div>
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
-        <div class="flex items-center gap-x-4">
-          <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
-            <svg class="h-6 w-6 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500 dark:text-neutral-400">Completed</p>
-            <p id="stat-completed" class="text-2xl font-bold text-gray-800 dark:text-white">0</p>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Filter Tabs -->
-    <div class="mb-6 border-b border-gray-200 dark:border-neutral-700">
-      <nav class="-mb-px flex gap-x-6 overflow-x-auto">
-        <button data-filter="all" class="filter-tab active border-b-2 border-orange-500 px-1 pb-4 text-sm font-medium text-orange-600 dark:text-orange-400 whitespace-nowrap">All Orders</button>
-        <button data-filter="pending" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Pending</button>
-        <button data-filter="processing" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Processing</button>
-        <button data-filter="dispatched" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Dispatched</button>
-        <button data-filter="completed" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Completed</button>
-        <button data-filter="cancelled" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Cancelled</button>
-      </nav>
-    </div>
+      <!-- Stats Cards -->
+      <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+          <div class="flex items-center gap-x-4">
+            <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-900/30">
+              <svg class="h-6 w-6 text-yellow-600 dark:text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500 dark:text-neutral-400">Pending</p>
+              <p id="stat-pending" class="text-2xl font-bold text-gray-800 dark:text-white">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+          <div class="flex items-center gap-x-4">
+            <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+              <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500 dark:text-neutral-400">Processing</p>
+              <p id="stat-processing" class="text-2xl font-bold text-gray-800 dark:text-white">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+          <div class="flex items-center gap-x-4">
+            <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
+              <svg class="h-6 w-6 text-purple-600 dark:text-purple-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500 dark:text-neutral-400">Dispatched</p>
+              <p id="stat-dispatched" class="text-2xl font-bold text-gray-800 dark:text-white">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+          <div class="flex items-center gap-x-4">
+            <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+              <svg class="h-6 w-6 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500 dark:text-neutral-400">Completed</p>
+              <p id="stat-completed" class="text-2xl font-bold text-gray-800 dark:text-white">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <div class="flex flex-col">
-      <div class="-m-1.5 overflow-x-auto">
-        <div class="p-1.5 min-w-full inline-block align-middle">
-          <div class="border rounded-xl divide-y divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700 overflow-hidden shadow-sm">
-            <div class="py-3 px-4 bg-gray-50 dark:bg-neutral-800">
-              <div class="relative max-w-xs">
-                <label for="hs-table-search" class="sr-only">Search</label>
-                <input type="text" name="hs-table-search" id="hs-table-search" class="py-2.5 px-3 ps-10 block w-full border-gray-200 rounded-lg text-sm focus:border-orange-500 focus:ring-orange-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-orange-600" placeholder="Search orders...">
-                <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-3">
-                  <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <!-- Filter Tabs -->
+      <div class="mb-6 border-b border-gray-200 dark:border-neutral-700">
+        <nav class="-mb-px flex gap-x-6 overflow-x-auto">
+          <button data-filter="all" class="filter-tab active border-b-2 border-orange-500 px-1 pb-4 text-sm font-medium text-orange-600 dark:text-orange-400 whitespace-nowrap">All Orders</button>
+          <button data-filter="pending" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Pending</button>
+          <button data-filter="processing" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Processing</button>
+          <button data-filter="dispatched" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Dispatched</button>
+          <button data-filter="completed" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Completed</button>
+          <button data-filter="cancelled" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Cancelled</button>
+        </nav>
+      </div>
+
+      <div class="flex flex-col">
+        <div class="-m-1.5 overflow-x-auto">
+          <div class="p-1.5 min-w-full inline-block align-middle">
+            <div class="border rounded-xl divide-y divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700 overflow-hidden shadow-sm">
+              <div class="py-3 px-4 bg-gray-50 dark:bg-neutral-800">
+                <div class="relative max-w-xs">
+                  <label for="hs-table-search" class="sr-only">Search</label>
+                  <input type="text" name="hs-table-search" id="hs-table-search" class="py-2.5 px-3 ps-10 block w-full border-gray-200 rounded-lg text-sm focus:border-orange-500 focus:ring-orange-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-orange-600" placeholder="Search orders...">
+                  <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-3">
+                    <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="overflow-hidden">
-              <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                <thead class="bg-gray-50 dark:bg-neutral-800">
-                  <tr>
-                    <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Order ID</th>
-                    <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Customer</th>
-                    <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Date</th>
-                    <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Total</th>
-                    <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Status</th>
-                    <th scope="col" class="px-6 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="orders-table-body" class="divide-y divide-gray-200 dark:divide-neutral-700">
-                  <!-- Orders injected here -->
-                </tbody>
-              </table>
+              <div class="overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                  <thead class="bg-gray-50 dark:bg-neutral-800">
+                    <tr>
+                      <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Order ID</th>
+                      <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Customer</th>
+                      <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Date</th>
+                      <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Total</th>
+                      <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Status</th>
+                      <th scope="col" class="px-6 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-neutral-400">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="orders-table-body" class="divide-y divide-gray-200 dark:divide-neutral-700">
+                    <!-- Orders injected here -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
+</MainLayout>
 
   <!-- Order Details Modal -->
   <div id="order-modal" class="hidden fixed inset-0 z-[80] overflow-x-hidden overflow-y-auto flex items-center justify-center p-4">
@@ -526,4 +542,30 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
     backdrop?.classList.add('hidden');
     document.body.style.overflow = '';
   }
+
+  // Auth guard - redirect to login if not authenticated
+  const savedUser = localStorage.getItem('user');
+  const authLoading = document.getElementById('auth-loading');
+  const adminContent = document.getElementById('admin-content');
+
+  if (!savedUser) {
+    window.location.href = "/login";
+  } else {
+    const user = JSON.parse(savedUser);
+    // Optional: Check if user is admin
+    if (user.role !== 'admin') {
+      window.location.href = "/";
+    } else {
+      // User is authenticated and is admin, show content
+      authLoading?.classList.add('hidden');
+      adminContent?.classList.remove('hidden');
+    }
+  }
+
+  // Logout functionality
+  const logoutBtn = document.getElementById('logout-btn');
+  logoutBtn?.addEventListener('click', () => {
+    localStorage.removeItem('user');
+    window.location.href = "/login";
+  });
 </script>

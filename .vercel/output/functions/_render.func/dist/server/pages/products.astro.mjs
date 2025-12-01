@@ -1,11 +1,11 @@
-import { c as createAstro, a as createComponent, m as maybeRenderHead, b as addAttribute, d as renderComponent, r as renderTemplate, F as Fragment, u as unescapeHTML } from '../chunks/astro/server_DLiYjd8-.mjs';
+import { c as createAstro, a as createComponent, m as maybeRenderHead, b as addAttribute, r as renderComponent, d as renderTemplate, F as Fragment, u as unescapeHTML } from '../chunks/astro/server_B5Ll6kUe.mjs';
 import 'kleur/colors';
-import { $ as $$Icon, a as $$MainLayout, S as SITE } from '../chunks/MainLayout_CpB-AcgO.mjs';
-import { $ as $$PrimaryCTA } from '../chunks/PrimaryCTA_BvRZKh1n.mjs';
+import { $ as $$Icon, a as $$MainLayout, S as SITE } from '../chunks/MainLayout_-cIOTyUD.mjs';
+import { $ as $$PrimaryCTA } from '../chunks/PrimaryCTA_DR09Me4l.mjs';
 import '../chunks/index_DfOMS8cV.mjs';
-import { $ as $$Image } from '../chunks/_astro_assets_yRdkXsmR.mjs';
+import { $ as $$Image } from '../chunks/_astro_assets_UvPZzydF.mjs';
 import 'clsx';
-import { g as getCollection } from '../chunks/_astro_content_Dci-qtBb.mjs';
+import { g as getCollection } from '../chunks/_astro_content_Bs25cIIi.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$5 = createAstro("https://peshawarichappal.store");

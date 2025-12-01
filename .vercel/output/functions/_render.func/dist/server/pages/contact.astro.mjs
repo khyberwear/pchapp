@@ -1,9 +1,23 @@
-import { c as createAstro, a as createComponent, m as maybeRenderHead, q as renderSlot, r as renderTemplate, b as addAttribute, d as renderComponent, F as Fragment, u as unescapeHTML } from '../chunks/astro/server_DLiYjd8-.mjs';
+import { c as createAstro, a as createComponent, m as maybeRenderHead, b as addAttribute, d as renderTemplate, q as renderSlot, r as renderComponent, F as Fragment, u as unescapeHTML } from '../chunks/astro/server_B5Ll6kUe.mjs';
 import 'kleur/colors';
-import { $ as $$Icon, a as $$MainLayout, S as SITE } from '../chunks/MainLayout_CpB-AcgO.mjs';
-import { $ as $$AuthBtn } from '../chunks/AuthBtn_Byv4S58r.mjs';
+import { $ as $$Icon, a as $$MainLayout, S as SITE } from '../chunks/MainLayout_-cIOTyUD.mjs';
 import 'clsx';
 export { renderers } from '../renderers.mjs';
+
+const $$Astro$5 = createAstro("https://peshawarichappal.store");
+const $$AuthBtn = createComponent(($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro$5, $$props, $$slots);
+  Astro2.self = $$AuthBtn;
+  const { title } = Astro2.props;
+  const baseClasses = "inline-flex w-full items-center justify-center gap-x-2 rounded-lg px-4 py-3 text-sm font-bold text-neutral-700 focus-visible:ring-3 outline-hidden transition duration-300";
+  const borderClasses = "border border-transparent";
+  const bgColorClasses = "bg-yellow-400 dark:focus:outline-hidden";
+  const hoverClasses = "hover:bg-yellow-500";
+  const fontSizeClasses = "2xl:text-base";
+  const disabledClasses = "disabled:pointer-events-none disabled:opacity-50";
+  const ringClasses = "ring-zinc-500 dark:ring-zinc-200";
+  return renderTemplate`<!-- Styled submit button with dynamic title -->${maybeRenderHead()}<button type="submit"${addAttribute(`${baseClasses} ${borderClasses} ${bgColorClasses} ${hoverClasses} ${fontSizeClasses} ${disabledClasses} ${ringClasses}`, "class")}>${title}</button>`;
+}, "/Users/atifjan/PC/pchapp/src/components/ui/buttons/AuthBtn.astro", void 0);
 
 const $$Astro$4 = createAstro("https://peshawarichappal.store");
 const $$ContactIconBlock = createComponent(($$result, $$props, $$slots) => {
