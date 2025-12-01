@@ -1,10 +1,15 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "search.exclude": {
-    "**/.vercel": true
+    "**/.vercel": true,
+    "**/.vercel/**": true
   },
   "files.exclude": {
     "**/.vercel": true
   },
-  "typescript.preferences.importModuleSpecifier": "relative"
+  "files.watcherExclude": {
+    "**/.vercel/**": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false
 }

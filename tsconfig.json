@@ -34,10 +34,15 @@
   },
   "include": [
     ".astro/types.d.ts",
-    "**/*"
+    "src/**/*",
+    "*.config.mjs",
+    "*.config.ts"
   ],
   "exclude": [
     "dist",
-    ".vercel"
+    "dist/**",
+    ".vercel",
+    ".vercel/**",
+    "node_modules"
   ]
 }
