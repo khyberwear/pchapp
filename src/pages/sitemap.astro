@@ -4,6 +4,7 @@ import { SITE } from "@data/constants";
 import { getCollection } from "astro:content";
 
 const pageTitle = `Sitemap | ${SITE.title}`;
+const pageDescription = "Complete sitemap of Peshawari Chappal Store. Find all pages, products, blog articles, and resources. Shop authentic handcrafted Peshawari Chappals from Charsadda, Pakistan.";
 
 // Get all products
 const products = await getCollection("products", ({ id }) => id.startsWith("en/"));
@@ -12,11 +13,11 @@ const products = await getCollection("products", ({ id }) => id.startsWith("en/"
 const blogPosts = await getCollection("blog", ({ id }) => id.startsWith("en/"));
 
 const mainPages = [
-  { name: "Home", url: "/", icon: "home" },
-  { name: "Products", url: "/products", icon: "products" },
-  { name: "Blog", url: "/blog", icon: "blog" },
-  { name: "Contact", url: "/contact", icon: "contact" },
-  { name: "Sitemap", url: "/sitemap", icon: "sitemap" },
+  { name: "Home", url: "/", icon: "home", description: "Welcome to Peshawari Chappal Store" },
+  { name: "Products", url: "/products", icon: "products", description: "Browse our chappal collection" },
+  { name: "Blog", url: "/blog", icon: "blog", description: "Styling tips & care guides" },
+  { name: "Contact", url: "/contact", icon: "contact", description: "Get in touch with us" },
+  { name: "Sitemap", url: "/sitemap", icon: "sitemap", description: "Website navigation" },
 ];
 
 const customerService = [
@@ -25,9 +26,50 @@ const customerService = [
   { name: "Shopping Cart", url: "/checkout" },
   { name: "Checkout", url: "/checkout" },
 ];
+
+// JSON-LD Structured Data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": pageTitle,
+  "description": pageDescription,
+  "url": "https://peshawarichappal.store/sitemap",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": mainPages.map((page, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": page.name,
+      "url": `https://peshawarichappal.store${page.url}`
+    }))
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Peshawari Chappal Store",
+    "url": "https://peshawarichappal.store",
+    "logo": "https://peshawarichappal.store/logokw.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+92-301-8768666",
+      "contactType": "customer service",
+      "email": "info@khyberwear.com",
+      "areaServed": "PK",
+      "availableLanguage": "English"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Charsadda",
+      "addressCountry": "Pakistan"
+    }
+  }
+};
 ---
 
-<MainLayout title={pageTitle}>
+<MainLayout 
+  title={pageTitle} 
+  customDescription={pageDescription}
+  structuredData={structuredData}
+>
   <!-- Hero Section -->
   <section class="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 py-16 overflow-hidden">
     <!-- Decorative Elements -->

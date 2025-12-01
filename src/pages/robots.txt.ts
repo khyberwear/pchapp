@@ -1,26 +1,50 @@
 // https://docs.astro.build/en/guides/integrations-guide/sitemap/#usage
 import type { APIRoute } from 'astro';
 
+const site = "https://peshawarichappal.store";
+
 const robotsTxt = `
+# Peshawari Chappal Store - robots.txt
+# https://peshawarichappal.store
+
 User-agent: Googlebot
-Disallow:
 Allow: /
-Crawl-delay: 10
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
 
 User-agent: Yandex
-Disallow:
 Allow: /
 Crawl-delay: 2
 
-User-agent: archive.org_bot
-Disallow:
+User-agent: facebot
 Allow: /
-Crawl-delay: 2
+
+User-agent: Twitterbot
+Allow: /
 
 User-agent: *
-Disallow: /
+Allow: /
+Crawl-delay: 2
 
-Sitemap: ${new URL('sitemap-index.xml', import.meta.env.SITE).href}
+# Disallow admin and API routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /settings
+Disallow: /checkout
+
+# Sitemap location
+Sitemap: ${site}/sitemap.xml
 `.trim();
 
 export const GET: APIRoute = () => {
