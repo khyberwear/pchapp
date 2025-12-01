@@ -5,23 +5,68 @@ export const prerender = true;
 // Import the necessary components
 import MainLayout from "@/layouts/MainLayout.astro";
 import HeroSection from "@components/sections/landing/HeroSection.astro";
-import FeaturesGeneral from "@components/sections/features/FeaturesGeneral.astro";
-import FeaturesNavs from "@components/sections/features/FeaturesNavs.astro";
-import TestimonialsSection from "@components/sections/testimonials/TestimonialsSection.astro";
 import FAQ from "@components/sections/misc/FAQ.astro";
 import heroImage from "@images/hero-image.avif";
 import faqs from "@data/faqs.json";
-import features from "@data/features.json";
-import featureImage from "@images/features-image.avif";
-import construction from "@images/construction-image.avif";
-import tools from "@images/automated-tools.avif";
-import dashboard from "@images/dashboard-image.avif";
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+
+// Get products for the featured section
+const products = (await getCollection("products", ({ id }) => id.startsWith("en/")))
+  .sort((a, b) => a.data.main.id - b.data.main.id)
+  .slice(0, 4);
 
 const avatarSrcs: Array<string> = [
   "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80",
   "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80",
   "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&&auto=format&fit=facearea&facepad=3&w=300&h=300&q=80",
   "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80",
+];
+
+// Features data
+const features = [
+  {
+    icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>`,
+    title: "100% Genuine Leather",
+    description: "Premium buffalo and camel leather sourced from trusted local suppliers."
+  },
+  {
+    icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>`,
+    title: "Handcrafted Excellence",
+    description: "Each pair is meticulously handmade by skilled Peshawar artisans."
+  },
+  {
+    icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+    title: "All-Day Comfort",
+    description: "Ergonomic design with cushioned soles for maximum comfort."
+  },
+  {
+    icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>`,
+    title: "Free Shipping",
+    description: "Free delivery across Pakistan on all orders over Rs 3,000."
+  }
+];
+
+// Testimonials
+const testimonials = [
+  {
+    content: "Best quality Peshawari Chappals I've ever owned! The leather is so soft and they're incredibly comfortable. Highly recommended!",
+    author: "Imran Ahmed",
+    location: "Lahore",
+    rating: 5
+  },
+  {
+    content: "I ordered these for my wedding and received so many compliments. The craftsmanship is exceptional and they look even better in person.",
+    author: "Farhan Khan",
+    location: "Karachi",
+    rating: 5
+  },
+  {
+    content: "These chappals are worth every rupee! They've become my everyday footwear. Super comfortable and stylish.",
+    author: "Ali Hassan",
+    location: "Islamabad",
+    rating: 5
+  }
 ];
 ---
 
@@ -40,85 +85,188 @@ const avatarSrcs: Array<string> = [
     starCount={4}
     reviews=`From Over <span class="font-bold">12.8k</span> Reviews`
     src={heroImage}
-    alt="Stack of Peshawari Chappal product boxes containing assorted hardware tools"
+    alt="Handcrafted Peshawari Chappal collection"
   />
 
-  <FeaturesGeneral
-    title="Authentic Peshawari Craftsmanship"
-    subTitle="At Peshawari Chappal, we bring you the finest handcrafted leather sandals from Peshawar. Our master craftsmen use traditional techniques passed down through generations to create comfortable, durable, and stylish footwear that celebrates Pashtun heritage."
-    src={featureImage}
-    alt="Peshawari Chappal collection display"
-    features={features}
-  />
+  <!-- Features Section -->
+  <section class="py-16 bg-gradient-to-b from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900">
+    <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <span class="inline-block px-4 py-1 mb-4 text-sm font-medium text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-900/30 dark:text-yellow-400">
+          Why Choose Us
+        </span>
+        <h2 class="text-3xl font-bold text-neutral-800 dark:text-neutral-200 md:text-4xl">
+          Authentic Peshawari Craftsmanship
+        </h2>
+        <p class="mt-4 text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+          Every pair tells a story of tradition, quality, and passion for authentic Pakistani footwear.
+        </p>
+      </div>
+      
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {features.map((feature) => (
+          <div class="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform">
+              <Fragment set:html={feature.icon} />
+            </div>
+            <h3 class="text-lg font-bold text-neutral-800 dark:text-neutral-200 mb-2">{feature.title}</h3>
+            <p class="text-neutral-600 dark:text-neutral-400 text-sm">{feature.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 
-  <FeaturesNavs
-    title=`Discover <span class="text-yellow-500 dark:text-yellow-400">Peshawari Chappal</span> — Traditional Elegance Meets Modern Style`
-    tabs={[
-      {
-        heading: "Premium Leather Selection",
-        content:
-          "Choose from our range of premium leather options including buffalo hide, camel leather, and genuine cowhide. Each material is carefully sourced and treated to ensure maximum comfort and durability for your Peshawari Chappals.",
-        svg: "tools",
-        src: tools,
-        alt: "Premium leather materials for Peshawari Chappals",
-        first: true,
-      },
-      {
-        heading: "Traditional Craftsmanship",
-        content:
-          "Our skilled artisans handcraft each pair of chappals using time-honored techniques from Peshawar. From cutting and stitching to sole attachment, every step is performed with precision and care to deliver authentic Peshawari footwear.",
-        svg: "dashboard",
-        src: dashboard,
-        alt: "Artisan crafting a Peshawari Chappal",
-        second: true,
-      },
-      {
-        heading: "Variety of Styles",
-        content:
-          "Explore our diverse collection featuring classic Charsadda style, modern Zalmi designs, and elegant Imran Khan style chappals. Whether for daily wear or special occasions, find the perfect pair that matches your personality.",
-        svg: "house",
-        src: construction,
-        alt: "Collection of different Peshawari Chappal styles",
-      },
-    ]}
-  />
+  <!-- Featured Products Section -->
+  <section class="py-16">
+    <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12">
+        <div>
+          <span class="inline-block px-4 py-1 mb-4 text-sm font-medium text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-900/30 dark:text-yellow-400">
+            Our Collection
+          </span>
+          <h2 class="text-3xl font-bold text-neutral-800 dark:text-neutral-200 md:text-4xl">
+            Featured Chappals
+          </h2>
+          <p class="mt-2 text-neutral-600 dark:text-neutral-400">
+            Discover our most popular handcrafted styles
+          </p>
+        </div>
+        <a href="/products" class="mt-4 sm:mt-0 inline-flex items-center gap-2 text-yellow-600 hover:text-yellow-700 dark:text-yellow-500 dark:hover:text-yellow-400 font-medium transition-colors">
+          View All Products
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
+      
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {products.map((product) => (
+          <a href={`/products/${product.id.replace(/^en\//, "")}`} class="group relative bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+            <div class="aspect-square overflow-hidden">
+              <img 
+                src={typeof product.data.main.imgCard === 'string' ? product.data.main.imgCard : product.data.main.imgCard.src}
+                alt={product.data.main.imgAlt}
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-neutral-800 dark:text-neutral-200 group-hover:text-yellow-600 dark:group-hover:text-yellow-500 transition-colors">
+                {product.data.title}
+              </h3>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{product.data.description}</p>
+              <div class="mt-4 flex items-center justify-between">
+                <span class="text-yellow-600 dark:text-yellow-500 font-bold">View Details</span>
+                <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
 
-  <TestimonialsSection
-    title="Loved by Chappal Enthusiasts"
-    subTitle="Join thousands of satisfied customers who have discovered the comfort and style of authentic Peshawari Chappals."
-    ;
-    testimonials={[
-      {
-        content:
-          "These Peshawari Chappals are absolutely amazing! The leather quality is exceptional and they're so comfortable. I've received countless compliments wearing them with both traditional and Western outfits.",
-        author: "Ahmed Khan",
-        role: "Fashion Enthusiast | Islamabad",
-        avatarSrc:
-          "https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?q=80&w=1453&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-      },
-    ]}
-    statistics={[
-      {
-        count: "50k+",
-        description:
-          "happy customers wearing our handcrafted Peshawari Chappals",
-      },
-      {
-        count: "4.9★",
-        description:
-          "average rating from our satisfied chappal lovers",
-      },
-      {
-        count: "100%",
-        description:
-          "genuine leather and traditional craftsmanship guaranteed",
-      },
-      {
-        count: "15+",
-        description: "years of expertise in handcrafting authentic Peshawari footwear",
-      },
-    ]}
-  />
+  <!-- Stats Section -->
+  <section class="py-16 bg-gradient-to-r from-yellow-500 to-yellow-600">
+    <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 text-center">
+        <div>
+          <div class="text-4xl md:text-5xl font-bold text-white mb-2">50K+</div>
+          <p class="text-yellow-100">Happy Customers</p>
+        </div>
+        <div>
+          <div class="text-4xl md:text-5xl font-bold text-white mb-2">15+</div>
+          <p class="text-yellow-100">Years Experience</p>
+        </div>
+        <div>
+          <div class="text-4xl md:text-5xl font-bold text-white mb-2">100%</div>
+          <p class="text-yellow-100">Genuine Leather</p>
+        </div>
+        <div>
+          <div class="text-4xl md:text-5xl font-bold text-white mb-2">4.9★</div>
+          <p class="text-yellow-100">Customer Rating</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="py-16">
+    <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <span class="inline-block px-4 py-1 mb-4 text-sm font-medium text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-900/30 dark:text-yellow-400">
+          Testimonials
+        </span>
+        <h2 class="text-3xl font-bold text-neutral-800 dark:text-neutral-200 md:text-4xl">
+          What Our Customers Say
+        </h2>
+        <p class="mt-4 text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+          Join thousands of satisfied customers who love their Peshawari Chappals
+        </p>
+      </div>
+      
+      <div class="grid gap-6 md:grid-cols-3">
+        {testimonials.map((testimonial) => (
+          <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg">
+            <div class="flex gap-1 mb-4">
+              {[...Array(testimonial.rating)].map(() => (
+                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                </svg>
+              ))}
+            </div>
+            <p class="text-neutral-600 dark:text-neutral-400 mb-4 italic">"{testimonial.content}"</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-white font-bold">
+                {testimonial.author.charAt(0)}
+              </div>
+              <div>
+                <p class="font-bold text-neutral-800 dark:text-neutral-200">{testimonial.author}</p>
+                <p class="text-sm text-neutral-500 dark:text-neutral-400">{testimonial.location}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-neutral-100 dark:bg-neutral-800">
+    <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-br from-neutral-800 to-neutral-900 dark:from-neutral-700 dark:to-neutral-800 rounded-3xl p-8 md:p-12 lg:p-16 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+          <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
+            </pattern>
+            <rect width="100" height="100" fill="url(#grid)"/>
+          </svg>
+        </div>
+        <div class="relative">
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+            Ready to Step into Tradition?
+          </h2>
+          <p class="text-neutral-300 text-lg max-w-2xl mx-auto mb-8">
+            Experience the comfort and elegance of authentic Peshawari Chappals. Order now and get free shipping on orders over Rs 3,000.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/products" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-neutral-900 font-bold rounded-xl transition-colors">
+              Shop Now
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+            <a href="/contact" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-neutral-900 font-bold rounded-xl transition-colors">
+              Contact Us
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <FAQ title="Frequently<br />asked questions" faqs={faqs} />
 </MainLayout>
