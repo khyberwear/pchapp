@@ -1,1 +1,0 @@
-import{a as o}from"./index.daetGfa_.js";const e=typeof localStorage<"u"?localStorage.getItem("user"):null,t=e?JSON.parse(e):null,l=o(t);function r(){l.set(null),typeof localStorage<"u"&&localStorage.removeItem("user")}export{l as $,r as l};

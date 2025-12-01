@@ -1,0 +1,274 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import EmailInput from "@components/ui/forms/input/EmailInput.astro";
+import PasswordInput from "@components/ui/forms/input/PasswordInput.astro";
+import Checkbox from "@components/ui/forms/input/Checkbox.astro";
+import AuthBtn from "@components/ui/buttons/AuthBtn.astro";
+import GoogleBtn from "@components/ui/buttons/GoogleBtn.astro";
+---
+
+<MainLayout>
+  <section class="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-800">
+    <div class="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <div class="w-full max-w-md">
+        <!-- Back to Home Link -->
+        <a 
+          href="/" 
+          class="mb-8 inline-flex items-center gap-2 text-sm font-medium text-neutral-600 transition-colors hover:text-orange-500 dark:text-neutral-400 dark:hover:text-orange-400"
+        >
+          <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Back to Home
+        </a>
+
+        <!-- Login Card -->
+        <div class="overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-xl shadow-orange-100/50 dark:border-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-900/50">
+          <!-- Header -->
+          <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-8 text-center">
+            <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+              <svg class="h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-white">Welcome Back</h1>
+            <p class="mt-2 text-orange-100">Sign in to your account</p>
+          </div>
+
+          <!-- Form Content -->
+          <div class="p-6 sm:p-8">
+            <!-- Tab Navigation -->
+            <div class="mb-6 flex rounded-xl bg-neutral-100 p-1 dark:bg-neutral-700" id="auth-tabs">
+              <button 
+                type="button"
+                class="auth-tab active flex-1 rounded-lg py-2.5 text-sm font-semibold transition-all"
+                data-tab="login"
+              >
+                Sign In
+              </button>
+              <button 
+                type="button"
+                class="auth-tab flex-1 rounded-lg py-2.5 text-sm font-semibold transition-all"
+                data-tab="register"
+              >
+                Sign Up
+              </button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form-container">
+              <GoogleBtn title="Sign in with Google" />
+
+              <div class="my-6 flex items-center text-xs uppercase text-neutral-400 before:me-4 before:flex-1 before:border-t before:border-neutral-200 after:ms-4 after:flex-1 after:border-t after:border-neutral-200 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                Or continue with email
+              </div>
+
+              <form id="login-form" class="space-y-4">
+                <EmailInput id="login-email" errorId="login-email-error" />
+                <PasswordInput
+                  forgot={true}
+                  id="login-password"
+                  errorId="login-password-error"
+                  content="8+ characters required"
+                />
+                <Checkbox id="remember-me" />
+                <AuthBtn title="Sign in" />
+              </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form-container" class="hidden">
+              <GoogleBtn title="Sign up with Google" />
+
+              <div class="my-6 flex items-center text-xs uppercase text-neutral-400 before:me-4 before:flex-1 before:border-t before:border-neutral-200 after:ms-4 after:flex-1 after:border-t after:border-neutral-200 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                Or continue with email
+              </div>
+
+              <form id="register-form" class="space-y-4">
+                <EmailInput id="register-email" errorId="register-email-error" />
+                <PasswordInput
+                  id="create-password"
+                  errorId="register-password-error"
+                  content="8+ characters required"
+                />
+                <PasswordInput
+                  label="Confirm Password"
+                  id="confirm-password"
+                  errorId="confirm-password-error"
+                  content="Password does not match"
+                />
+                <Checkbox label="I accept the " id="terms-agree">
+                  <a
+                    class="font-medium text-orange-500 hover:underline dark:text-orange-400"
+                    href="#"
+                  >Terms and Conditions</a>
+                </Checkbox>
+                <AuthBtn title="Create Account" />
+              </form>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div id="recover-form-container" class="hidden">
+              <div class="mb-6 text-center">
+                <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
+                  <svg class="h-6 w-6 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-neutral-800 dark:text-neutral-200">Forgot Password?</h3>
+                <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Enter your email to reset your password</p>
+              </div>
+
+              <form id="recover-form" class="space-y-4">
+                <EmailInput id="recover-email" errorId="recover-email-error" />
+                <AuthBtn title="Send Reset Link" />
+              </form>
+
+              <button 
+                type="button"
+                id="back-to-login"
+                class="mt-4 w-full text-center text-sm font-medium text-orange-500 hover:underline dark:text-orange-400"
+              >
+                Back to Sign In
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Text -->
+        <p class="mt-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
+          By signing in, you agree to our 
+          <a href="#" class="text-orange-500 hover:underline">Privacy Policy</a> 
+          and 
+          <a href="#" class="text-orange-500 hover:underline">Terms of Service</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .auth-tab {
+    color: #6b7280;
+    background: transparent;
+  }
+  .auth-tab.active {
+    color: #ea580c;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  :global(.dark) .auth-tab.active {
+    background: #262626;
+    color: #fb923c;
+  }
+</style>
+
+<script>
+  import { login } from "@stores/authStore";
+
+  // Tab switching
+  const tabs = document.querySelectorAll('.auth-tab');
+  const loginContainer = document.getElementById('login-form-container');
+  const registerContainer = document.getElementById('register-form-container');
+  const recoverContainer = document.getElementById('recover-form-container');
+  const authTabs = document.getElementById('auth-tabs');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tabName = tab.getAttribute('data-tab');
+      
+      // Update active tab
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      // Show/hide forms
+      if (tabName === 'login') {
+        loginContainer?.classList.remove('hidden');
+        registerContainer?.classList.add('hidden');
+        recoverContainer?.classList.add('hidden');
+      } else if (tabName === 'register') {
+        loginContainer?.classList.add('hidden');
+        registerContainer?.classList.remove('hidden');
+        recoverContainer?.classList.add('hidden');
+      }
+    });
+  });
+
+  // Forgot password link
+  const forgotLinks = document.querySelectorAll('[data-hs-overlay="#hs-toggle-between-modals-recover-modal"]');
+  forgotLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginContainer?.classList.add('hidden');
+      registerContainer?.classList.add('hidden');
+      recoverContainer?.classList.remove('hidden');
+      authTabs?.classList.add('hidden');
+    });
+  });
+
+  // Back to login button
+  const backToLogin = document.getElementById('back-to-login');
+  backToLogin?.addEventListener('click', () => {
+    loginContainer?.classList.remove('hidden');
+    registerContainer?.classList.add('hidden');
+    recoverContainer?.classList.add('hidden');
+    authTabs?.classList.remove('hidden');
+    tabs.forEach(t => {
+      if (t.getAttribute('data-tab') === 'login') {
+        t.classList.add('active');
+      } else {
+        t.classList.remove('active');
+      }
+    });
+  });
+
+  // Login form submission
+  const loginForm = document.getElementById('login-form');
+  loginForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const emailInput = document.getElementById('login-email') as HTMLInputElement;
+    const email = emailInput?.value || 'user@example.com';
+    
+    // Check for admin credentials
+    if (email === 'admin@pchapp.com') {
+      login(email, 'admin');
+    } else {
+      login(email, 'user');
+    }
+    
+    alert(`Logged in as ${email}`);
+    window.location.href = '/';
+  });
+
+  // Register form submission
+  const registerForm = document.getElementById('register-form');
+  registerForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const emailInput = document.getElementById('register-email') as HTMLInputElement;
+    const email = emailInput?.value || 'user@example.com';
+    
+    login(email, 'user');
+    alert(`Account created for ${email}`);
+    window.location.href = '/';
+  });
+
+  // Recover form submission
+  const recoverForm = document.getElementById('recover-form');
+  recoverForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const emailInput = document.getElementById('recover-email') as HTMLInputElement;
+    const email = emailInput?.value;
+    
+    alert(`Password reset link sent to ${email}`);
+    // Go back to login
+    backToLogin?.click();
+  });
+
+  // Check if already logged in
+  import { $user } from "@stores/authStore";
+  $user.subscribe((user) => {
+    if (user) {
+      window.location.href = '/';
+    }
+  });
+</script>

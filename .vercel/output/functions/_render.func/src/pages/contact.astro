@@ -1,0 +1,36 @@
+---
+// Import the necessary components
+import MainLayout from "@/layouts/MainLayout.astro";
+import ContactSection from "@components/sections/misc/ContactSection.astro";
+import { SITE } from "@data/constants";
+
+const pageTitle: string = `Contact | ${SITE.title}`;
+const metaDescription =
+  "Have questions about our Peshawari Chappals? Reach out for sizing help, custom orders, or bulk inquiries. We're here to help you find the perfect handcrafted leather sandals.";
+const ogTitle = "Contact Us | Peshawari Chappal";
+---
+
+<MainLayout
+  title={pageTitle}
+  customDescription={metaDescription}
+  customOgTitle={ogTitle}
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://peshawarichappal.store/contact",
+    url: "https://peshawarichappal.store/contact",
+    name: "Contact Us | Peshawari Chappal",
+    description:
+      "Have questions about our Peshawari Chappals? Reach out for sizing help, custom orders, or bulk inquiries. We're here to help you find the perfect handcrafted leather sandals.",
+    isPartOf: {
+      "@type": "WebSite",
+      url: "https://peshawarichappal.store",
+      name: "Peshawari Chappal",
+      description:
+        "Authentic handcrafted Peshawari Chappals made with premium leather. Traditional Pakistani footwear crafted for comfort and style.",
+    },
+    inLanguage: "en-US",
+  }}
+>
+  <ContactSection />
+</MainLayout>

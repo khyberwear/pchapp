@@ -1,5 +1,8 @@
 ---
 // Import the necessary components from their respective component files
+import LoginModal from "@components/ui/forms/LoginModal.astro";
+import RegisterModal from "@components/ui/forms/RegisterModal.astro";
+import RecoverModal from "@components/ui/forms/RecoverModal.astro";
 import LoginBtn from "@components/ui/buttons/LoginBtn.astro";
 ---
 
@@ -39,6 +42,13 @@ import LoginBtn from "@components/ui/buttons/LoginBtn.astro";
     </div>
   </div>
 </div>
+
+<!-- Login Modal -->
+<LoginModal />
+<!-- Register Modal -->
+<RegisterModal />
+<!-- Password Recovery Modal -->
+<RecoverModal />
 
 <script>
   import { $user, logout } from "@stores/authStore";
