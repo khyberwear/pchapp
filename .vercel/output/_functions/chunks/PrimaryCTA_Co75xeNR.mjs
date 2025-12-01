@@ -1,6 +1,6 @@
 import { c as createAstro, a as createComponent, m as maybeRenderHead, b as addAttribute, r as renderComponent, d as renderTemplate } from './astro/server_3TkFQEGt.mjs';
 import 'kleur/colors';
-import { $ as $$Icon } from './MainLayout_Das2oow9.mjs';
+import { $ as $$Icon } from './MainLayout_CnSuKhx_.mjs';
 
 const $$Astro = createAstro("https://peshawarichappal.store");
 const $$PrimaryCTA = createComponent(($$result, $$props, $$slots) => {

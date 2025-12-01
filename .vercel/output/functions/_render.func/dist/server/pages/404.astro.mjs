@@ -1,6 +1,6 @@
 import { c as createAstro, a as createComponent, m as maybeRenderHead, b as addAttribute, r as renderComponent, d as renderTemplate, e as renderScript } from '../chunks/astro/server_3TkFQEGt.mjs';
 import 'kleur/colors';
-import { $ as $$Icon, S as SITE, a as $$MainLayout } from '../chunks/MainLayout_Das2oow9.mjs';
+import { $ as $$Icon, S as SITE, a as $$MainLayout } from '../chunks/MainLayout_CnSuKhx_.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$1 = createAstro("https://peshawarichappal.store");

@@ -1,6 +1,6 @@
 import { c as createAstro, a as createComponent, m as maybeRenderHead, q as renderSlot, d as renderTemplate, b as addAttribute, r as renderComponent, F as Fragment, u as unescapeHTML } from '../chunks/astro/server_3TkFQEGt.mjs';
 import 'kleur/colors';
-import { b as $$AuthBtn, $ as $$Icon, a as $$MainLayout, S as SITE } from '../chunks/MainLayout_Das2oow9.mjs';
+import { b as $$AuthBtn, $ as $$Icon, a as $$MainLayout, S as SITE } from '../chunks/MainLayout_CnSuKhx_.mjs';
 import 'clsx';
 export { renderers } from '../renderers.mjs';
 
