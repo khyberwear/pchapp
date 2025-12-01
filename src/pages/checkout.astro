@@ -6,7 +6,7 @@ const pageTitle = `Checkout | ${SITE.title}`;
 ---
 
 <MainLayout title={pageTitle}>
-  <section class="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+  <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-gray-800 dark:text-neutral-200">
         Checkout
@@ -16,9 +16,12 @@ const pageTitle = `Checkout | ${SITE.title}`;
       </p>
     </div>
 
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
-      <div class="p-4 sm:p-7">
-        <form id="checkout-form">
+    <div class="grid gap-8 lg:grid-cols-3">
+      <!-- Left Column - Form (2/3 width) -->
+      <div class="lg:col-span-2">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+          <div class="p-4 sm:p-7">
+            <form id="checkout-form">
           <div class="grid gap-y-6">
             <!-- Contact Info -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -127,9 +130,12 @@ const pageTitle = `Checkout | ${SITE.title}`;
         </form>
       </div>
     </div>
+  </div>
 
+  <!-- Right Column - Order Summary (1/3 width) -->
+  <div class="lg:col-span-1">
     <!-- Order Summary Card -->
-    <div class="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 lg:sticky lg:top-24">
       <div class="p-4 sm:p-7">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-neutral-200 mb-1">Order summary</h3>
         <p class="text-sm text-gray-500 dark:text-neutral-400 mb-6">Review your items before placing the order.</p>
@@ -154,6 +160,8 @@ const pageTitle = `Checkout | ${SITE.title}`;
         </div>
       </div>
     </div>
+  </div>
+</div>
   </section>
 </MainLayout>
 
@@ -203,10 +211,11 @@ const pageTitle = `Checkout | ${SITE.title}`;
 
     orderItemsContainer.innerHTML = items.map((item) => {
       subtotal += item.price * item.quantity;
+      const imageUrl = String(item.image);
       return `
         <div class="flex justify-between items-start pb-4 border-b border-gray-200 dark:border-neutral-700 last:border-b-0">
           <div class="flex gap-4">
-            <img src="${item.image}" alt="${item.title}" class="w-16 h-16 object-cover rounded-md">
+            <img src="${imageUrl}" alt="${item.title}" class="w-16 h-16 object-cover rounded-md">
             <div>
               <p class="text-sm font-medium text-gray-800 dark:text-neutral-200">${item.title}</p>
               <p class="text-sm text-gray-500 dark:text-neutral-400">Rs ${item.price} each</p>

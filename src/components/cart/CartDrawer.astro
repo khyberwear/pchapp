@@ -43,7 +43,7 @@
     <div class="border-t p-4 dark:border-neutral-700">
       <div class="mb-4 flex justify-between text-lg font-bold text-gray-800 dark:text-white">
         <span>Total</span>
-        <span id="cart-total">$0.00</span>
+        <span id="cart-total">Rs 0.00</span>
       </div>
       <a
         href="/checkout"
@@ -68,16 +68,17 @@
     
     if (items.length === 0) {
       cartItemsContainer.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400">Your cart is empty.</p>';
-      cartTotalElement.textContent = "$0.00";
+      cartTotalElement.textContent = "Rs 0.00";
       return;
     }
 
     let total = 0;
     cartItemsContainer.innerHTML = items.map((item) => {
       total += item.price * item.quantity;
+      const imageUrl = String(item.image);
       return `
         <div class="flex gap-x-4 rounded-lg border p-3 dark:border-neutral-700">
-          <img src="${item.image}" alt="${item.title}" class="w-16 h-16 object-cover rounded-md">
+          <img src="${imageUrl}" alt="${item.title}" class="w-16 h-16 object-cover rounded-md">
           <div class="flex-1 min-w-0">
             <h4 class="text-sm font-medium text-gray-800 dark:text-white truncate">${item.title}</h4>
             <p class="text-sm font-semibold text-gray-800 dark:text-white">Rs ${(item.price * item.quantity).toFixed(2)}</p>
@@ -111,7 +112,7 @@
       `;
     }).join("");
 
-    cartTotalElement.textContent = `$${total.toFixed(2)}`;
+    cartTotalElement.textContent = `Rs ${total.toFixed(2)}`;
 
     // Add event listeners to remove buttons
     document.querySelectorAll(".remove-btn").forEach((btn) => {
