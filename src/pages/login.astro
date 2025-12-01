@@ -138,16 +138,21 @@ import { SITE } from "@data/constants";
     e.preventDefault();
     
     const emailInput = document.getElementById("email") as HTMLInputElement;
+    const passwordInputEl = document.getElementById("password") as HTMLInputElement;
     const email = emailInput?.value;
+    const password = passwordInputEl?.value;
+    
+    // Admin credentials - change these to your desired login details
+    const ADMIN_EMAIL = "atifjan2019@gmail.com";
+    const ADMIN_PASSWORD = "Test@#1234$";
     
     // Check for admin credentials
-    if (email === "admin@pchapp.com") {
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       login(email, "admin");
+      window.location.href = "/admin";
     } else {
-      login(email, "user");
+      // Show error message for invalid credentials
+      errorMessage?.classList.remove("hidden");
     }
-    
-    // Redirect to admin page after successful login
-    window.location.href = "/admin";
   });
 </script>
