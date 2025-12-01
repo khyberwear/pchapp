@@ -347,7 +347,6 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
   import { addToCart } from "@stores/cartStore";
 
   const addToCartBtn = document.getElementById("add-to-cart-btn");
-  const whatsappBtn = document.getElementById("order-whatsapp-btn");
 
   if (addToCartBtn) {
     addToCartBtn.addEventListener("click", () => {
@@ -366,16 +365,6 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
         // @ts-ignore
         window.HSOverlay.open(cartDrawer);
       }
-    });
-  }
-
-  if (whatsappBtn) {
-    whatsappBtn.addEventListener("click", () => {
-      const productTitle = addToCartBtn?.dataset.title || "Product";
-      const productPrice = addToCartBtn?.dataset.price || "0";
-      const message = encodeURIComponent(`Hi, I want to order: ${productTitle}\nPrice: Rs ${productPrice}`);
-      const whatsappUrl = `https://wa.me/923001234567?text=${message}`;
-      window.open(whatsappUrl, "_blank");
     });
   }
 </script>
