@@ -10,7 +10,7 @@
     "description": "Best option for DIY projects",
     "price": "49",
     "cents": ".00",
-    "billingFrequency": "USD / monthly",
+    "billingFrequency": "Rs / monthly",
     "features": [
       "Key hardware tools",
       "Access to guides & tutorials",
@@ -25,7 +25,7 @@
     "description": "Best for large scale uses",
     "price": "89",
     "cents": ".00",
-    "billingFrequency": "USD / monthly",
+    "billingFrequency": "Rs / monthly",
     "features": [
       "Premium tool selection",
       "Priority support",
