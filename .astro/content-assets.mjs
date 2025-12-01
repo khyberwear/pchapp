@@ -1,8 +1,1 @@
-
-import __ASTRO_IMAGE_IMPORT_Z2scB8W from "../../images/starlight/screwfast_hero.svg?astroContentImageFlag=&importer=src%2Fcontent%2Fdocs%2Fwelcome-to-docs.mdx";
-import __ASTRO_IMAGE_IMPORT_Z1S9kBH from "../../images/starlight/screwfast_hero_dark.svg?astroContentImageFlag=&importer=src%2Fcontent%2Fdocs%2Fwelcome-to-docs.mdx";
-import __ASTRO_IMAGE_IMPORT_20bWNI from "@/images/insights/insight-2.avif?astroContentImageFlag=&importer=src%2Fcontent%2Finsights%2Fen%2Finsight-2.md";
-import __ASTRO_IMAGE_IMPORT_Z1jJENC from "@/images/insights/insight-1.avif?astroContentImageFlag=&importer=src%2Fcontent%2Finsights%2Fen%2Finsight-1.md";
-import __ASTRO_IMAGE_IMPORT_eVrC8 from "@/images/insights/insight-3.avif?astroContentImageFlag=&importer=src%2Fcontent%2Finsights%2Fen%2Finsight-3.md";
-export default new Map([["../../images/starlight/screwfast_hero.svg?astroContentImageFlag=&importer=src%2Fcontent%2Fdocs%2Fwelcome-to-docs.mdx", __ASTRO_IMAGE_IMPORT_Z2scB8W], ["../../images/starlight/screwfast_hero_dark.svg?astroContentImageFlag=&importer=src%2Fcontent%2Fdocs%2Fwelcome-to-docs.mdx", __ASTRO_IMAGE_IMPORT_Z1S9kBH], ["@/images/insights/insight-2.avif?astroContentImageFlag=&importer=src%2Fcontent%2Finsights%2Fen%2Finsight-2.md", __ASTRO_IMAGE_IMPORT_20bWNI], ["@/images/insights/insight-1.avif?astroContentImageFlag=&importer=src%2Fcontent%2Finsights%2Fen%2Finsight-1.md", __ASTRO_IMAGE_IMPORT_Z1jJENC], ["@/images/insights/insight-3.avif?astroContentImageFlag=&importer=src%2Fcontent%2Finsights%2Fen%2Finsight-3.md", __ASTRO_IMAGE_IMPORT_eVrC8]]);
-		
+export default new Map();
