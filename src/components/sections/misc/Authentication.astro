@@ -62,14 +62,22 @@ import LoginBtn from "@components/ui/buttons/LoginBtn.astro";
   const logoutBtn = document.getElementById("logout-btn");
 
   // Toggle dropdown
-  userMenuBtn?.addEventListener("click", () => {
-    userDropdown?.classList.toggle("hidden");
+  userMenuBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (userDropdown?.classList.contains("hidden")) {
+      userDropdown?.classList.remove("hidden");
+      userDropdown?.classList.add("flex", "flex-col");
+    } else {
+      userDropdown?.classList.add("hidden");
+      userDropdown?.classList.remove("flex", "flex-col");
+    }
   });
 
   // Close dropdown when clicking outside
   document.addEventListener("click", (e) => {
     if (userContainer && !userContainer.contains(e.target as Node)) {
       userDropdown?.classList.add("hidden");
+      userDropdown?.classList.remove("flex", "flex-col");
     }
   });
 
