@@ -103,7 +103,7 @@ const pageTitle = `Checkout | ${SITE.title}`;
         shippingAddress: formData.get("address") as string,
         shippingCity: formData.get("city") as string,
         shippingPostalCode: formData.get("postal-code") as string,
-        items: currentCart,
+        items: Object.values(currentCart),
         total: parseFloat(orderTotalElement?.textContent?.replace("$", "") || "0"),
       };
 

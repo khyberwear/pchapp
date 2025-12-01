@@ -23,19 +23,32 @@ interface OrderEmailData {
 export async function sendAdminNotification(orderData: OrderEmailData) {
     const adminEmail = import.meta.env.ADMIN_EMAIL || 'mail@webspires.co.uk';
 
+    const ownerEmail = import.meta.env.OWNER_EMAIL;
+
+    const recipients = [
+        {
+            Email: adminEmail,
+            Fields: {
+                name: 'Admin',
+            },
+        }
+    ];
+
+    if (ownerEmail) {
+        recipients.push({
+            Email: ownerEmail,
+            Fields: {
+                name: 'Owner',
+            },
+        });
+    }
+
     const itemsList = orderData.items
         .map(item => `- ${item.title} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}`)
         .join('\n');
 
     const emailContent = {
-        Recipients: [
-            {
-                Email: adminEmail,
-                Fields: {
-                    name: 'Admin',
-                },
-            },
-        ],
+        Recipients: recipients,
         Content: {
             Body: [
                 {
