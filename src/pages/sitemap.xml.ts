@@ -17,7 +17,6 @@ export const GET: APIRoute = async () => {
     { url: "/blog", priority: "0.8", changefreq: "weekly" },
     { url: "/contact", priority: "0.7", changefreq: "monthly" },
     { url: "/sitemap", priority: "0.5", changefreq: "monthly" },
-    { url: "/checkout", priority: "0.6", changefreq: "monthly" },
   ];
 
   // Generate current date in W3C format
@@ -32,49 +31,40 @@ export const GET: APIRoute = async () => {
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   
   <!-- Static Pages -->
-  ${staticPages
+${staticPages
     .map(
-      (page) => `
-  <url>
+      (page) => `  <url>
     <loc>${site}${page.url}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>`
     )
-    .join("")}
+    .join("\n")}
 
   <!-- Product Pages -->
-  ${products
+${products
     .map(
-      (product) => `
-  <url>
+      (product) => `  <url>
     <loc>${site}/products/${product.id.replace(/^en\//, "")}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    ${product.data.main?.imgMain ? `
-    <image:image>
-      <image:loc>${site}${product.data.main.imgMain}</image:loc>
-      <image:title>${product.data.title} - Peshawari Chappal</image:title>
-      <image:caption>${product.data.description || product.data.title}</image:caption>
-    </image:image>` : ""}
   </url>`
     )
-    .join("")}
+    .join("\n")}
 
   <!-- Blog Posts -->
-  ${blogPosts
+${blogPosts
     .map(
-      (post) => `
-  <url>
+      (post) => `  <url>
     <loc>${site}/blog/${post.id.replace(/^en\//, "")}</loc>
     <lastmod>${post.data.pubDate ? new Date(post.data.pubDate).toISOString().split('T')[0] : today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`
     )
-    .join("")}
+    .join("\n")}
 
 </urlset>`.trim();
 
