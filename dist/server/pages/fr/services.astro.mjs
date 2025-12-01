@@ -1,7 +1,7 @@
 import { a as createComponent, d as renderComponent, r as renderTemplate } from '../../chunks/astro/server_CHNLwNGm.mjs';
 import 'kleur/colors';
-import { a as $$MainLayout } from '../../chunks/MainLayout_DqtqoQYv.mjs';
-import { p as personWorking, b as blueprints, a as beforeAfter, c as aerialView, d as constructionWorkers, u as usingTools, e as underConstruction, f as progressBuilding, $ as $$MainSection, g as $$RightSection, h as $$LeftSection, i as $$FeaturesStats } from '../../chunks/under-construction_BBp0NzYG.mjs';
+import { a as $$MainLayout } from '../../chunks/MainLayout_p7NdcJfY.mjs';
+import { p as personWorking, b as blueprints, a as beforeAfter, c as aerialView, d as constructionWorkers, u as usingTools, e as underConstruction, f as progressBuilding, $ as $$MainSection, g as $$RightSection, h as $$LeftSection, i as $$FeaturesStats } from '../../chunks/under-construction_Y1Llv7-Y.mjs';
 import { g as getRelativeLocaleUrl } from '../../chunks/i18n_BGKA494d.mjs';
 export { renderers } from '../../renderers.mjs';
 

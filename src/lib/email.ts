@@ -10,12 +10,18 @@ interface OrderEmailData {
     orderNumber: string;
     customerName: string;
     customerEmail: string;
+    customerPhone: string;
     items: Array<{
         title: string;
         quantity: number;
         price: number;
     }>;
     total: number;
+    subtotal: number;
+    deliveryCost: number;
+    deliveryMethod: string;
+    paymentMethod: string;
+    orderNotes: string;
     shippingAddress: string;
 }
 
@@ -44,8 +50,11 @@ export async function sendAdminNotification(orderData: OrderEmailData) {
     }
 
     const itemsList = orderData.items
-        .map(item => `- ${item.title} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}`)
+        .map(item => `- ${item.title} x ${item.quantity} = Rs ${item.price * item.quantity}`)
         .join('\n');
+
+    const deliveryLabel = orderData.deliveryMethod === 'express' ? 'Express Delivery' : 'Normal Delivery';
+    const paymentLabel = orderData.paymentMethod === 'bank' ? 'Bank Transfer' : 'Cash on Delivery';
 
     const emailContent = {
         Recipients: recipients,
@@ -62,11 +71,19 @@ export async function sendAdminNotification(orderData: OrderEmailData) {
               <h3>Customer Details:</h3>
               <p><strong>Name:</strong> ${orderData.customerName}</p>
               <p><strong>Email:</strong> ${orderData.customerEmail}</p>
+              <p><strong>Phone:</strong> ${orderData.customerPhone}</p>
               <p><strong>Shipping Address:</strong> ${orderData.shippingAddress}</p>
+              <hr style="border: 1px solid #eee;">
+              <h3>Order Details:</h3>
+              <p><strong>Delivery Method:</strong> ${deliveryLabel}</p>
+              <p><strong>Payment Method:</strong> ${paymentLabel}</p>
+              <p><strong>Notes:</strong> ${orderData.orderNotes || 'None'}</p>
               <hr style="border: 1px solid #eee;">
               <h3>Order Items:</h3>
               <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${itemsList}</pre>
-              <h3 style="color: #ff6b35;">Total: $${orderData.total.toFixed(2)}</h3>
+              <p><strong>Subtotal:</strong> Rs ${orderData.subtotal}</p>
+              <p><strong>Delivery Cost:</strong> Rs ${orderData.deliveryCost}</p>
+              <h3 style="color: #ff6b35;">Total: Rs ${orderData.total}</h3>
               <hr style="border: 1px solid #eee;">
               <p style="color: #666; font-size: 12px;">Received at ${new Date().toLocaleString()}</p>
             </div>
@@ -96,8 +113,11 @@ export async function sendAdminNotification(orderData: OrderEmailData) {
 // Send customer confirmation
 export async function sendCustomerConfirmation(orderData: OrderEmailData) {
     const itemsList = orderData.items
-        .map(item => `- ${item.title} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}`)
+        .map(item => `- ${item.title} x ${item.quantity} = Rs ${item.price * item.quantity}`)
         .join('\n');
+
+    const deliveryLabel = orderData.deliveryMethod === 'express' ? 'Express Delivery' : 'Normal Delivery';
+    const paymentLabel = orderData.paymentMethod === 'bank' ? 'Bank Transfer' : 'Cash on Delivery';
 
     const emailContent = {
         Recipients: [
@@ -122,10 +142,14 @@ export async function sendCustomerConfirmation(orderData: OrderEmailData) {
               <p><strong>Order Number:</strong> ${orderData.orderNumber}</p>
               <h3>Order Summary:</h3>
               <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${itemsList}</pre>
-              <h3 style="color: #ff6b35;">Total: $${orderData.total.toFixed(2)}</h3>
+              <p><strong>Subtotal:</strong> Rs ${orderData.subtotal}</p>
+              <p><strong>Delivery Cost:</strong> Rs ${orderData.deliveryCost} (${deliveryLabel})</p>
+              <h3 style="color: #ff6b35;">Total: Rs ${orderData.total}</h3>
               <hr style="border: 1px solid #eee;">
-              <h3>Shipping Address:</h3>
-              <p>${orderData.shippingAddress}</p>
+              <h3>Delivery Details:</h3>
+              <p><strong>Address:</strong> ${orderData.shippingAddress}</p>
+              <p><strong>Phone:</strong> ${orderData.customerPhone}</p>
+              <p><strong>Payment Method:</strong> ${paymentLabel}</p>
               <hr style="border: 1px solid #eee;">
               <p style="color: #666;">We'll notify you once your order ships. Thank you for shopping with Peshawari Chappal!</p>
               <p style="color: #666; font-size: 12px;">Order placed on ${new Date().toLocaleString()}</p>

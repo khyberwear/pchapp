@@ -1,6 +1,6 @@
 import { renderers } from './renderers.mjs';
 import { c as createExports } from './chunks/entrypoint_CIEM343X.mjs';
-import { manifest } from './manifest_DN7nPLXZ.mjs';
+import { manifest } from './manifest_ChWYsZda.mjs';
 
 const serverIslandMap = new Map();;
 
@@ -30,8 +30,9 @@ const _page22 = () => import('./pages/products.astro.mjs');
 const _page23 = () => import('./pages/robots.txt.astro.mjs');
 const _page24 = () => import('./pages/services.astro.mjs');
 const _page25 = () => import('./pages/settings.astro.mjs');
-const _page26 = () => import('./pages/index.astro.mjs');
-const _page27 = () => import('./pages/_---slug_.astro.mjs');
+const _page26 = () => import('./pages/thank-you.astro.mjs');
+const _page27 = () => import('./pages/index.astro.mjs');
+const _page28 = () => import('./pages/_---slug_.astro.mjs');
 const pageMap = new Map([
     ["node_modules/astro/dist/assets/endpoint/generic.js", _page0],
     ["src/pages/404.astro", _page1],
@@ -59,8 +60,9 @@ const pageMap = new Map([
     ["src/pages/robots.txt.ts", _page23],
     ["src/pages/services.astro", _page24],
     ["src/pages/settings.astro", _page25],
-    ["src/pages/index.astro", _page26],
-    ["node_modules/@astrojs/starlight/routes/static/index.astro", _page27]
+    ["src/pages/thank-you.astro", _page26],
+    ["src/pages/index.astro", _page27],
+    ["node_modules/@astrojs/starlight/routes/static/index.astro", _page28]
 ]);
 
 const _manifest = Object.assign(manifest, {
@@ -71,7 +73,7 @@ const _manifest = Object.assign(manifest, {
     middleware: () => import('./_astro-internal_middleware.mjs')
 });
 const _args = {
-    "middlewareSecret": "9dae8403-af58-4e9b-b8c3-ceed8f6e2ef6",
+    "middlewareSecret": "9896c4a0-9eb9-4489-92e0-1f3714927b20",
     "skewProtection": false
 };
 const _exports = createExports(_manifest, _args);

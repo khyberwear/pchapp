@@ -5,7 +5,7 @@ import { f as AstroUserError } from './chunks/astro/server_CHNLwNGm.mjs';
 import 'clsx';
 import 'cookie';
 import { d as defineMiddleware, s as sequence } from './chunks/index_CqAQ08X_.mjs';
-import { u as useTranslations } from './chunks/translations_B3kr98wh.mjs';
+import { u as useTranslations } from './chunks/translations_oW9PQyM0.mjs';
 
 const onRequest$1 = defineMiddleware(async (context, next) => {
   context.locals.t = useTranslations(context.currentLocale);

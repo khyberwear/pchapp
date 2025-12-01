@@ -19,8 +19,14 @@ export const POST: APIRoute = async ({ request }) => {
             shippingAddress,
             shippingCity,
             shippingPostalCode,
+            shippingCountry,
+            deliveryMethod,
+            paymentMethod,
+            orderNotes,
             items,
             total,
+            subtotal,
+            deliveryCost,
         } = data;
 
         // Validate required fields
@@ -32,6 +38,9 @@ export const POST: APIRoute = async ({ request }) => {
         }
 
         // Save order to database
+        // Storing extra details in shipping_address for now to avoid schema migration
+        const fullShippingAddress = `${shippingAddress}\n${shippingCity}, ${shippingPostalCode}\n${shippingCountry}\nPhone: ${customerPhone}\nDelivery: ${deliveryMethod}\nPayment: ${paymentMethod}\nNotes: ${orderNotes}`;
+
         await executeQuery(
             `INSERT INTO orders (
         order_number,
@@ -50,7 +59,7 @@ export const POST: APIRoute = async ({ request }) => {
                 customerName,
                 customerEmail,
                 customerPhone || '',
-                shippingAddress,
+                fullShippingAddress,
                 shippingCity || '',
                 shippingPostalCode || '',
                 JSON.stringify(items),
@@ -64,13 +73,19 @@ export const POST: APIRoute = async ({ request }) => {
             orderNumber,
             customerName,
             customerEmail,
+            customerPhone,
             items: items.map((item: any) => ({
                 title: item.title,
                 quantity: item.quantity,
                 price: item.price,
             })),
             total,
-            shippingAddress: `${shippingAddress}, ${shippingCity} ${shippingPostalCode}`,
+            subtotal,
+            deliveryCost,
+            deliveryMethod,
+            paymentMethod,
+            orderNotes,
+            shippingAddress: `${shippingAddress}, ${shippingCity} ${shippingPostalCode}, ${shippingCountry}`,
         };
 
         // Send emails (don't await to avoid blocking the response)

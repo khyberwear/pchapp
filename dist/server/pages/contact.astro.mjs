@@ -1,6 +1,6 @@
 import { a as createComponent, m as maybeRenderHead, d as renderComponent, r as renderTemplate } from '../chunks/astro/server_CHNLwNGm.mjs';
 import 'kleur/colors';
-import { b as $$AuthBtn, $ as $$Icon, a as $$MainLayout, S as SITE } from '../chunks/MainLayout_DqtqoQYv.mjs';
+import { b as $$AuthBtn, $ as $$Icon, a as $$MainLayout, S as SITE } from '../chunks/MainLayout_p7NdcJfY.mjs';
 import { $ as $$TextInput, a as $$EmailContactInput, b as $$PhoneInput, c as $$TextAreaInput, d as $$ContactIconBlock } from '../chunks/TextAreaInput_IUuJEZT1.mjs';
 export { renderers } from '../renderers.mjs';
 

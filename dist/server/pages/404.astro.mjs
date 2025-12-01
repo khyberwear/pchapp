@@ -1,6 +1,6 @@
 import { c as createAstro, a as createComponent, m as maybeRenderHead, b as addAttribute, d as renderComponent, r as renderTemplate, g as renderScript } from '../chunks/astro/server_CHNLwNGm.mjs';
 import 'kleur/colors';
-import { $ as $$Icon, S as SITE, a as $$MainLayout } from '../chunks/MainLayout_DqtqoQYv.mjs';
+import { $ as $$Icon, S as SITE, a as $$MainLayout } from '../chunks/MainLayout_p7NdcJfY.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$1 = createAstro("https://screwfast.uk");

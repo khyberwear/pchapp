@@ -25,7 +25,9 @@ async function sendAdminNotification(orderData) {
       }
     });
   }
-  const itemsList = orderData.items.map((item) => `- ${item.title} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}`).join("\n");
+  const itemsList = orderData.items.map((item) => `- ${item.title} x ${item.quantity} = Rs ${item.price * item.quantity}`).join("\n");
+  const deliveryLabel = orderData.deliveryMethod === "express" ? "Express Delivery" : "Normal Delivery";
+  const paymentLabel = orderData.paymentMethod === "bank" ? "Bank Transfer" : "Cash on Delivery";
   const emailContent = {
     Recipients: recipients,
     Content: {
@@ -41,11 +43,19 @@ async function sendAdminNotification(orderData) {
               <h3>Customer Details:</h3>
               <p><strong>Name:</strong> ${orderData.customerName}</p>
               <p><strong>Email:</strong> ${orderData.customerEmail}</p>
+              <p><strong>Phone:</strong> ${orderData.customerPhone}</p>
               <p><strong>Shipping Address:</strong> ${orderData.shippingAddress}</p>
+              <hr style="border: 1px solid #eee;">
+              <h3>Order Details:</h3>
+              <p><strong>Delivery Method:</strong> ${deliveryLabel}</p>
+              <p><strong>Payment Method:</strong> ${paymentLabel}</p>
+              <p><strong>Notes:</strong> ${orderData.orderNotes || "None"}</p>
               <hr style="border: 1px solid #eee;">
               <h3>Order Items:</h3>
               <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${itemsList}</pre>
-              <h3 style="color: #ff6b35;">Total: $${orderData.total.toFixed(2)}</h3>
+              <p><strong>Subtotal:</strong> Rs ${orderData.subtotal}</p>
+              <p><strong>Delivery Cost:</strong> Rs ${orderData.deliveryCost}</p>
+              <h3 style="color: #ff6b35;">Total: Rs ${orderData.total}</h3>
               <hr style="border: 1px solid #eee;">
               <p style="color: #666; font-size: 12px;">Received at ${(/* @__PURE__ */ new Date()).toLocaleString()}</p>
             </div>
@@ -71,7 +81,9 @@ async function sendAdminNotification(orderData) {
   }
 }
 async function sendCustomerConfirmation(orderData) {
-  const itemsList = orderData.items.map((item) => `- ${item.title} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}`).join("\n");
+  const itemsList = orderData.items.map((item) => `- ${item.title} x ${item.quantity} = Rs ${item.price * item.quantity}`).join("\n");
+  const deliveryLabel = orderData.deliveryMethod === "express" ? "Express Delivery" : "Normal Delivery";
+  const paymentLabel = orderData.paymentMethod === "bank" ? "Bank Transfer" : "Cash on Delivery";
   const emailContent = {
     Recipients: [
       {
@@ -95,10 +107,14 @@ async function sendCustomerConfirmation(orderData) {
               <p><strong>Order Number:</strong> ${orderData.orderNumber}</p>
               <h3>Order Summary:</h3>
               <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${itemsList}</pre>
-              <h3 style="color: #ff6b35;">Total: $${orderData.total.toFixed(2)}</h3>
+              <p><strong>Subtotal:</strong> Rs ${orderData.subtotal}</p>
+              <p><strong>Delivery Cost:</strong> Rs ${orderData.deliveryCost} (${deliveryLabel})</p>
+              <h3 style="color: #ff6b35;">Total: Rs ${orderData.total}</h3>
               <hr style="border: 1px solid #eee;">
-              <h3>Shipping Address:</h3>
-              <p>${orderData.shippingAddress}</p>
+              <h3>Delivery Details:</h3>
+              <p><strong>Address:</strong> ${orderData.shippingAddress}</p>
+              <p><strong>Phone:</strong> ${orderData.customerPhone}</p>
+              <p><strong>Payment Method:</strong> ${paymentLabel}</p>
               <hr style="border: 1px solid #eee;">
               <p style="color: #666;">We'll notify you once your order ships. Thank you for shopping with Peshawari Chappal!</p>
               <p style="color: #666; font-size: 12px;">Order placed on ${(/* @__PURE__ */ new Date()).toLocaleString()}</p>
@@ -137,8 +153,14 @@ const POST = async ({ request }) => {
       shippingAddress,
       shippingCity,
       shippingPostalCode,
+      shippingCountry,
+      deliveryMethod,
+      paymentMethod,
+      orderNotes,
       items,
-      total
+      total,
+      subtotal,
+      deliveryCost
     } = data;
     if (!customerName || !customerEmail || !shippingAddress || !items || !total) {
       return new Response(
@@ -146,6 +168,13 @@ const POST = async ({ request }) => {
         { status: 400 }
       );
     }
+    const fullShippingAddress = `${shippingAddress}
+${shippingCity}, ${shippingPostalCode}
+${shippingCountry}
+Phone: ${customerPhone}
+Delivery: ${deliveryMethod}
+Payment: ${paymentMethod}
+Notes: ${orderNotes}`;
     await executeQuery(
       `INSERT INTO orders (
         order_number,
@@ -164,7 +193,7 @@ const POST = async ({ request }) => {
         customerName,
         customerEmail,
         customerPhone || "",
-        shippingAddress,
+        fullShippingAddress,
         shippingCity || "",
         shippingPostalCode || "",
         JSON.stringify(items),
@@ -176,13 +205,19 @@ const POST = async ({ request }) => {
       orderNumber,
       customerName,
       customerEmail,
+      customerPhone,
       items: items.map((item) => ({
         title: item.title,
         quantity: item.quantity,
         price: item.price
       })),
       total,
-      shippingAddress: `${shippingAddress}, ${shippingCity} ${shippingPostalCode}`
+      subtotal,
+      deliveryCost,
+      deliveryMethod,
+      paymentMethod,
+      orderNotes,
+      shippingAddress: `${shippingAddress}, ${shippingCity} ${shippingPostalCode}, ${shippingCountry}`
     };
     try {
       await Promise.all([

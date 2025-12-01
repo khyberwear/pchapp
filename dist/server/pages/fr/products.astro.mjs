@@ -1,9 +1,9 @@
 import { c as createAstro, a as createComponent, d as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_CHNLwNGm.mjs';
 import 'kleur/colors';
-import { a as $$MainLayout } from '../../chunks/MainLayout_DqtqoQYv.mjs';
-import { $ as $$PrimaryCTA } from '../../chunks/PrimaryCTA_xjF4ANY0.mjs';
-import { $ as $$CardSmall, a as $$CardWide, b as $$FeaturesStatsAlt, c as $$TestimonialsSectionAlt } from '../../chunks/TestimonialsSectionAlt_714EpoCi.mjs';
-import { g as getCollection } from '../../chunks/_astro_content_47ejiC3q.mjs';
+import { a as $$MainLayout } from '../../chunks/MainLayout_p7NdcJfY.mjs';
+import { $ as $$PrimaryCTA } from '../../chunks/PrimaryCTA_DcdOJ3Jd.mjs';
+import { $ as $$CardSmall, a as $$CardWide, b as $$FeaturesStatsAlt, c as $$TestimonialsSectionAlt } from '../../chunks/TestimonialsSectionAlt_vf_98ZGP.mjs';
+import { g as getCollection } from '../../chunks/_astro_content_BzHMUHez.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const $$Astro = createAstro("https://screwfast.uk");

@@ -1,7 +1,7 @@
 import { c as createAstro, a as createComponent, d as renderComponent, r as renderTemplate } from '../chunks/astro/server_CHNLwNGm.mjs';
 import 'kleur/colors';
-import { a as $$MainLayout, p as partnersData } from '../chunks/MainLayout_DqtqoQYv.mjs';
-import { $ as $$AnnouncementBanner, a as $$HeroSection, h as heroImage, b as $$ClientsSection, c as $$FeaturesGeneral, d as $$FeaturesNavs, t as tools, e as dashboard, f as construction, g as $$TestimonialsSection, i as $$PricingSection, j as $$FAQ, k as $$HeroSectionAlt } from '../chunks/dashboard-image_BeO6PDLL.mjs';
+import { a as $$MainLayout, p as partnersData } from '../chunks/MainLayout_p7NdcJfY.mjs';
+import { $ as $$AnnouncementBanner, a as $$HeroSection, h as heroImage, b as $$ClientsSection, c as $$FeaturesGeneral, d as $$FeaturesNavs, t as tools, e as dashboard, f as construction, g as $$TestimonialsSection, i as $$PricingSection, j as $$FAQ, k as $$HeroSectionAlt } from '../chunks/dashboard-image_LbGxGS7j.mjs';
 import { f as featureImage } from '../chunks/features-image_D-AVC8LA.mjs';
 export { renderers } from '../renderers.mjs';
 

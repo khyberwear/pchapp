@@ -1,9 +1,9 @@
 import { c as createAstro, a as createComponent, d as renderComponent, r as renderTemplate, m as maybeRenderHead, F as Fragment, b as addAttribute } from '../../../chunks/astro/server_CHNLwNGm.mjs';
 import 'kleur/colors';
-import { S as SITE, a as $$MainLayout } from '../../../chunks/MainLayout_DqtqoQYv.mjs';
+import { S as SITE, a as $$MainLayout } from '../../../chunks/MainLayout_p7NdcJfY.mjs';
 import { f as formatDate, $ as $$AvatarBlogLarge, c as capitalize } from '../../../chunks/utils_CKNR7GrX.mjs';
-import { $ as $$Bookmark, a as $$SocialShare, b as $$PostFeedback, c as $$CardRelated } from '../../../chunks/PostFeedback_DzZvuDBg.mjs';
-import { g as getCollection } from '../../../chunks/_astro_content_47ejiC3q.mjs';
+import { $ as $$Bookmark, a as $$SocialShare, b as $$PostFeedback, c as $$CardRelated } from '../../../chunks/PostFeedback_CgIYvnQP.mjs';
+import { g as getCollection } from '../../../chunks/_astro_content_BzHMUHez.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 const $$Astro = createAstro("https://screwfast.uk");
