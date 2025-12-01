@@ -1,0 +1,1 @@
+import{$ as a}from"./authStore.DDs6cqPb.js";import"./index.daetGfa_.js";const n=document.getElementById("af-account-full-name"),t=document.getElementById("af-account-email");a.subscribe(e=>{e?(n&&(n.value=e.name),t&&(t.value=e.email)):window.location.href="/"});
