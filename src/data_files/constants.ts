@@ -7,8 +7,8 @@ export const SITE = {
   tagline: "Authentic Handcrafted Footwear",
   description: "Experience the tradition and elegance of authentic Peshawari Chappals. Handcrafted with premium leather for comfort and style.",
   description_short: "Authentic handcrafted Peshawari Chappals made with premium leather.",
-  url: "https://pchapp.com",
-  author: "Peshawari Chappal Team",
+  url: "https://peshawarichappal.store",
+  author: "Khyber Wear",
 };
 
 export const SEO = {
@@ -35,7 +35,7 @@ export const OG = {
   locale: "en_US",
   type: "website",
   url: SITE.url,
-  title: `${SITE.title}: : Authentic Handcrafted Footwear`,
+  title: `Peshawari Chappal - Authentic Handcrafted Footwear`,
   description: "Step into tradition with our premium collection of Peshawari Chappals. Handcrafted for comfort and durability. Shop now for the perfect blend of style and heritage.",
   image: ogImageSrc,
 };
