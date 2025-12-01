@@ -36,66 +36,65 @@ interface Article {
 const articles: Article[] = [
   {
     isRightSection: true,
-    title: "Delivering Expert Guidance",
+    title: "Custom Chappal Design",
     subTitle:
-      "Embarking on a construction project can be overwhelming. With our professional consultation services, we guide you through every stage, ensuring you make informed decisions. Whether you are a DIY enthusiast or a skilled contractor, our experts are on hand to offer tailored advice on product selection, project scope, and compliance with local regulations.",
+      "Looking for something unique? Our master craftsmen can create custom Peshawari Chappals tailored to your preferences. Choose your leather type, color, strap style, and sole thickness. Whether it's a special occasion or a personal statement, we bring your vision to life.",
     single: false,
     imgOne: blueprints,
-    imgOneAlt: "Blueprints and digital tablet with construction plans.",
+    imgOneAlt: "Custom chappal design sketches and leather samples",
     imgTwo: personWorking,
-    imgTwoAlt: "Person working in the office",
+    imgTwoAlt: "Artisan working on custom chappal order",
   },
   {
     isRightSection: false,
-    title: "Transforming Designs into Reality",
+    title: "Bulk & Corporate Orders",
     subTitle:
-      "Our skilled craftsmen bring precision and excellence to every construction project. From minor installations to substantial structural work, Peshawari Chappal offers reliable construction services to turn your plans into tangible outcomes. We ensure the highest standards of safety and workmanship, utilizing top-quality tools and materials from our extensive inventory.",
+      "Planning a wedding, corporate event, or looking to stock your retail store? We offer special pricing on bulk orders of authentic Peshawari Chappals. Our team ensures consistent quality across all pairs while meeting your deadline and budget requirements.",
     img: beforeAfter,
-    imgAlt: "Construction site before and after",
+    imgAlt: "Bulk order of Peshawari Chappals for events",
     btnExists: true,
-    btnTitle: "Learn More",
-    btnURL: "#",
+    btnTitle: "Request Quote",
+    btnURL: "/contact",
   },
   {
     isRightSection: true,
-    title: "Navigating Projects with Professional Oversight",
+    title: "Chappal Restoration & Repair",
     subTitle:
-      "Effective project management is at the heart of any successful build. Peshawari Chappal provides thorough planning and robust management services that keep your project on time and within budget. Let us handle the complexities of workflow coordination, resource allocation, and stakeholder communication while you focus on your vision.",
+      "Give your beloved Peshawari Chappals a new lease on life. Our skilled artisans can restore worn soles, repair straps, recondition leather, and bring back the original charm of your favorite pair. We believe quality footwear deserves quality care.",
     single: false,
     imgOne: constructionWorkers,
-    imgOneAlt: "Construction workers orchestrating a project",
+    imgOneAlt: "Artisan repairing leather straps",
     imgTwo: aerialView,
-    imgTwoAlt: "Aerial view of managed construction",
+    imgTwoAlt: "Before and after chappal restoration",
   },
   {
     isRightSection: false,
-    title: "Ensuring Long-lasting Performance",
+    title: "Leather Care Products",
     subTitle:
-      "Our commitment to your project doesn't end at completion. Peshawari Chappal offers ongoing maintenance and support services to ensure your construction's longevity and performance. From regular check-ups to emergency assistance, our responsive team is there to provide seamless support.",
+      "Extend the life of your Peshawari Chappals with our premium leather care products. From conditioning creams to protective sprays, we offer everything you need to keep your leather footwear looking pristine and feeling comfortable for years.",
     img: usingTools,
-    imgAlt:
-      "Man in orange and black vest wearing white helmet holding yellow and black power tool",
+    imgAlt: "Premium leather care products for chappal maintenance",
   },
   {
     isRightSection: true,
-    title: "Crafting Bespoke Strategies for Unique Challenges",
+    title: "Wholesale Partnership Program",
     subTitle:
-      "For our larger enterprise clients, Peshawari Chappal offers custom solutions designed to meet specific industry challenges. By understanding your unique needs, we engineer tailored strategies aimed at optimizing your operations, enhancing efficiency, and driving your business forward.",
+      "Join our network of retailers and distributors bringing authentic Peshawari Chappals to customers worldwide. We offer competitive wholesale pricing, reliable supply, and marketing support to help grow your business with our traditional footwear.",
     single: false,
     imgOne: progressBuilding,
-    imgOneAlt: "In progress building structure",
+    imgOneAlt: "Wholesale chappal inventory",
     imgTwo: underConstruction,
-    imgTwoAlt: "Brown and gray building under construction",
+    imgTwoAlt: "Global shipping of Peshawari Chappals",
     btnExists: true,
-    btnTitle: "Read more",
-    btnURL: "#",
+    btnTitle: "Partner With Us",
+    btnURL: "/contact",
   },
 ];
 
 const pageTitle: string = `Services | ${SITE.title}`;
 const metaDescription =
-  "Uniting expertise with your vision, Peshawari Chappal provides exceptional service and comprehensive solutions in the hardware and construction industry, from consultation to project completion.";
-const ogTitle = "Expert Consultation Services | Peshawari Chappal";
+  "Custom Peshawari Chappal design, bulk orders, leather restoration, and wholesale partnerships. Expert services for authentic Pakistani footwear.";
+const ogTitle = "Chappal Services | Peshawari Chappal";
 ---
 
 <MainLayout
@@ -107,26 +106,26 @@ const ogTitle = "Expert Consultation Services | Peshawari Chappal";
     "@type": "WebPage",
     "@id": "https://peshawarichappal.store/services",
     url: "https://peshawarichappal.store/services",
-    name: "Expert Consultation Services | Peshawari Chappal",
+    name: "Chappal Services | Peshawari Chappal",
     description:
-      "Uniting expertise with your vision, Peshawari Chappal provides exceptional service and comprehensive solutions in the hardware and construction industry, from consultation to project completion.",
+      "Custom Peshawari Chappal design, bulk orders, leather restoration, and wholesale partnerships. Expert services for authentic Pakistani footwear.",
     isPartOf: {
       "@type": "WebSite",
       url: "https://peshawarichappal.store",
       name: "Peshawari Chappal",
       description:
-        "Peshawari Chappal offers top-tier hardware tools and expert construction services to meet all your project needs.",
+        "Authentic handcrafted Peshawari Chappals made with premium leather. Traditional Pakistani footwear crafted for comfort and style.",
     },
     inLanguage: "en-US",
   }}
 >
   {/* MainSection is the introductory section of the page, it also contains a CTA button */}
   <MainSection
-    title="Uniting Expertise with Your Vision"
-    subTitle="At Peshawari Chappal, we take pride in providing comprehensive solutions and exceptional service in the hardware and construction industry. Our experienced team is dedicated to supporting your project from inception to completion with a range of specialized services."
+    title="Craftsmanship Beyond Footwear"
+    subTitle="At Peshawari Chappal, we offer more than just traditional sandals. From custom designs and bulk orders to restoration services and wholesale partnerships, our expert artisans are dedicated to preserving the art of authentic Peshawari footwear while meeting your unique needs."
     btnExists={true}
-    btnTitle="Schedule a Consultation"
-    btnURL="#"
+    btnTitle="Get in Touch"
+    btnURL="/contact"
   />
   {/* RightSection and LeftSection contain details about various services along with pertinent imagery.
   They alternate for variety in design.
@@ -167,21 +166,21 @@ const ogTitle = "Expert Consultation Services | Peshawari Chappal";
   {/* FeaturesStats section showcases essential stats valuable to users */}
   <FeaturesStats
     title="By the Numbers"
-    subTitle="Our commitment to quality and reliability is evident in every project we undertake. At Peshawari Chappal, we are dedicated to delivering industry-leading services that ensure your construction projects are built to last."
-    mainStatTitle="96%"
-    mainStatSubTitle="of our clients rate their experience with Peshawari Chappal as exceptional"
+    subTitle="Our commitment to quality and tradition is evident in every pair of chappals we craft. At Peshawari Chappal, we're dedicated to delivering exceptional handcrafted footwear that honors our heritage."
+    mainStatTitle="50k+"
+    mainStatSubTitle="happy customers wearing our authentic Peshawari Chappals worldwide"
     stats={[
       {
-        stat: "99.8%",
-        description: "project completion rate",
+        stat: "100%",
+        description: "genuine leather in every pair",
       },
       {
-        stat: "5,000+",
-        description: "successful installations",
+        stat: "15+",
+        description: "years of craftsmanship expertise",
       },
       {
-        stat: "85%",
-        description: "client growth year-over-year",
+        stat: "4.9★",
+        description: "average customer rating",
       },
     ]}
   />

@@ -1,44 +1,44 @@
 // Define data structures for services and success stories
 export const servicesData = [
   {
-    title: "Explore Advice and Explanations",
+    title: "Chappal Care Guide",
     description:
-      "Dive deep into helpful guides and explanations for all of Peshawari Chappal's features",
+      "Learn how to clean, condition, and maintain your Peshawari Chappals for lasting beauty",
     icon: "guides",
-    url: "#",
+    url: "/blog",
   },
   {
-    title: "Discover Integrations",
+    title: "Custom Orders",
     description:
-      "Supercharge Your Workflow. Seamless integrations with all your favorite tools",
+      "Design your own Peshawari Chappal with custom leather, colors, and styles",
     icon: "puzzle",
-    url: "#",
+    url: "/services",
   },
   {
-    title: "Expert Services",
-    description: "Go beyond tools with Peshawari Chappal's expert services",
+    title: "Bulk & Wholesale",
+    description: "Special pricing for weddings, events, and retail partners",
     icon: "rocket",
-    url: "#",
+    url: "/services",
   },
   {
-    title: "Cutting-Edge Tools",
+    title: "Premium Collection",
     description:
-      "Build Smarter, Faster. Experience next-level efficiency with Peshawari Chappal's cutting-edge construction tools",
+      "Explore our finest handcrafted Peshawari Chappals made with premium leather",
     icon: "hammer",
-    url: "#",
+    url: "/products",
   },
   {
-    title: "Simple Plans",
+    title: "Size Guide",
     description:
-      "Boost your efficiency with Peshawari Chappal's straightforward, value-driven plans",
+      "Find your perfect fit with our comprehensive Peshawari Chappal sizing chart",
     icon: "sparks",
-    url: "#",
+    url: "/products",
   },
   {
-    title: "Community Forum",
-    description: "Learn, share, and connect with other Peshawari Chappal users",
+    title: "Heritage Stories",
+    description: "Discover the rich history and cultural significance of Peshawari Chappals",
     icon: "community",
-    url: "#",
+    url: "/blog",
   },
 ];
 
@@ -46,9 +46,9 @@ export const successStoriesData = [
   {
     image:
       "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1376&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-    alt: "Image Description",
+    alt: "Happy Customer",
     description:
-      "See how Peshawari Chappal has empowered businesses of all sizes to achieve outstanding results.",
-    learnMoreUrl: "#",
+      "See how customers around the world are embracing the comfort and style of authentic Peshawari Chappals.",
+    learnMoreUrl: "/products",
   },
 ];
