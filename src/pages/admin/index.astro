@@ -73,13 +73,13 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
 
     <!-- Filter Tabs -->
     <div class="mb-6 border-b border-gray-200 dark:border-neutral-700">
-      <nav class="-mb-px flex gap-x-6">
-        <button data-filter="all" class="filter-tab active border-b-2 border-orange-500 px-1 pb-4 text-sm font-medium text-orange-600 dark:text-orange-400">All Orders</button>
-        <button data-filter="pending" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300">Pending</button>
-        <button data-filter="processing" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300">Processing</button>
-        <button data-filter="dispatched" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300">Dispatched</button>
-        <button data-filter="completed" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300">Completed</button>
-        <button data-filter="cancelled" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300">Cancelled</button>
+      <nav class="-mb-px flex gap-x-6 overflow-x-auto">
+        <button data-filter="all" class="filter-tab active border-b-2 border-orange-500 px-1 pb-4 text-sm font-medium text-orange-600 dark:text-orange-400 whitespace-nowrap">All Orders</button>
+        <button data-filter="pending" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Pending</button>
+        <button data-filter="processing" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Processing</button>
+        <button data-filter="dispatched" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Dispatched</button>
+        <button data-filter="completed" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Completed</button>
+        <button data-filter="cancelled" class="filter-tab border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300 whitespace-nowrap">Cancelled</button>
       </nav>
     </div>
 
@@ -120,12 +120,12 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
   </section>
 
   <!-- Order Details Modal -->
-  <div id="order-modal" class="hs-overlay hidden fixed inset-0 z-[80] overflow-x-hidden overflow-y-auto">
-    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto">
-      <div class="relative flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
+  <div id="order-modal" class="hidden fixed inset-0 z-[80] overflow-x-hidden overflow-y-auto flex items-center justify-center p-4">
+    <div class="relative w-full max-w-2xl">
+      <div class="relative flex flex-col bg-white border shadow-lg rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
         <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
           <h3 id="modal-title" class="font-bold text-gray-800 dark:text-white">Order Details</h3>
-          <button type="button" class="close-modal flex justify-center items-center h-7 w-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-700">
+          <button type="button" id="close-modal-x" class="flex justify-center items-center h-7 w-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-700">
             <svg class="flex-shrink-0 h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
           </button>
         </div>
@@ -133,7 +133,7 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
           <!-- Order details injected here -->
         </div>
         <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-          <button type="button" class="close-modal py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700">Close</button>
+          <button type="button" id="close-modal-btn" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700">Close</button>
         </div>
       </div>
     </div>
@@ -160,8 +160,14 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
   let allOrders: any[] = [];
   let currentFilter = 'all';
 
+  const tableBody = document.getElementById("orders-table-body");
+  const modal = document.getElementById('order-modal');
+  const backdrop = document.getElementById('modal-backdrop');
+  const modalTitle = document.getElementById('modal-title');
+  const modalContent = document.getElementById('modal-content');
+
   // Wait for page to fully load before checking auth
-  window.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const user = $user.get();
     if (!user || user.role !== 'admin') {
       window.location.href = '/';
@@ -170,8 +176,6 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
       setupEventListeners();
     }
   });
-
-  const tableBody = document.getElementById("orders-table-body");
 
   function setupEventListeners() {
     // Refresh button
@@ -193,11 +197,27 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
     });
 
     // Modal close buttons
-    document.querySelectorAll('.close-modal').forEach(btn => {
-      btn.addEventListener('click', closeModal);
-    });
+    document.getElementById('close-modal-x')?.addEventListener('click', closeModal);
+    document.getElementById('close-modal-btn')?.addEventListener('click', closeModal);
+    backdrop?.addEventListener('click', closeModal);
 
-    document.getElementById('modal-backdrop')?.addEventListener('click', closeModal);
+    // Event delegation for table action buttons
+    tableBody?.addEventListener('click', async (e) => {
+      const target = e.target as HTMLElement;
+      const button = target.closest('button[data-action]') as HTMLButtonElement;
+      if (!button) return;
+
+      const orderNumber = button.dataset.order;
+      const action = button.dataset.action;
+
+      if (!orderNumber || !action) return;
+
+      if (action === 'view') {
+        viewOrder(orderNumber);
+      } else {
+        await updateOrderStatus(orderNumber, action);
+      }
+    });
   }
 
   function setFilter(filter: string) {
@@ -240,10 +260,15 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
       completed: allOrders.filter(o => o.status.toLowerCase() === 'completed').length,
     };
     
-    (document.getElementById('stat-pending') as HTMLElement).textContent = stats.pending.toString();
-    (document.getElementById('stat-processing') as HTMLElement).textContent = stats.processing.toString();
-    (document.getElementById('stat-dispatched') as HTMLElement).textContent = stats.dispatched.toString();
-    (document.getElementById('stat-completed') as HTMLElement).textContent = stats.completed.toString();
+    const pendingEl = document.getElementById('stat-pending');
+    const processingEl = document.getElementById('stat-processing');
+    const dispatchedEl = document.getElementById('stat-dispatched');
+    const completedEl = document.getElementById('stat-completed');
+    
+    if (pendingEl) pendingEl.textContent = stats.pending.toString();
+    if (processingEl) processingEl.textContent = stats.processing.toString();
+    if (dispatchedEl) dispatchedEl.textContent = stats.dispatched.toString();
+    if (completedEl) completedEl.textContent = stats.completed.toString();
   }
 
   function getStatusBadge(status: string) {
@@ -263,28 +288,28 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
     const actions: string[] = [];
 
     if (status === 'pending') {
-      actions.push(`<button onclick="updateOrderStatus('${order.order_number}', 'processing')" class="inline-flex items-center gap-1 rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50">
+      actions.push(`<button data-order="${order.order_number}" data-action="processing" class="inline-flex items-center gap-1 rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50">
         <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
         Process
       </button>`);
     }
     
     if (status === 'processing') {
-      actions.push(`<button onclick="updateOrderStatus('${order.order_number}', 'dispatched')" class="inline-flex items-center gap-1 rounded-lg bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-600 hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400 dark:hover:bg-purple-900/50">
+      actions.push(`<button data-order="${order.order_number}" data-action="dispatched" class="inline-flex items-center gap-1 rounded-lg bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-600 hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400 dark:hover:bg-purple-900/50">
         <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg>
         Dispatch
       </button>`);
     }
     
     if (status === 'dispatched') {
-      actions.push(`<button onclick="updateOrderStatus('${order.order_number}', 'completed')" class="inline-flex items-center gap-1 rounded-lg bg-green-50 px-3 py-1.5 text-xs font-medium text-green-600 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50">
+      actions.push(`<button data-order="${order.order_number}" data-action="completed" class="inline-flex items-center gap-1 rounded-lg bg-green-50 px-3 py-1.5 text-xs font-medium text-green-600 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50">
         <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         Complete
       </button>`);
     }
     
     if (status !== 'cancelled' && status !== 'completed') {
-      actions.push(`<button onclick="updateOrderStatus('${order.order_number}', 'cancelled')" class="inline-flex items-center gap-1 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50">
+      actions.push(`<button data-order="${order.order_number}" data-action="cancelled" class="inline-flex items-center gap-1 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50">
         <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         Cancel
       </button>`);
@@ -336,8 +361,8 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
           </span>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-end">
-          <div class="flex items-center justify-end gap-2">
-            <button onclick="viewOrder('${order.order_number}')" class="inline-flex items-center gap-1 rounded-lg bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600">
+          <div class="flex items-center justify-end gap-2 flex-wrap">
+            <button data-order="${order.order_number}" data-action="view" class="inline-flex items-center gap-1 rounded-lg bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600">
               <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               View
             </button>
@@ -388,8 +413,7 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
     }
   }
 
-  // Global functions for inline onclick handlers
-  (window as any).updateOrderStatus = async function(orderNumber: string, newStatus: string) {
+  async function updateOrderStatus(orderNumber: string, newStatus: string) {
     const confirmMessages: Record<string, string> = {
       processing: 'Mark this order as processing? An email will be sent to the customer.',
       dispatched: 'Mark this order as dispatched? An email will be sent to the customer.',
@@ -423,20 +447,20 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
       console.error('Error updating order status:', error);
       alert('Failed to update order status. Please try again.');
     }
-  };
+  }
 
-  (window as any).viewOrder = function(orderNumber: string) {
+  function viewOrder(orderNumber: string) {
     const order = allOrders.find(o => o.order_number === orderNumber);
     if (!order) return;
 
-    const modalTitle = document.getElementById('modal-title');
-    const modalContent = document.getElementById('modal-content');
-    const modal = document.getElementById('order-modal');
-    const backdrop = document.getElementById('modal-backdrop');
-
     if (modalTitle) modalTitle.textContent = `Order #${order.order_number}`;
     
-    const items = Array.isArray(order.items) ? order.items : JSON.parse(order.items);
+    let items: any[] = [];
+    try {
+      items = Array.isArray(order.items) ? order.items : JSON.parse(order.items);
+    } catch (e) {
+      items = [];
+    }
     
     if (modalContent) {
       modalContent.innerHTML = `
@@ -462,7 +486,7 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
               <p class="text-sm"><span class="text-gray-500 dark:text-neutral-400">Name:</span> <span class="font-medium text-gray-800 dark:text-white">${order.customer_name}</span></p>
               <p class="text-sm"><span class="text-gray-500 dark:text-neutral-400">Email:</span> <span class="font-medium text-gray-800 dark:text-white">${order.customer_email}</span></p>
               <p class="text-sm"><span class="text-gray-500 dark:text-neutral-400">Phone:</span> <span class="font-medium text-gray-800 dark:text-white">${order.customer_phone || 'N/A'}</span></p>
-              <p class="text-sm"><span class="text-gray-500 dark:text-neutral-400">Address:</span> <span class="font-medium text-gray-800 dark:text-white">${order.shipping_address}, ${order.shipping_city} ${order.shipping_postal_code}</span></p>
+              <p class="text-sm"><span class="text-gray-500 dark:text-neutral-400">Address:</span> <span class="font-medium text-gray-800 dark:text-white">${order.shipping_address || ''}, ${order.shipping_city || ''} ${order.shipping_postal_code || ''}</span></p>
             </div>
           </div>
 
@@ -471,20 +495,20 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
               <h4 class="text-sm font-semibold text-gray-800 dark:text-white">Order Items</h4>
             </div>
             <div class="divide-y divide-gray-200 dark:divide-neutral-600">
-              ${items.map((item: any) => `
+              ${items.length > 0 ? items.map((item: any) => `
                 <div class="flex items-center justify-between px-4 py-3">
                   <div>
-                    <p class="text-sm font-medium text-gray-800 dark:text-white">${item.title}</p>
-                    <p class="text-xs text-gray-500 dark:text-neutral-400">Qty: ${item.quantity}</p>
+                    <p class="text-sm font-medium text-gray-800 dark:text-white">${item.title || item.name || 'Item'}</p>
+                    <p class="text-xs text-gray-500 dark:text-neutral-400">Qty: ${item.quantity || 1}</p>
                   </div>
-                  <p class="text-sm font-medium text-gray-800 dark:text-white">Rs ${(item.price * item.quantity).toLocaleString()}</p>
+                  <p class="text-sm font-medium text-gray-800 dark:text-white">Rs ${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</p>
                 </div>
-              `).join('')}
+              `).join('') : '<div class="px-4 py-3 text-sm text-gray-500 dark:text-neutral-400">No items found</div>'}
             </div>
             <div class="border-t border-gray-200 bg-gray-50 px-4 py-3 dark:border-neutral-600 dark:bg-neutral-700">
               <div class="flex items-center justify-between">
                 <p class="text-sm font-semibold text-gray-800 dark:text-white">Total</p>
-                <p class="text-lg font-bold text-orange-600 dark:text-orange-400">Rs ${parseFloat(order.total).toLocaleString()}</p>
+                <p class="text-lg font-bold text-orange-600 dark:text-orange-400">Rs ${parseFloat(order.total || 0).toLocaleString()}</p>
               </div>
             </div>
           </div>
@@ -495,11 +519,9 @@ const pageTitle = `Admin Dashboard | ${SITE.title}`;
     modal?.classList.remove('hidden');
     backdrop?.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-  };
+  }
 
   function closeModal() {
-    const modal = document.getElementById('order-modal');
-    const backdrop = document.getElementById('modal-backdrop');
     modal?.classList.add('hidden');
     backdrop?.classList.add('hidden');
     document.body.style.overflow = '';

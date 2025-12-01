@@ -29,10 +29,9 @@ export default defineConfig({
   prefetch: true,
   integrations: [sitemap({
     i18n: {
-      defaultLocale: "en", // All urls that don't contain `fr` after `https://screwfast.uk/` will be treated as default locale, i.e. `en`
+      defaultLocale: "en",
       locales: {
-        en: "en", // The `defaultLocale` value must present in `locales` keys
-        fr: "fr",
+        en: "en",
       },
     },
   }), starlight({
@@ -48,25 +47,11 @@ export default defineConfig({
         label: "English",
         lang: "en",
       },
-      de: { label: "Deutsch", lang: "de" },
-      es: { label: "Español", lang: "es" },
-      fa: { label: "Persian", lang: "fa", dir: "rtl" },
-      fr: { label: "Français", lang: "fr" },
-      ja: { label: "日本語", lang: "ja" },
-      "zh-cn": { label: "简体中文", lang: "zh-CN" },
     },
     // https://starlight.astro.build/guides/sidebar/
     sidebar: [
       {
         label: "Quick Start Guides",
-        translations: {
-          de: "Schnellstartanleitungen",
-          es: "Guías de Inicio Rápido",
-          fa: "راهنمای شروع سریع",
-          fr: "Guides de Démarrage Rapide",
-          ja: "クイックスタートガイド",
-          "zh-cn": "快速入门指南",
-        },
         autogenerate: { directory: "guides" },
       },
       {
