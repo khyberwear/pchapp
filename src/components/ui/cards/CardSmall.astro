@@ -13,7 +13,7 @@ interface Props {
 
 // Define classes to be used with the Image component
 const imageClass =
-  "absolute inset-0 h-full w-full object-cover object-center transition duration-[600ms] ease-[cubic-bezier(0.45,0,0.55,1)] group-hover:scale-110";
+  "absolute inset-0 h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-105";
 ---
 
 <!-- A clickable card that leads to the details of the product-->
@@ -22,23 +22,30 @@ const imageClass =
     ? `/${productLocale}/products/${product.id.replace(/^fr\//, "")}/`
     : `/products/${product.id.replace(/^en\//, "")}/`}
   data-astro-prefetch
-  class="group relative flex h-48 items-end overflow-hidden rounded-xl shadow-lg outline-hidden ring-zinc-500 focus-visible:ring-3 dark:ring-zinc-200 dark:focus:outline-hidden md:h-80"
+  class="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-2xl dark:bg-neutral-800 outline-hidden ring-orange-500 focus-visible:ring-2 dark:ring-orange-400"
 >
-  <!-- The product's main image -->
-  <img
-    src={typeof product.data.main.imgCard === 'string' ? product.data.main.imgCard : product.data.main.imgCard.src}
-    alt={product.data.main.imgAlt}
-    draggable={false}
-    class={imageClass}
-  />
-  <!-- An overlay gradient that sits on top of the product image-->
-  <div
-    class="pointer-events-none absolute inset-0 bg-linear-to-t from-neutral-800 via-transparent to-transparent opacity-50"
-  >
+  <!-- The product's main image container -->
+  <div class="relative h-48 overflow-hidden bg-neutral-100 dark:bg-neutral-700 md:h-64">
+    <img
+      src={typeof product.data.main.imgCard === 'string' ? product.data.main.imgCard : product.data.main.imgCard.src}
+      alt={product.data.main.imgAlt}
+      draggable={false}
+      class={imageClass}
+    />
   </div>
-  <!-- The product's subtitle and the anchor SVG icon-->
-  <span
-    class="relative mb-3 ml-4 inline-block text-sm font-bold text-neutral-50 transition duration-[600ms] ease-[cubic-bezier(0.45,0,0.55,1)] group-hover:scale-110 md:ml-5 md:text-lg"
-    >{product.data.description} <Icon name="openInNew" />
-  </span>
+  
+  <!-- Product info section -->
+  <div class="flex flex-col justify-between p-4 md:p-5">
+    <h3 class="text-base font-bold text-neutral-800 dark:text-neutral-100 mb-2 line-clamp-2 md:text-lg">
+      {product.data.title}
+    </h3>
+    <div class="flex items-center justify-between mt-2">
+      <span class="text-sm font-medium text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors">
+        View Details
+      </span>
+      <svg class="w-5 h-5 text-orange-600 dark:text-orange-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </div>
+  </div>
 </a>
