@@ -151,7 +151,7 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
                     {product.data.colors.map((color, index) => (
                       <button
                         type="button"
-                        class={`color-option relative h-10 w-10 rounded-full border-2 focus:outline-none ${index === 0 ? 'ring-2 ring-orange-500 ring-offset-2 dark:ring-offset-neutral-900' : 'border-transparent'}`}
+                        class={`color-option relative h-10 w-10 rounded-full border-2 focus:outline-none transition-all ${index === 0 ? 'ring-2 ring-orange-500 ring-offset-2 dark:ring-offset-neutral-900 scale-110' : 'border-transparent hover:scale-110'}`}
                         style={`background-color: ${color.colorCode}`}
                         data-color={color.name}
                         data-image={color.image ? (typeof color.image === 'string' ? color.image : color.image.src) : ''}
@@ -170,16 +170,16 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
                     <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Size</h3>
                     <a href="#" class="text-sm font-medium text-orange-600 hover:text-orange-500 dark:text-orange-400">Size guide</a>
                   </div>
-                  <div class="mt-2 grid grid-cols-6 gap-2 sm:grid-cols-8">
-                    {product.data.sizes.map((size, index) => (
-                      <button
-                        type="button"
-                        class={`size-option flex items-center justify-center rounded-md border py-2 text-sm font-medium uppercase sm:flex-1 ${index === 2 ? 'border-orange-500 bg-orange-50 text-orange-600 ring-1 ring-orange-500 dark:bg-orange-900/20 dark:text-orange-400' : 'border-neutral-200 text-neutral-900 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-800'}`}
-                        data-size={size}
-                      >
-                        {size}
-                      </button>
-                    ))}
+                  <div class="mt-2">
+                    <select
+                      id="size-selector"
+                      class="block w-full rounded-lg border-neutral-200 py-3 px-4 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400"
+                    >
+                      <option value="" disabled selected>Select a size</option>
+                      {product.data.sizes.map((size) => (
+                        <option value={size}>{size}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
@@ -206,7 +206,9 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
               data-title={product.data.title}
               data-price={product.data.main.price || 50}
               data-image={product.data.main.imgCard}
-              class="w-full rounded-xl bg-orange-600 px-6 py-3 text-base font-semibold text-white transition-all hover:bg-orange-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 sm:px-8 sm:py-4 sm:text-lg"
+              data-color={product.data.colors ? product.data.colors[0].name : ''}
+              data-size=""
+              class="w-full rounded-xl bg-orange-600 px-6 py-3 text-base font-semibold text-white transition-all hover:bg-orange-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 sm:px-8 sm:py-4 sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span class="flex items-center justify-center gap-2">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -364,7 +366,7 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
 
             {product.data.specificationsRight ? (
               <div class="space-y-6">
-                {product.data.specificationsRight.map((spec) => (
+                {product.data.specificationsRight.filter(spec => spec.title !== 'Warranty').map((spec) => (
                   <div class="flex justify-between items-center py-3 border-b border-neutral-200 dark:border-neutral-700">
                     <span class="font-medium text-neutral-900 dark:text-white">{spec.title}</span>
                     <span class="text-neutral-600 dark:text-neutral-300">{spec.subTitle}</span>
@@ -446,14 +448,77 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
 
   const addToCartBtn = document.getElementById("add-to-cart-btn");
   const whatsappBtn = document.getElementById("order-whatsapp-btn");
+  const sizeSelector = document.getElementById("size-selector") as HTMLSelectElement;
+  const colorOptions = document.querySelectorAll(".color-option");
+
+  // Handle Color Selection
+  colorOptions.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // Remove active state from all
+      colorOptions.forEach(b => {
+        b.classList.remove("ring-2", "ring-orange-500", "ring-offset-2", "dark:ring-offset-neutral-900", "scale-110");
+        b.classList.add("border-transparent", "hover:scale-110");
+      });
+
+      // Add active state to clicked
+      btn.classList.remove("border-transparent", "hover:scale-110");
+      btn.classList.add("ring-2", "ring-orange-500", "ring-offset-2", "dark:ring-offset-neutral-900", "scale-110");
+
+      // Update data attributes
+      const color = btn.getAttribute("data-color");
+      const image = btn.getAttribute("data-image");
+
+      if (addToCartBtn) {
+        addToCartBtn.dataset.color = color || "";
+      }
+
+      // Update main image if color has an image
+      const mainImage = document.getElementById("main-product-image") as HTMLImageElement;
+      if (mainImage && image) {
+        mainImage.src = image;
+      }
+    });
+  });
+
+  // Handle Size Selection
+  if (sizeSelector) {
+    sizeSelector.addEventListener("change", (e) => {
+      const size = (e.target as HTMLSelectElement).value;
+      if (addToCartBtn) {
+        addToCartBtn.dataset.size = size;
+        // Enable button if size is selected
+        if (size) {
+            addToCartBtn.removeAttribute("disabled");
+            addToCartBtn.classList.remove("opacity-50", "cursor-not-allowed");
+        } else {
+            addToCartBtn.setAttribute("disabled", "true");
+            addToCartBtn.classList.add("opacity-50", "cursor-not-allowed");
+        }
+      }
+    });
+    // Initially disable add to cart if size selector exists and no size is pre-selected
+    if (addToCartBtn && !sizeSelector.value) {
+        addToCartBtn.setAttribute("disabled", "true");
+        addToCartBtn.classList.add("opacity-50", "cursor-not-allowed");
+    }
+  }
 
   if (addToCartBtn) {
     addToCartBtn.addEventListener("click", () => {
+      // Check if size is required but not selected
+      if (sizeSelector && !sizeSelector.value) {
+        alert("Please select a size");
+        sizeSelector.focus();
+        return;
+      }
+
       const item = {
         id: addToCartBtn.dataset.id || "0",
         title: addToCartBtn.dataset.title || "Product",
         price: parseFloat(addToCartBtn.dataset.price || "0"),
         image: addToCartBtn.dataset.image || "",
+        color: addToCartBtn.dataset.color,
+        size: addToCartBtn.dataset.size,
       };
 
       addToCart(item);
@@ -472,7 +537,15 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
     whatsappBtn.addEventListener("click", () => {
       const productTitle = addToCartBtn?.dataset.title || "Product";
       const productPrice = addToCartBtn?.dataset.price || "50.00";
-      const message = `Hi, I'm interested in ordering *${productTitle}* (Rs ${productPrice})`;
+      const color = addToCartBtn?.dataset.color ? `Color: ${addToCartBtn.dataset.color}` : "";
+      const size = addToCartBtn?.dataset.size ? `Size: ${addToCartBtn.dataset.size}` : "";
+      
+      let details = "";
+      if (color || size) {
+        details = `(${[color, size].filter(Boolean).join(", ")})`;
+      }
+
+      const message = `Hi, I'm interested in ordering *${productTitle}* ${details} - Rs ${productPrice}`;
       const whatsappNumber = "923001234567"; // Replace with your WhatsApp number
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");

@@ -301,7 +301,10 @@ export async function sendAdminNotification(orderData: OrderEmailData) {
 // Send customer confirmation
 export async function sendCustomerConfirmation(orderData: OrderEmailData) {
     const itemsList = orderData.items
-        .map(item => `- ${item.title} x ${item.quantity} = Rs ${item.price * item.quantity}`)
+        .map(item => {
+            const variantInfo = [item.color ? `Color: ${item.color}` : '', item.size ? `Size: ${item.size}` : ''].filter(Boolean).join(', ');
+            return `- ${item.title} ${variantInfo ? `(${variantInfo})` : ''} x ${item.quantity} = Rs ${item.price * item.quantity}`;
+        })
         .join('\n');
 
     const deliveryLabel = orderData.deliveryMethod === 'express' ? 'Express Delivery' : 'Normal Delivery';

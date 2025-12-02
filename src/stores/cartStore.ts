@@ -2,10 +2,13 @@ import { map } from 'nanostores';
 
 export interface CartItem {
     id: string;
+    productId: string;
     title: string;
     price: number;
     quantity: number;
     image: string;
+    color?: string;
+    size?: string;
 }
 
 export const $cart = map<Record<string, CartItem>>({});
@@ -25,18 +28,22 @@ $cart.subscribe((cart) => {
     }
 });
 
-export function addToCart(item: Omit<CartItem, 'quantity'>) {
+export function addToCart(item: Omit<CartItem, 'quantity' | 'id'> & { id: string }) {
     const cart = $cart.get();
-    const existingItem = cart[item.id];
+    // Create a unique ID for the cart item based on product ID and variants
+    const cartItemId = `${item.id}-${item.color || 'default'}-${item.size || 'default'}`;
+    const existingItem = cart[cartItemId];
 
     if (existingItem) {
-        $cart.setKey(item.id, {
+        $cart.setKey(cartItemId, {
             ...existingItem,
             quantity: existingItem.quantity + 1,
         });
     } else {
-        $cart.setKey(item.id, {
+        $cart.setKey(cartItemId, {
             ...item,
+            productId: item.id, // Store original product ID
+            id: cartItemId, // Use composite ID for the cart item
             quantity: 1,
         });
     }

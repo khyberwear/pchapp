@@ -78,6 +78,8 @@ export const POST: APIRoute = async ({ request }) => {
                 title: item.title,
                 quantity: item.quantity,
                 price: item.price,
+                color: item.color,
+                size: item.size,
             })),
             total,
             subtotal,

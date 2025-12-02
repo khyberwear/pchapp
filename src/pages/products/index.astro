@@ -13,7 +13,7 @@ import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
 
 // Fetching all the product related content and sorting it by main.id
-const product: CollectionEntry<"products">[] = (
+const products: CollectionEntry<"products">[] = (
   await getCollection("products", ({ id }) => {
     return id.startsWith("en/");
   })
@@ -111,18 +111,34 @@ const ogTitle = "Peshawari Chappal Collection | Handcrafted Leather Sandals";
     </div>
     {/* Displaying products in alternating styles. Alternative product gets different card styling.
     Maps through all product entries and displays them with either CardSmall or CardWide based on their position. */}
-    <section class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8">
-      {
-        product.map((product, index) => {
-          const position = index % 4;
-          if (position === 0 || position === 3) {
-            return <CardSmall product={product} />;
-          } else {
-            return <CardWide product={product} />;
-          }
-        })
-      }
-    </section>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {products.map((product) => (
+        <a href={`/products/${product.id.replace(/^en\//, "")}`} class="group relative bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+          <div class="aspect-square overflow-hidden">
+            <img 
+              src={typeof product.data.main.imgCard === 'string' ? product.data.main.imgCard : product.data.main.imgCard.src}
+              alt={product.data.main.imgAlt}
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-bold text-neutral-800 dark:text-neutral-200 group-hover:text-yellow-600 dark:group-hover:text-yellow-500 transition-colors">
+              {product.data.title}
+            </h3>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">{product.data.description}</p>
+            <div class="mt-4 flex items-center justify-between">
+              <div class="flex flex-col">
+                <span class="text-lg font-bold text-neutral-900 dark:text-white">₨ {(product.data.main.price || 5500).toLocaleString()}</span>
+                {product.data.main.originalPrice && (
+                  <span class="text-xs text-neutral-500 line-through">₨ {product.data.main.originalPrice.toLocaleString()}</span>
+                )}
+              </div>
+              <span class="text-yellow-600 dark:text-yellow-500 font-bold text-sm">View Details</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
   </div>
   {/* Features statistics section */}
   <FeaturesStatsAlt
