@@ -40,12 +40,22 @@ const imageClass =
       {product.data.title}
     </h3>
     <div class="flex items-center justify-between mt-2">
-      <span class="text-sm font-medium text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors">
-        View Details
-      </span>
-      <svg class="w-5 h-5 text-orange-600 dark:text-orange-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-      </svg>
+      <div class="flex flex-col">
+        <span class="text-lg font-bold text-neutral-800 dark:text-neutral-100">
+          ₨ {(product.data.main.price || 5500).toLocaleString()}
+        </span>
+        {product.data.main.originalPrice && (
+          <span class="text-xs text-neutral-500 line-through">
+            ₨ {product.data.main.originalPrice.toLocaleString()}
+          </span>
+        )}
+      </div>
+      <div class="flex items-center gap-1 text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors">
+        <span class="text-sm font-medium">View</span>
+        <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </div>
     </div>
   </div>
 </a>
