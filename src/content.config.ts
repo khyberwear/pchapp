@@ -58,6 +58,12 @@ const productsCollection = defineCollection({
       first: image().optional(),
       second: image().optional(),
     }),
+    colors: z.array(z.object({
+      name: z.string(),
+      image: image().optional(),
+      colorCode: z.string().optional()
+    })).optional(),
+    sizes: z.array(z.string()).optional(),
   }),
 });
 

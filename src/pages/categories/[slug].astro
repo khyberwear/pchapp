@@ -1,0 +1,100 @@
+---
+// Import necessary components
+import MainLayout from "@/layouts/MainLayout.astro";
+import CardSmall from "@components/ui/cards/CardSmall.astro";
+import CardWide from "@components/ui/cards/CardWide.astro";
+import { getCollection } from "astro:content";
+import { SITE } from "@data/constants";
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const categories = [
+    {
+      slug: "peshawari-chappal",
+      title: "Peshawari Chappal",
+      description: "The timeless classic. Hand-stitched leather sandals known for their elegance and comfort.",
+      filter: (product: any) => product.data.title.toLowerCase().includes("zalmi")
+    },
+    {
+      slug: "norozi",
+      title: "Norozi Chappal",
+      description: "Rugged and robust with a thick tire sole. Built for durability and tough terrain.",
+      filter: (product: any) => product.data.title.toLowerCase().includes("norozi")
+    },
+    {
+      slug: "charsadda",
+      title: "Charsadda Chappal",
+      description: "Simple, lightweight, and stylish. A perfect blend of tradition and casual wear.",
+      filter: (product: any) => product.data.title.toLowerCase().includes("charsadda")
+    },
+    {
+      slug: "panjedar",
+      title: "Panjedar Chappal",
+      description: "Distinctive open-toe design with intricate stitching. A unique style statement.",
+      filter: (product: any) => product.data.title.toLowerCase().includes("panjedar")
+    }
+  ];
+
+  return categories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+
+// 2. Get the category prop
+const { category } = Astro.props;
+
+// 3. Fetch and filter products
+const allProducts = await getCollection("products", ({ id }) => id.startsWith("en/"));
+const products = allProducts.filter(category.filter);
+
+const pageTitle = `${category.title} | ${SITE.title}`;
+---
+
+<MainLayout
+  title={pageTitle}
+  description={category.description}
+>
+  <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
+    <div class="mb-4 flex items-center justify-between gap-8 sm:mb-8 md:mb-12">
+      <div class="flex items-center gap-12">
+        <h1 class="text-2xl font-bold tracking-tight text-balance text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200">
+          {category.title}
+        </h1>
+        <p class="hidden max-w-xl text-pretty text-neutral-600 md:block dark:text-neutral-400">
+          {category.description}
+        </p>
+      </div>
+    </div>
+
+    {products.length > 0 ? (
+      <section class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8">
+        {products.map((product, index) => {
+          const position = index % 4;
+          if (position === 0 || position === 3) {
+            return <CardSmall product={product} />;
+          } else {
+            return <CardWide product={product} />;
+          }
+        })}
+      </section>
+    ) : (
+      <div class="py-20 text-center">
+        <div class="mb-4 rounded-full bg-neutral-100 p-4 inline-flex dark:bg-neutral-800">
+          <svg class="h-10 w-10 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-neutral-800 dark:text-neutral-200">
+          No products found
+        </h3>
+        <p class="mt-2 text-neutral-600 dark:text-neutral-400">
+          We couldn't find any products in this collection.
+        </p>
+        <a href="/products" class="mt-6 inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-orange-600 px-4 py-3 text-sm font-semibold text-white hover:bg-orange-700 disabled:opacity-50 disabled:pointer-events-none">
+          View all products
+        </a>
+      </div>
+    )}
+  </section>
+</MainLayout>

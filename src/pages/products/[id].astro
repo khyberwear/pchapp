@@ -83,35 +83,47 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
             />
           </div>
           <!-- Thumbnail images if available -->
-          <div class="flex gap-4">
-            <div class="aspect-square w-20 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+          <div class="flex gap-4 overflow-x-auto pb-2">
+            <div class="aspect-square w-24 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 sm:w-28">
               <img
                 src={typeof product.data.main.imgMain === 'string' ? product.data.main.imgMain : product.data.main.imgMain.src}
                 alt={product.data.main.imgAlt}
-                class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image"
+                class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image ring-2 ring-transparent hover:ring-orange-500"
                 data-image={typeof product.data.main.imgMain === 'string' ? product.data.main.imgMain : product.data.main.imgMain.src}
               />
             </div>
             {product.data.blueprints?.first && (
-              <div class="aspect-square w-20 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+              <div class="aspect-square w-24 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 sm:w-28">
                 <img
                   src={typeof product.data.blueprints.first === 'string' ? product.data.blueprints.first : product.data.blueprints.first.src}
                   alt="Product detail"
-                  class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image"
+                  class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image ring-2 ring-transparent hover:ring-orange-500"
                   data-image={typeof product.data.blueprints.first === 'string' ? product.data.blueprints.first : product.data.blueprints.first.src}
                 />
               </div>
             )}
             {product.data.blueprints?.second && (
-              <div class="aspect-square w-20 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+              <div class="aspect-square w-24 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 sm:w-28">
                 <img
                   src={typeof product.data.blueprints.second === 'string' ? product.data.blueprints.second : product.data.blueprints.second.src}
                   alt="Product detail"
-                  class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image"
+                  class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image ring-2 ring-transparent hover:ring-orange-500"
                   data-image={typeof product.data.blueprints.second === 'string' ? product.data.blueprints.second : product.data.blueprints.second.src}
                 />
               </div>
             )}
+            {product.data.colors?.map((color) => (
+              color.image && (
+                <div class="aspect-square w-24 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 sm:w-28">
+                  <img
+                    src={typeof color.image === 'string' ? color.image : color.image.src}
+                    alt={color.name}
+                    class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image ring-2 ring-transparent hover:ring-orange-500"
+                    data-image={typeof color.image === 'string' ? color.image : color.image.src}
+                  />
+                </div>
+              )
+            ))}
           </div>
         </div>
 
@@ -128,6 +140,51 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
               {product.data.main.content}
             </p>
           </div>
+
+          <!-- Options (Colors & Sizes) -->
+          {(product.data.colors || product.data.sizes) && (
+            <div class="space-y-6 border-t border-b border-neutral-200 py-6 dark:border-neutral-700">
+              {product.data.colors && (
+                <div>
+                  <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Color</h3>
+                  <div class="mt-2 flex items-center gap-3">
+                    {product.data.colors.map((color, index) => (
+                      <button
+                        type="button"
+                        class={`color-option relative h-10 w-10 rounded-full border-2 focus:outline-none ${index === 0 ? 'ring-2 ring-orange-500 ring-offset-2 dark:ring-offset-neutral-900' : 'border-transparent'}`}
+                        style={`background-color: ${color.colorCode}`}
+                        data-color={color.name}
+                        data-image={color.image ? (typeof color.image === 'string' ? color.image : color.image.src) : ''}
+                        aria-label={color.name}
+                      >
+                        <span class="sr-only">{color.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {product.data.sizes && (
+                <div>
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Size</h3>
+                    <a href="#" class="text-sm font-medium text-orange-600 hover:text-orange-500 dark:text-orange-400">Size guide</a>
+                  </div>
+                  <div class="mt-2 grid grid-cols-6 gap-2 sm:grid-cols-8">
+                    {product.data.sizes.map((size, index) => (
+                      <button
+                        type="button"
+                        class={`size-option flex items-center justify-center rounded-md border py-2 text-sm font-medium uppercase sm:flex-1 ${index === 2 ? 'border-orange-500 bg-orange-50 text-orange-600 ring-1 ring-orange-500 dark:bg-orange-900/20 dark:text-orange-400' : 'border-neutral-200 text-neutral-900 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-800'}`}
+                        data-size={size}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <!-- Price and Add to Cart -->
           <div class="space-y-4">
@@ -170,6 +227,40 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
                 Order on WhatsApp
               </span>
             </button>
+
+            <button
+              id="video-btn"
+              class="w-full rounded-xl border-2 border-neutral-200 bg-white px-6 py-3 text-base font-semibold text-neutral-800 transition-all hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-neutral-200 focus:ring-offset-2 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-900 sm:px-8 sm:py-4 sm:text-lg"
+            >
+              <span class="flex items-center justify-center gap-2">
+                <svg class="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                </svg>
+                Check HD Video of {product.data.title}
+              </span>
+            </button>
+          </div>
+
+          <!-- Video Modal -->
+          <div id="video-modal" class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm transition-opacity duration-300">
+            <div class="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-black shadow-2xl">
+              <button id="close-video-modal" class="absolute right-4 top-4 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 focus:outline-none">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <div class="aspect-video w-full">
+                <iframe 
+                  id="video-iframe"
+                  class="h-full w-full" 
+                  src="" 
+                  title="Product Video"
+                  frameborder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
           </div>
 
           <!-- Key Features -->
@@ -400,6 +491,47 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
       }
     });
   });
+
+  // Video Modal functionality
+  const videoBtn = document.getElementById("video-btn");
+  const videoModal = document.getElementById("video-modal");
+  const closeVideoBtn = document.getElementById("close-video-modal");
+  const videoIframe = document.getElementById("video-iframe") as HTMLIFrameElement;
+  
+  // Dummy video URL (Peshawari Chappal making or showcase)
+  const videoUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"; // Rick Roll placeholder, replace with actual video
+
+  if (videoBtn && videoModal && closeVideoBtn && videoIframe) {
+    videoBtn.addEventListener("click", () => {
+      videoModal.classList.remove("hidden");
+      videoModal.classList.add("flex");
+      videoIframe.src = videoUrl;
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    });
+
+    const closeModal = () => {
+      videoModal.classList.add("hidden");
+      videoModal.classList.remove("flex");
+      videoIframe.src = ""; // Stop video
+      document.body.style.overflow = ""; // Restore scrolling
+    };
+
+    closeVideoBtn.addEventListener("click", closeModal);
+
+    // Close on click outside
+    videoModal.addEventListener("click", (e) => {
+      if (e.target === videoModal) {
+        closeModal();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !videoModal.classList.contains("hidden")) {
+        closeModal();
+      }
+    });
+  }
 </script>
 
 <script>
