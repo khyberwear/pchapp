@@ -2,6 +2,7 @@
 const navBarLinks = [
   { name: "Home", url: "/" },
   { name: "Products", url: "/products" },
+  { name: "Collections", url: "/categories" },
   { name: "Blog", url: "/blog" },
   { name: "Contact", url: "/contact" },
 ];
