@@ -5,7 +5,7 @@ import { glob } from 'astro/loaders';
 
 const productsCollection = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/products" }),
-    schema: ({ image }) => z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     description: z.string(),
     main: z.object({
@@ -14,6 +14,8 @@ const productsCollection = defineCollection({
       imgCard: image(),
       imgMain: image(),
       imgAlt: z.string(),
+      price: z.number().optional(),
+      originalPrice: z.number().optional(),
     }),
     tabs: z.array(
       z.object({
@@ -61,19 +63,19 @@ const productsCollection = defineCollection({
 
 const blogCollection = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/blog" }),
-  schema: ({ image }) => z.object ({
-  title: z.string(),
-  description: z.string(),
-  contents: z.array(z.string()),
-  author: z.string(),
-  role: z.string().optional(),
-  authorImage: image(),
-  authorImageAlt: z.string(),
-  pubDate: z.date(),
-  cardImage: image(),
-  cardImageAlt: z.string(),
-  readTime: z.number(),
-  tags: z.array(z.string()).optional(),
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    description: z.string(),
+    contents: z.array(z.string()),
+    author: z.string(),
+    role: z.string().optional(),
+    authorImage: image(),
+    authorImageAlt: z.string(),
+    pubDate: z.date(),
+    cardImage: image(),
+    cardImageAlt: z.string(),
+    readTime: z.number(),
+    tags: z.array(z.string()).optional(),
   }),
 });
 

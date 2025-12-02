@@ -27,6 +27,12 @@
             },
             "imgAlt": {
               "type": "string"
+            },
+            "price": {
+              "type": "number"
+            },
+            "originalPrice": {
+              "type": "number"
             }
           },
           "required": [

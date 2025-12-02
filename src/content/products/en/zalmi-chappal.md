@@ -1,54 +1,63 @@
 ---
-title: "Zalmi Chappal"
-description: "Premium Brown Leather"
+title: "Shiny Black Smart Zalmi Peshawari Chappal"
+description: "Premium Leather – Hand-stitched Excellence"
 main:
   id: 2
   content: |
-    The Zalmi Chappal combines modern style with traditional craftsmanship. Made from rich brown leather, it offers a sophisticated look suitable for any wardrobe.
-  imgCard: "https://images.unsplash.com/photo-1562183241-b937e95585b6?w=400&h=300&fit=crop"
-  imgMain: "https://images.unsplash.com/photo-1562183241-b937e95585b6?w=800&h=600&fit=crop"
-  imgAlt: "Zalmi Chappal in Brown Leather"
+    Experience authentic Peshawari craftsmanship with our Shiny Black Smart Zalmi Chappal. Each pair is expertly hand-stitched using centuries-old techniques, featuring premium leather and a durable truck-tire sole for long-lasting wear.
+  imgCard: "@images/zalmi1.jpg"
+  imgMain: "@images/zalmi1.jpg"
+  imgAlt: "Shiny Black Smart Zalmi Peshawari Chappal"
+  price: 5500
+  originalPrice: 6500
 tabs:
   - id: "tabs-with-card-item-1"
     dataTab: "#tabs-with-card-1"
     title: "Description"
   - id: "tabs-with-card-item-2"
     dataTab: "#tabs-with-card-2"
-    title: "Details"
+    title: "Features"
   - id: "tabs-with-card-item-3"
     dataTab: "#tabs-with-card-3"
     title: "Sizing"
 longDescription:
-  title: "Modern Elegance"
+  title: "Premium Craftsmanship"
   subTitle: |
-    The Zalmi Chappal is designed for the modern man who values tradition. Its sleek design and comfortable fit make it a versatile choice for daily wear or special events.
-  btnTitle: "Contact for Custom Orders"
+    The Shiny Black Smart Zalmi Peshawari Chappal represents the perfect blend of traditional artistry and modern durability. Hand-stitched by skilled artisans using time-honored techniques passed down through generations.
+  btnTitle: "Add to Cart"
   btnURL: "#"
 descriptionList:
-  - title: "Rich Brown Leather"
-    subTitle: "Selected for its texture and durability, the brown leather ages beautifully over time."
-  - title: "Comfort Fit"
-    subTitle: "Designed with a cushioned insole to provide all-day comfort."
-  - title: "Durable Stitching"
-    subTitle: "Reinforced stitching ensures the chappal withstands daily wear and tear."
+  - title: "Premium Leather"
+    subTitle: "Expertly hand-stitched using centuries-old craftsmanship for unmatched quality."
+  - title: "Durable Truck-Tire Sole"
+    subTitle: "Built for long-lasting wear and superior grip on any surface."
+  - title: "Double-Stitched Design"
+    subTitle: "Ensures extra toughness and a distinctive, premium look."
+  - title: "Maximum Comfort"
+    subTitle: "Soft inner padding with an adjustable strap for a snug, personalized fit."
+  - title: "Adjustable Fit"
+    subTitle: "Designed for a comfortable feel that adapts to your foot."
 specificationsLeft:
   - title: "Material"
-    subTitle: "Genuine Leather"
+    subTitle: "Premium Genuine Leather"
   - title: "Sole"
-    subTitle: "Rubber"
+    subTitle: "Durable Truck-Tire"
   - title: "Origin"
     subTitle: "Peshawar, Pakistan"
   - title: "Color"
-    subTitle: "Brown"
+    subTitle: "Shiny Black"
+  - title: "Price"
+    subTitle: "₨ 5,500 (Was ₨ 6,500)"
 tableData:
   - feature: ["Feature", "Detail"]
     description:
-      - ["Upper Material", "Leather"]
-      - ["Sole Material", "Rubber"]
-      - ["Stitching", "Single Stitch"]
+      - ["Upper Material", "Premium Leather"]
+      - ["Sole Material", "Truck-Tire"]
+      - ["Stitching", "Double-Stitched"]
       - ["Weight", "Medium"]
-      - ["Warranty", "6 Months"]
+      - ["Warranty", "12 Months"]
+      - ["Fit", "Adjustable Strap"]
 blueprints:
-  first: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=400&fit=crop"
-  second: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&h=400&fit=crop"
+  first: "@images/zalmi2.jpg"
+  second: "@images/zalmi3.jpg"
 ---

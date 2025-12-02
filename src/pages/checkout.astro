@@ -211,11 +211,9 @@ const pageTitle = `Checkout | ${SITE.title}`;
 
     orderItemsContainer.innerHTML = items.map((item) => {
       subtotal += item.price * item.quantity;
-      const imageUrl = String(item.image);
       return `
         <div class="flex justify-between items-start pb-4 border-b border-gray-200 dark:border-neutral-700 last:border-b-0">
           <div class="flex gap-4">
-            <img src="${imageUrl}" alt="${item.title}" class="w-16 h-16 object-cover rounded-md">
             <div>
               <p class="text-sm font-medium text-gray-800 dark:text-neutral-200">${item.title}</p>
               <p class="text-sm text-gray-500 dark:text-neutral-400">Rs ${item.price} each</p>
