@@ -4,6 +4,8 @@ import { sendAdminNotification, sendCustomerConfirmation } from '../../lib/email
 
 export const prerender = false;
 
+// Force deployment update
+
 // Initialize database on first load
 let dbInitialized = false;
 
