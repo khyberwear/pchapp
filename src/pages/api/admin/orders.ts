@@ -1,10 +1,22 @@
 import type { APIRoute } from 'astro';
-import { getAll } from '../../../lib/db';
+import { getAll, initializeDatabase } from '../../../lib/db';
 
 export const prerender = false;
 
+// Initialize database on first load
+let dbInitialized = false;
+
 export const GET: APIRoute = async ({ request }) => {
     try {
+        // Initialize database if not already done
+        if (!dbInitialized) {
+            try {
+                await initializeDatabase();
+                dbInitialized = true;
+            } catch (initError) {
+                console.error('Database initialization error:', initError);
+            }
+        }
         // Get auth header (basic check - in production use proper auth)
         const authHeader = request.headers.get('authorization');
 
