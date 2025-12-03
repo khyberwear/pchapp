@@ -1,1 +1,0 @@
-import{$ as r}from"./cartStore.wrkIm_xd.js";import"./index.daetGfa_.js";const t=document.getElementById("cart-count");r.subscribe(c=>{if(t){const e=Object.values(c).reduce((n,o)=>n+o.quantity,0);t.textContent=e.toString()}});

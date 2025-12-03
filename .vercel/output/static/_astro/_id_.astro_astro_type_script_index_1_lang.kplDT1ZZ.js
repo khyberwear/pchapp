@@ -1,1 +1,0 @@
-import{a as d}from"./cartStore.wrkIm_xd.js";import"./index.daetGfa_.js";const t=document.getElementById("add-to-cart-btn");t&&t.addEventListener("click",()=>{const a={id:t.dataset.id||"0",title:t.dataset.title||"Product",price:parseFloat(t.dataset.price||"0"),image:t.dataset.image||""};d(a);const e=document.getElementById("cart-drawer");e&&window.HSOverlay.open(e)});
