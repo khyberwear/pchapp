@@ -10,6 +10,13 @@ main:
   imgAlt: "Shiny Black Smart Zalmi Peshawari Chappal"
   price: 5500
   originalPrice: 6500
+sizes:
+  - "7"
+  - "8"
+  - "9"
+  - "10"
+  - "11"
+  - "12"
 tabs:
   - id: "tabs-with-card-item-1"
     dataTab: "#tabs-with-card-1"

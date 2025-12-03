@@ -9,6 +9,13 @@ main:
   imgAlt: "Norozi Shikari Chappal Double Sole"
   price: 14999
   originalPrice: 20000
+sizes:
+  - "7"
+  - "8"
+  - "9"
+  - "10"
+  - "11"
+  - "12"
 tabs:
   - title: "Description"
     id: "tabs-with-card-item-1"
