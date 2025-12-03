@@ -149,7 +149,7 @@ async function sendOrderStatusEmail(data) {
           Content: emailContent.html
         }
       ],
-      From: "noreply@webspires.co.uk",
+      From: "noreply@khyberwear.com",
       Subject: emailContent.subject
     }
   };
@@ -226,7 +226,7 @@ async function sendAdminNotification(orderData) {
           `
         }
       ],
-      From: "noreply@webspires.co.uk",
+      From: "noreply@khyberwear.com",
       Subject: `New Order #${orderData.orderNumber} - Peshawari Chappal`
     }
   };
@@ -289,7 +289,7 @@ async function sendCustomerConfirmation(orderData) {
           `
         }
       ],
-      From: "noreply@webspires.co.uk",
+      From: "noreply@khyberwear.com",
       Subject: `Order Confirmation #${orderData.orderNumber} - Peshawari Chappal`
     }
   };

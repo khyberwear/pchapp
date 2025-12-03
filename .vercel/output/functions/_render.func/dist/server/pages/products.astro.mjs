@@ -1,25 +1,13 @@
 import { c as createAstro, a as createComponent, m as maybeRenderHead, r as renderComponent, d as renderTemplate, F as Fragment, u as unescapeHTML, b as addAttribute } from '../chunks/astro/server_B5Ll6kUe.mjs';
 import 'kleur/colors';
-import { a as $$MainLayout, S as SITE } from '../chunks/MainLayout_C1ONpxrI.mjs';
-import { $ as $$PrimaryCTA } from '../chunks/PrimaryCTA_DjcJJFMA.mjs';
+import { a as $$MainLayout, S as SITE } from '../chunks/MainLayout_2j5aXtNi.mjs';
+import { $ as $$PrimaryCTA } from '../chunks/PrimaryCTA_DH5n_MiR.mjs';
 import '../chunks/index_DfOMS8cV.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_UvPZzydF.mjs';
+import { _ as __ASTRO_IMAGE_IMPORT_eD6hw } from '../chunks/zalmi1_Cvv2kVuJ.mjs';
 import 'clsx';
-import { g as getCollection } from '../chunks/_astro_content_CRCyDS9T.mjs';
+import { g as getCollection } from '../chunks/_astro_content_CFw5y03i.mjs';
 export { renderers } from '../renderers.mjs';
-
-const product5 = new Proxy({"src":"/_astro/features-image.BEGIe8fA.avif","width":4375,"height":2369,"format":"avif"}, {
-						get(target, name, receiver) {
-							if (name === 'clone') {
-								return structuredClone(target);
-							}
-							if (name === 'fsPath') {
-								return "/Users/atifjan/PC/pchapp/src/images/features-image.avif";
-							}
-							
-							return target[name];
-						}
-					});
 
 const $$Astro$3 = createAstro("https://peshawarichappal.store");
 const $$FeaturesStatsAlt = createComponent(($$result, $$props, $$slots) => {
@@ -27,7 +15,7 @@ const $$FeaturesStatsAlt = createComponent(($$result, $$props, $$slots) => {
   Astro2.self = $$FeaturesStatsAlt;
   const { title, subTitle, benefits } = Astro2.props;
   const ListItemMarker = `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mt-0.5 h-6 w-6 text-orange-400 dark:text-orange-300 flex-none"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`;
-  return renderTemplate`${maybeRenderHead()}<section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"> <!-- Grid --> <div class="lg:grid lg:grid-cols-12 lg:items-center lg:gap-16"> <div class="lg:col-span-7"> ${renderComponent($$result, "Image", $$Image, { "class": "rounded-xl", "src": product5, "alt": "Mockup of floating boxes" })} </div> <div class="mt-5 sm:mt-10 lg:col-span-5 lg:mt-0"> <div class="space-y-6 sm:space-y-8"> <div class="space-y-2 md:space-y-4"> <h2 class="text-balance text-3xl font-bold text-neutral-800 dark:text-neutral-200 lg:text-4xl"> ${title} </h2> ${subTitle && renderTemplate`<p class="text-pretty text-neutral-600 dark:text-neutral-400"> ${subTitle} </p>`} </div> ${benefits && renderTemplate`<ul class="space-y-2 sm:space-y-4"> ${benefits.map((item) => renderTemplate`<li class="flex space-x-3"> ${renderComponent($$result, "Fragment", Fragment, {}, { "default": ($$result2) => renderTemplate`${unescapeHTML(ListItemMarker)}` })} <span class="text-pretty text-base font-medium text-neutral-600 dark:text-neutral-400"> ${item} </span> </li>`)} </ul>`} </div> </div> </div> </section>`;
+  return renderTemplate`${maybeRenderHead()}<section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"> <!-- Grid --> <div class="lg:grid lg:grid-cols-12 lg:items-center lg:gap-16"> <div class="lg:col-span-7 flex justify-center lg:justify-start"> ${renderComponent($$result, "Image", $$Image, { "class": "w-full max-w-md object-contain mix-blend-multiply dark:mix-blend-normal dark:brightness-90", "src": __ASTRO_IMAGE_IMPORT_eD6hw, "alt": "Peshawari Chappal" })} </div> <div class="mt-5 sm:mt-10 lg:col-span-5 lg:mt-0"> <div class="space-y-6 sm:space-y-8"> <div class="space-y-2 md:space-y-4"> <h2 class="text-balance text-3xl font-bold text-neutral-800 dark:text-neutral-200 lg:text-4xl"> ${title} </h2> ${subTitle && renderTemplate`<p class="text-pretty text-neutral-600 dark:text-neutral-400"> ${subTitle} </p>`} </div> ${benefits && renderTemplate`<ul class="space-y-2 sm:space-y-4"> ${benefits.map((item) => renderTemplate`<li class="flex space-x-3"> ${renderComponent($$result, "Fragment", Fragment, {}, { "default": ($$result2) => renderTemplate`${unescapeHTML(ListItemMarker)}` })} <span class="text-pretty text-base font-medium text-neutral-600 dark:text-neutral-400"> ${item} </span> </li>`)} </ul>`} </div> </div> </div> </section>`;
 }, "/Users/atifjan/PC/pchapp/src/components/sections/features/FeaturesStatsAlt.astro", void 0);
 
 const $$Astro$2 = createAstro("https://peshawarichappal.store");
@@ -111,10 +99,10 @@ const $$file = "/Users/atifjan/PC/pchapp/src/pages/products/index.astro";
 const $$url = "/products";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-	__proto__: null,
-	default: $$Index,
-	file: $$file,
-	url: $$url
+  __proto__: null,
+  default: $$Index,
+  file: $$file,
+  url: $$url
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const page = () => _page;

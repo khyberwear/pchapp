@@ -1,5 +1,5 @@
 import { a as getOne, e as executeQuery } from '../../../chunks/db_h1ugnc2a.mjs';
-import { s as sendOrderStatusEmail } from '../../../chunks/email_Mt44NHyd.mjs';
+import { s as sendOrderStatusEmail } from '../../../chunks/email_Be65Twn2.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 const prerender = false;

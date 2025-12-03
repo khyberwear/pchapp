@@ -1,9 +1,9 @@
 import { c as createAstro, a as createComponent, m as maybeRenderHead, b as addAttribute, d as renderTemplate, r as renderComponent } from '../chunks/astro/server_B5Ll6kUe.mjs';
 import 'kleur/colors';
-import { a as $$MainLayout, S as SITE } from '../chunks/MainLayout_C1ONpxrI.mjs';
+import { a as $$MainLayout, S as SITE } from '../chunks/MainLayout_2j5aXtNi.mjs';
 import 'clsx';
 import { f as formatDate } from '../chunks/utils_875MjSoU.mjs';
-import { g as getCollection } from '../chunks/_astro_content_CRCyDS9T.mjs';
+import { g as getCollection } from '../chunks/_astro_content_CFw5y03i.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$1 = createAstro("https://peshawarichappal.store");

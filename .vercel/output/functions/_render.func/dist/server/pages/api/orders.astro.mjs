@@ -1,10 +1,30 @@
-import { e as executeQuery } from '../../chunks/db_h1ugnc2a.mjs';
-import { a as sendAdminNotification, b as sendCustomerConfirmation } from '../../chunks/email_Mt44NHyd.mjs';
+import { i as initializeDatabase, e as executeQuery } from '../../chunks/db_h1ugnc2a.mjs';
+import { a as sendAdminNotification, b as sendCustomerConfirmation } from '../../chunks/email_Be65Twn2.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const prerender = false;
+let dbInitialized = false;
 const POST = async ({ request }) => {
   try {
+    if (!dbInitialized) {
+      try {
+        await initializeDatabase();
+        dbInitialized = true;
+        console.log("Database initialized successfully");
+      } catch (initError) {
+        console.error("Database initialization error:", initError);
+        return new Response(
+          JSON.stringify({
+            error: "Database initialization failed",
+            details: initError instanceof Error ? initError.message : "Unknown error"
+          }),
+          {
+            status: 500,
+            headers: { "Content-Type": "application/json" }
+          }
+        );
+      }
+    }
     const data = await request.json();
     const orderNumber = `PCH-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
     const {
@@ -26,7 +46,10 @@ const POST = async ({ request }) => {
     if (!customerName || !customerEmail || !shippingAddress || !items || !total) {
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
-        { status: 400 }
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" }
+        }
       );
     }
     const fullShippingAddress = `${shippingAddress}
@@ -36,32 +59,46 @@ Phone: ${customerPhone}
 Delivery: ${deliveryMethod}
 Payment: ${paymentMethod}
 Notes: ${orderNotes}`;
-    await executeQuery(
-      `INSERT INTO orders (
-        order_number,
-        customer_name,
-        customer_email,
-        customer_phone,
-        shipping_address,
-        shipping_city,
-        shipping_postal_code,
-        items,
-        total,
-        status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        orderNumber,
-        customerName,
-        customerEmail,
-        customerPhone || "",
-        fullShippingAddress,
-        shippingCity || "",
-        shippingPostalCode || "",
-        JSON.stringify(items),
-        total,
-        "pending"
-      ]
-    );
+    try {
+      await executeQuery(
+        `INSERT INTO orders (
+                order_number,
+                customer_name,
+                customer_email,
+                customer_phone,
+                shipping_address,
+                shipping_city,
+                shipping_postal_code,
+                items,
+                total,
+                status
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          orderNumber,
+          customerName,
+          customerEmail,
+          customerPhone || "",
+          fullShippingAddress,
+          shippingCity || "",
+          shippingPostalCode || "",
+          JSON.stringify(items),
+          total,
+          "pending"
+        ]
+      );
+    } catch (dbError) {
+      console.error("Database insert error:", dbError);
+      return new Response(
+        JSON.stringify({
+          error: "Failed to save order to database",
+          details: dbError instanceof Error ? dbError.message : "Unknown error"
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+    }
     const emailData = {
       orderNumber,
       customerName,
@@ -96,13 +133,22 @@ Notes: ${orderNotes}`;
         orderNumber,
         message: "Order placed successfully!"
       }),
-      { status: 201 }
+      {
+        status: 201,
+        headers: { "Content-Type": "application/json" }
+      }
     );
   } catch (error) {
     console.error("Order creation error:", error);
     return new Response(
-      JSON.stringify({ error: "Failed to create order" }),
-      { status: 500 }
+      JSON.stringify({
+        error: "Failed to create order",
+        details: error instanceof Error ? error.message : "Unknown error"
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      }
     );
   }
 };
