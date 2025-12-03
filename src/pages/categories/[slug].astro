@@ -2,6 +2,7 @@
 // Import necessary components
 import MainLayout from "@/layouts/MainLayout.astro";
 import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
 
 // 1. Generate a new path for every collection entry
@@ -41,7 +42,7 @@ const { category } = Astro.props;
 // 3. Fetch and filter products
 const allProducts = await getCollection("products", ({ id }) => id.startsWith("en/"));
 
-let products = [];
+let products: CollectionEntry<"products">[] = [];
 if (category.slug === "peshawari-chappal") {
   products = allProducts.filter((product) => product.data.title.toLowerCase().includes("zalmi"));
 } else if (category.slug === "norozi") {
@@ -57,7 +58,7 @@ const pageTitle = `${category.title} | ${SITE.title}`;
 
 <MainLayout
   title={pageTitle}
-  description={category.description}
+  customDescription={category.description}
 >
   <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
     <div class="mb-4 flex items-center justify-between gap-8 sm:mb-8 md:mb-12">
