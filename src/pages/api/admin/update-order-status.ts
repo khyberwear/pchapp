@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { executeQuery, getOne } from '../../../lib/db';
+import { supabase } from '../../../lib/db';
 import { sendOrderStatusEmail } from '../../../lib/email';
 
 export const prerender = false;
@@ -25,12 +25,13 @@ export const POST: APIRoute = async ({ request }) => {
         }
 
         // Get the order first to get customer details
-        const order = await getOne(
-            `SELECT * FROM orders WHERE order_number = ?`,
-            [orderNumber]
-        );
+        const { data: order, error: fetchError } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('order_number', orderNumber)
+            .single();
 
-        if (!order) {
+        if (fetchError || !order) {
             return new Response(
                 JSON.stringify({ error: 'Order not found' }),
                 { status: 404 }
@@ -38,15 +39,20 @@ export const POST: APIRoute = async ({ request }) => {
         }
 
         // Update the order status
-        await executeQuery(
-            `UPDATE orders SET status = ? WHERE order_number = ?`,
-            [status.toLowerCase(), orderNumber]
-        );
+        const { error: updateError } = await supabase
+            .from('orders')
+            .update({ status: status.toLowerCase() })
+            .eq('order_number', orderNumber);
+
+        if (updateError) {
+            console.error('Error updating order status db:', updateError);
+            throw updateError;
+        }
 
         // Send email notification to customer
         try {
             const items = typeof order.items === 'string' ? JSON.parse(order.items as string) : order.items;
-            
+
             await sendOrderStatusEmail({
                 orderNumber: order.order_number as string,
                 customerName: order.customer_name as string,
@@ -62,8 +68,8 @@ export const POST: APIRoute = async ({ request }) => {
         }
 
         return new Response(
-            JSON.stringify({ 
-                success: true, 
+            JSON.stringify({
+                success: true,
                 message: `Order status updated to ${status}`,
                 orderNumber,
                 newStatus: status.toLowerCase()

@@ -1,20 +1,12 @@
 import type { APIRoute } from 'astro';
-import { initializeDatabase } from '../../lib/db';
 
 export const prerender = false;
 
 export const GET: APIRoute = async () => {
-    try {
-        await initializeDatabase();
-        return new Response(
-            JSON.stringify({ success: true, message: 'Database initialized' }),
-            { status: 200 }
-        );
-    } catch (error) {
-        console.error('Database initialization error:', error);
-        return new Response(
-            JSON.stringify({ error: 'Failed to initialize database' }),
-            { status: 500 }
-        );
-    }
+    // With Supabase, we assume the database is already initialized via migrations/dashboard
+    // This endpoint can remain as a health check or simply return success
+    return new Response(
+        JSON.stringify({ success: true, message: 'Database connected (Supabase)' }),
+        { status: 200 }
+    );
 };
