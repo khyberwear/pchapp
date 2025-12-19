@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { supabase } from '../../../lib/db';
+import { supabaseAdmin as supabase } from '../../../lib/db';
 import { sendOrderStatusEmail } from '../../../lib/email';
 
 export const prerender = false;

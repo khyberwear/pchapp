@@ -10,6 +10,12 @@ if (!supabaseUrl || !supabaseKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Initialize Supabase Admin client (Service Role) - use ONLY in server-side API routes
+const supabaseServiceKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+export const supabaseAdmin = supabaseServiceKey
+  ? createClient(supabaseUrl, supabaseServiceKey)
+  : supabase; // Fallback to anon client (will fail for protected RLS)
+
 // Deprecated: Helper function to execute queries - keeping for type compatibility during migration if needed, 
 // but calls should be replaced.
 // For now, we will NOT export executeQuery, getAll, or getOne.
