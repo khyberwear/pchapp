@@ -128,7 +128,12 @@ const pageTitle = `Products Management | ${SITE.title}`;
 
           <div>
             <label for="gallery_images" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Gallery Images (one URL per line)</label>
-            <textarea id="gallery_images" name="gallery_images" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg" class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"></textarea>
+            <textarea id="gallery_images" name="gallery_images" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"></textarea>
+          </div>
+
+          <div>
+            <label for="video_url" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Video URL (YouTube, etc.)</label>
+            <input type="text" id="video_url" name="video_url" placeholder="https://www.youtube.com/watch?v=..." class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white" />
           </div>
 
           <div>
@@ -333,6 +338,7 @@ const pageTitle = `Products Management | ${SITE.title}`;
       (document.getElementById('original_price') as HTMLInputElement).value = product.original_price || '';
       (document.getElementById('main_image') as HTMLInputElement).value = product.main_image || '';
       (document.getElementById('gallery_images') as HTMLTextAreaElement).value = (product.gallery_images || []).join('\n');
+      (document.getElementById('video_url') as HTMLInputElement).value = product.video_url || '';
       (document.getElementById('sizes') as HTMLInputElement).value = (product.sizes || []).join(', ');
       (document.getElementById('content') as HTMLTextAreaElement).value = product.content || '';
       (document.getElementById('in_stock') as HTMLInputElement).checked = product.in_stock !== false;
@@ -375,8 +381,9 @@ const pageTitle = `Products Management | ${SITE.title}`;
       price: parseFloat((document.getElementById('price') as HTMLInputElement).value),
       original_price: parseFloat((document.getElementById('original_price') as HTMLInputElement).value) || null,
       main_image: (document.getElementById('main_image') as HTMLInputElement).value || null,
-      card_image: (document.getElementById('main_image') as HTMLInputElement).value || null, // Use main as card
+      card_image: (document.getElementById('main_image') as HTMLInputElement).value || null,
       gallery_images: galleryInput ? galleryInput.split('\n').map(s => s.trim()).filter(s => s) : [],
+      video_url: (document.getElementById('video_url') as HTMLInputElement).value || null,
       sizes: sizesInput ? sizesInput.split(',').map(s => s.trim()) : [],
       content: (document.getElementById('content') as HTMLTextAreaElement).value || null,
       in_stock: (document.getElementById('in_stock') as HTMLInputElement).checked,

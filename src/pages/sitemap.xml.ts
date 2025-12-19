@@ -1,13 +1,23 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import { createClient } from "@supabase/supabase-js";
 
 const site = "https://peshawarichappal.store";
 
-export const GET: APIRoute = async () => {
-  // Get all products
-  const products = await getCollection("products", ({ id }) => id.startsWith("en/"));
+// Create Supabase client
+const supabase = createClient(
+  import.meta.env.PUBLIC_SUPABASE_URL,
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
 
-  // Get all blog posts
+export const GET: APIRoute = async () => {
+  // Get all products from Supabase
+  const { data: products } = await supabase
+    .from('products')
+    .select('slug, updated_at')
+    .eq('in_stock', true);
+
+  // Get all blog posts (still from content collection)
   const blogPosts = await getCollection("blog", ({ id }) => id.startsWith("en/"));
 
   // Static pages with their priority and change frequency
@@ -22,6 +32,8 @@ export const GET: APIRoute = async () => {
 
   // Generate current date in W3C format
   const today = new Date().toISOString().split('T')[0];
+
+  const allProducts = products || [];
 
   // Build XML sitemap
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -44,11 +56,11 @@ ${staticPages
       .join("\n")}
 
   <!-- Product Pages -->
-${products
+${allProducts
       .map(
-        (product) => `  <url>
-    <loc>${site}/products/${product.id.replace(/^en\//, "")}</loc>
-    <lastmod>${today}</lastmod>
+        (product: any) => `  <url>
+    <loc>${site}/products/${product.slug}</loc>
+    <lastmod>${product.updated_at ? new Date(product.updated_at).toISOString().split('T')[0] : today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>`

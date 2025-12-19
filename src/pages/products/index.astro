@@ -1,67 +1,51 @@
 ---
-// Importing necessary components
+// Products listing page - fetches from Supabase
+export const prerender = false;
+
 import MainLayout from "@/layouts/MainLayout.astro";
-import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
 import FeaturesStatsAlt from "@components/sections/features/FeaturesStatsAlt.astro";
 import TestimonialsSectionAlt from "@components/sections/testimonials/TestimonialsSectionAlt.astro";
-
-// Importing necessary functions from Astro
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
+import { supabase } from "@/lib/db";
 
-// Fetching all the product related content and sorting it by main.id
-const products: CollectionEntry<"products">[] = (
-  await getCollection("products", ({ id }) => {
-    return id.startsWith("en/");
-  })
-).sort(
-  (a: CollectionEntry<"products">, b: CollectionEntry<"products">) =>
-    a.data.main.id - b.data.main.id
-);
+// Fetch products from Supabase
+const { data: products, error } = await supabase
+  .from('products')
+  .select('*')
+  .eq('in_stock', true)
+  .order('created_at', { ascending: false });
 
-// Define variables for page content
-const title: string = "Our Collection";
-const subTitle: string =
-  "Explore our handcrafted collection of authentic Peshawari Chappals. From classic Charsadda designs to modern Zalmi styles, each pair is crafted with premium leather by skilled artisans for comfort and durability.";
+const allProducts = products || [];
 
-// Testimonial data that will be rendered in the component
+const title = "Our Collection";
+const subTitle = "Explore our handcrafted collection of authentic Peshawari Chappals. From classic Charsadda designs to modern Zalmi styles, each pair is crafted with premium leather by skilled artisans for comfort and durability.";
+
 const testimonials = [
-  // First testimonial data
   {
-    content:
-      " \"I've been wearing Peshawari Chappals for years, and these are by far the most comfortable pair I've owned. The leather quality is exceptional, and they look even better with age. Perfect for both casual and traditional wear!\" ",
+    content: "\"I've been wearing Peshawari Chappals for years, and these are by far the most comfortable pair I've owned. The leather quality is exceptional, and they look even better with age. Perfect for both casual and traditional wear!\"",
     author: "Tariq Mehmood",
     role: "Regular Customer | Lahore",
-    avatarSrc:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-    avatarAlt: "Image Description",
+    avatarSrc: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
+    avatarAlt: "Tariq Mehmood",
   },
-  // Second testimonial data
   {
-    content:
-      " \"Ordered the Zalmi Chappal as a gift for my father, and he absolutely loves it! The craftsmanship is remarkable, and you can see the traditional Peshawari touch in every detail. Will definitely order more for the family.\" ",
+    content: "\"Ordered the Zalmi Chappal as a gift for my father, and he absolutely loves it! The craftsmanship is remarkable, and you can see the traditional Peshawari touch in every detail. Will definitely order more for the family.\"",
     author: "Ayesha Siddiqui",
     role: "Gift Buyer | Karachi",
-    avatarSrc:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1376&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-    avatarAlt: "Image Description",
+    avatarSrc: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1376&auto=format&fit=crop&ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
+    avatarAlt: "Ayesha Siddiqui",
   },
-  // Third testimonial data
   {
-    content:
-      " \"As someone who appreciates traditional Pakistani footwear, I'm impressed by the authentic design and quality. The Imran Khan style chappal is my go-to for formal occasions. These chappals are true works of art.\" ",
+    content: "\"As someone who appreciates traditional Pakistani footwear, I'm impressed by the authentic design and quality. The Imran Khan style chappal is my go-to for formal occasions. These chappals are true works of art.\"",
     author: "Usman Ali",
     role: "Cultural Enthusiast | Peshawar",
-    avatarSrc:
-      "https://images.unsplash.com/photo-1474176857210-7287d38d27c6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-    avatarAlt: "Image Description",
+    avatarSrc: "https://images.unsplash.com/photo-1474176857210-7287d38d27c6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
+    avatarAlt: "Usman Ali",
   },
 ];
 
-const pageTitle: string = `Products | ${SITE.title}`;
-const metaDescription =
-  "Shop authentic handcrafted Peshawari Chappals. Premium leather sandals in classic Charsadda, Zalmi, and Imran Khan styles. Traditional Pakistani footwear.";
+const pageTitle = `Products | ${SITE.title}`;
+const metaDescription = "Shop authentic handcrafted Peshawari Chappals. Premium leather sandals in classic Charsadda, Zalmi, and Imran Khan styles. Traditional Pakistani footwear.";
 const ogTitle = "Peshawari Chappal Collection | Handcrafted Leather Sandals";
 ---
 
@@ -71,74 +55,106 @@ const ogTitle = "Peshawari Chappal Collection | Handcrafted Leather Sandals";
   customOgTitle={ogTitle}
   structuredData={{
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": "CollectionPage",
     "@id": "https://peshawarichappal.store/products",
     url: "https://peshawarichappal.store/products",
-    name: "Peshawari Chappal Collection | Handcrafted Leather Sandals",
-    description:
-      "Shop authentic handcrafted Peshawari Chappals. Premium leather sandals in classic Charsadda, Zalmi, and Imran Khan styles. Traditional Pakistani footwear.",
-    isPartOf: {
-      "@type": "WebSite",
-      url: "https://peshawarichappal.store",
-      name: "Peshawari Chappal",
-      description:
-        "Authentic handcrafted Peshawari Chappals made with premium leather. Traditional Pakistani footwear crafted for comfort and style.",
-    },
-    inLanguage: "en-US",
+    name: "Peshawari Chappal Collection",
+    description: metaDescription,
   }}
 >
-  <div
-    class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
-  >
-    <div class="mb-4 flex items-center justify-between gap-8 sm:mb-8 md:mb-12">
-      <div class="flex items-center gap-12">
-        <h1
-          class="text-2xl font-bold tracking-tight text-balance text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200"
-        >
+  <section class="bg-white dark:bg-neutral-900">
+    <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+      
+      <!-- Header -->
+      <div class="mb-12 text-center">
+        <span class="inline-block px-4 py-1 mb-4 text-sm font-medium text-orange-700 bg-orange-100 rounded-full dark:bg-orange-900/30 dark:text-orange-400">
+          Our Collection
+        </span>
+        <h1 class="text-3xl font-bold text-neutral-900 dark:text-white sm:text-4xl lg:text-5xl">
           {title}
         </h1>
-        {
-          subTitle && (
-            <p class="hidden max-w-(--breakpoint-sm) text-pretty text-neutral-600 md:block dark:text-neutral-400">
-              {subTitle}
-            </p>
-          )
-        }
+        <p class="mt-4 text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
+          {subTitle}
+        </p>
       </div>
-      <PrimaryCTA title="Customer Stories" url="#testimonials" noArrow={true} />
-    </div>
-    {/* Displaying products in alternating styles. Alternative product gets different card styling.
-    Maps through all product entries and displays them with either CardSmall or CardWide based on their position. */}
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-      {products.map((product) => (
-        <a href={`/products/${product.id.replace(/^en\//, "")}`} class="group relative bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-          <div class="aspect-square overflow-hidden">
-            <img 
-              src={typeof product.data.main.imgCard === 'string' ? product.data.main.imgCard : product.data.main.imgCard.src}
-              alt={product.data.main.imgAlt}
-              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            />
-          </div>
-          <div class="p-5">
-            <h3 class="text-lg font-bold text-neutral-800 dark:text-neutral-200 group-hover:text-yellow-600 dark:group-hover:text-yellow-500 transition-colors">
-              {product.data.title}
-            </h3>
-            <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">{product.data.description}</p>
-            <div class="mt-4 flex items-center justify-between">
-              <div class="flex flex-col">
-                <span class="text-lg font-bold text-neutral-900 dark:text-white">₨ {(product.data.main.price || 5500).toLocaleString()}</span>
-                {product.data.main.originalPrice && (
-                  <span class="text-xs text-neutral-500 line-through">₨ {product.data.main.originalPrice.toLocaleString()}</span>
-                )}
+
+      <!-- Products Grid -->
+      {allProducts.length > 0 ? (
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {allProducts.map((product: any) => (
+            <a 
+              href={`/products/${product.slug}`} 
+              class="group relative bg-white dark:bg-neutral-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+            >
+              {/* Image */}
+              <div class="aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-700">
+                <img 
+                  src={product.main_image || product.card_image || '/placeholder.jpg'}
+                  alt={product.title}
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                />
               </div>
-              <span class="text-yellow-600 dark:text-yellow-500 font-bold text-sm">View Details</span>
-            </div>
-          </div>
-        </a>
-      ))}
+              
+              {/* Stock Badge */}
+              <div class="absolute top-4 left-4">
+                <span class={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${product.in_stock ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                  <span class={`h-1.5 w-1.5 rounded-full ${product.in_stock ? 'bg-green-200' : 'bg-red-200'}`}></span>
+                  {product.in_stock ? 'In Stock' : 'Out of Stock'}
+                </span>
+              </div>
+              
+              {/* Discount Badge */}
+              {product.original_price && product.original_price > product.price && (
+                <div class="absolute top-4 right-4">
+                  <span class="rounded-full bg-orange-500 px-3 py-1 text-xs font-bold text-white">
+                    {Math.round((1 - product.price / product.original_price) * 100)}% OFF
+                  </span>
+                </div>
+              )}
+              
+              {/* Content */}
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-500 transition-colors">
+                  {product.title}
+                </h3>
+                <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
+                  {product.description}
+                </p>
+                
+                {/* Price */}
+                <div class="mt-4 flex items-baseline gap-2 flex-wrap">
+                  <span class="text-2xl font-bold text-orange-600 dark:text-orange-500">
+                    Rs {product.price?.toLocaleString()}
+                  </span>
+                  {product.original_price && (
+                    <span class="text-sm text-neutral-400 line-through">
+                      Rs {product.original_price?.toLocaleString()}
+                    </span>
+                  )}
+                </div>
+                
+                {/* CTA */}
+                <div class="mt-4 flex items-center justify-between">
+                  <span class="text-sm font-semibold text-orange-600 dark:text-orange-500 group-hover:underline">
+                    View Details →
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-20">
+          <svg class="mx-auto h-16 w-16 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+          </svg>
+          <p class="mt-4 text-xl text-neutral-500">No products available</p>
+        </div>
+      )}
     </div>
-  </div>
-  {/* Features statistics section */}
+  </section>
+
   <FeaturesStatsAlt
     title="Why Choose Peshawari Chappal?"
     subTitle="Step into authentic tradition with our handcrafted Peshawari Chappals. Whether you prefer classic designs or modern styles, our artisans create each pair with meticulous attention to detail and premium materials."
@@ -148,7 +164,7 @@ const ogTitle = "Peshawari Chappal Collection | Handcrafted Leather Sandals";
       "Exceptional comfort with cushioned soles for all-day wear.",
     ]}
   />
-  {/* Testimonials section */}
+
   <TestimonialsSectionAlt
     title="What Our Customers Say"
     testimonials={testimonials}
