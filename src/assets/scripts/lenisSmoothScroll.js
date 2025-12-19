@@ -7,3 +7,6 @@ import Lenis from "lenis";
 const lenis = new Lenis({
     autoRaf: true,
 });
+
+// Expose lenis globally so modals can stop/start it
+window.lenis = lenis;

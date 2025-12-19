@@ -3,12 +3,21 @@ import ogImageSrc from "@images/social.png";
 
 
 export const SITE = {
-  title: "Peshawari Chappal",
+  title: "Peshawari Chappal | Authentic Handcrafted Leather Sandals Pakistan",
   tagline: "Authentic Handcrafted Footwear",
-  description: "Experience the tradition and elegance of authentic Peshawari Chappals. Handcrafted with premium leather for comfort and style.",
+  description: "Shop authentic Peshawari Chappals handcrafted with premium leather. Traditional Pakistani sandals for men. Free shipping across Pakistan. Order online now!",
   description_short: "Authentic handcrafted Peshawari Chappals made with premium leather.",
   url: "https://peshawarichappal.store",
   author: "Khyber Wear",
+  phone: "+92 300 1234567",
+  email: "info@peshawarichappal.store",
+  address: {
+    streetAddress: "Main Chowk",
+    addressLocality: "Charsadda",
+    addressRegion: "Khyber Pakhtunkhwa",
+    postalCode: "25000",
+    addressCountry: "PK"
+  }
 };
 
 export const SEO = {
@@ -16,18 +25,65 @@ export const SEO = {
   description: SITE.description,
   structuredData: {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    inLanguage: "en-US",
-    "@id": SITE.url,
-    url: SITE.url,
-    name: SITE.title,
-    description: SITE.description,
-    isPartOf: {
-      "@type": "WebSite",
-      url: SITE.url,
-      name: SITE.title,
-      description: SITE.description,
-    },
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE.url}/#website`,
+        url: SITE.url,
+        name: "Peshawari Chappal Store",
+        description: SITE.description,
+        inLanguage: "en-US",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${SITE.url}/products?q={search_term_string}`,
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": `${SITE.url}/#organization`,
+        name: "Peshawari Chappal Store",
+        url: SITE.url,
+        logo: `${SITE.url}/logokw.png`,
+        image: `${SITE.url}/images/hero-image.avif`,
+        description: SITE.description,
+        telephone: SITE.phone,
+        email: SITE.email,
+        address: {
+          "@type": "PostalAddress",
+          ...SITE.address
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: "34.0151",
+          longitude: "71.5249"
+        },
+        openingHoursSpecification: {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          opens: "09:00",
+          closes: "21:00"
+        },
+        priceRange: "Rs 4500 - Rs 20000",
+        sameAs: [
+          "https://www.facebook.com/peshawarichappal",
+          "https://www.instagram.com/peshawarichappal",
+          "https://wa.me/923001234567"
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${SITE.url}/#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: SITE.url
+          }
+        ]
+      }
+    ]
   },
 };
 
@@ -35,8 +91,8 @@ export const OG = {
   locale: "en_US",
   type: "website",
   url: SITE.url,
-  title: `Peshawari Chappal - Authentic Handcrafted Footwear`,
-  description: "Step into tradition with our premium collection of Peshawari Chappals. Handcrafted for comfort and durability. Shop now for the perfect blend of style and heritage.",
+  title: "Peshawari Chappal | Buy Authentic Handcrafted Leather Sandals Online",
+  description: "Shop authentic Peshawari Chappals handcrafted with premium leather. Traditional Pakistani sandals for men. Free shipping across Pakistan. Order online now!",
   image: ogImageSrc,
 };
 
