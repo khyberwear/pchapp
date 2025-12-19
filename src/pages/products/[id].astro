@@ -1,42 +1,35 @@
 ---
-// Static page - prerender at build time
-export const prerender = true;
+// Dynamic product page - fetches from Supabase
+export const prerender = false;
 
-// Import section components
 import MainLayout from "@/layouts/MainLayout.astro";
-import ProductTabBtn from "@components/ui/buttons/ProductTabBtn.astro";
-import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
-import { Image } from "astro:assets";
-import { getCollection } from "astro:content";
 import { SITE } from "@data/constants";
+import { supabase } from "@/lib/db";
 
-// Global declaration for gsap animation library
-declare global {
-  interface Window {
-    gsap: any;
-  }
+// Get product slug from URL
+const { id } = Astro.params;
+
+// Fetch product from Supabase
+const { data: product, error } = await supabase
+  .from('products')
+  .select('*')
+  .eq('slug', id)
+  .single();
+
+// Handle not found
+if (error || !product) {
+  return Astro.redirect('/products');
 }
 
-// This gets the static paths for all the unique products
+const pageTitle = `${product.title} | ${SITE.title}`;
+const metaDescription = product.description || `Shop ${product.title} - Authentic handcrafted Peshawari Chappal`;
+const ogTitle = `${product.title} | Handcrafted Leather Sandals`;
 
-export async function getStaticPaths() {
-  const productEntries = await getCollection("products", ({ id }) =>
-    id.startsWith("en/")
-  );
-  return productEntries.map((product) => {
-    const idWithoutLang = product.id.replace(/^en\//, ""); // Remove the "en/" prefix
-    return {
-      params: { id: idWithoutLang },
-      props: { product },
-    };
-  });
-}
-
-const { product } = Astro.props;
-
-const pageTitle: string = `${product.data.title} | ${SITE.title}`;
-const metaDescription = product.data.description;
-const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari Chappal`;
+// Parse arrays/objects if they're strings
+const sizes = Array.isArray(product.sizes) ? product.sizes : [];
+const galleryImages = Array.isArray(product.gallery_images) ? product.gallery_images : [];
+const colors = Array.isArray(product.colors) ? product.colors : [];
+const features = Array.isArray(product.features) ? product.features : [];
 ---
 
 <MainLayout
@@ -46,18 +39,23 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
   structuredData={{
     "@context": "https://schema.org",
     "@type": "Product",
-    "@id": `https://peshawarichappal.store/products/${product.data.title.toLowerCase().replace(/\s+/g, "-")}`,
-    name: product.data.title,
-    description: product.data.description,
+    "@id": `https://peshawarichappal.store/products/${product.slug}`,
+    name: product.title,
+    description: product.description,
+    image: product.main_image,
     brand: {
       "@type": "Brand",
       name: "Peshawari Chappal",
     },
+    offers: {
+      "@type": "Offer",
+      price: product.price,
+      priceCurrency: "PKR",
+      availability: product.in_stock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+    },
   }}
 >
-  <!-- Product Hero Section -->
   <section class="relative overflow-hidden bg-gradient-to-br from-neutral-50 via-white to-neutral-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900">
-    <!-- Background Pattern -->
     <div class="absolute inset-0 opacity-5">
       <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
         <defs>
@@ -76,209 +74,132 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
           <div class="aspect-square overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
             <img
               id="main-product-image"
-              src={typeof product.data.main.imgMain === 'string' ? product.data.main.imgMain : product.data.main.imgMain.src}
-              alt={product.data.main.imgAlt}
-              class="h-full w-full object-cover object-center transition-transform duration-300 hover:scale-105"
-              loading="eager"
+              src={product.main_image || '/placeholder.jpg'}
+              alt={product.title}
+              class="h-full w-full object-cover transition-all duration-500"
             />
           </div>
-          <!-- Thumbnail images if available -->
-          <div class="flex gap-4 overflow-x-auto pb-2">
-            <div class="aspect-square w-24 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 sm:w-28">
-              <img
-                src={typeof product.data.main.imgMain === 'string' ? product.data.main.imgMain : product.data.main.imgMain.src}
-                alt={product.data.main.imgAlt}
-                class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image ring-2 ring-transparent hover:ring-orange-500"
-                data-image={typeof product.data.main.imgMain === 'string' ? product.data.main.imgMain : product.data.main.imgMain.src}
-              />
+          
+          {/* Thumbnail Gallery */}
+          {galleryImages.length > 0 && (
+            <div class="flex gap-3 overflow-x-auto pb-2">
+              <button
+                class="thumbnail-btn flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 border-orange-500 opacity-100"
+                data-image={product.main_image}
+              >
+                <img src={product.main_image} alt="Main" class="w-full h-full object-cover" />
+              </button>
+              {galleryImages.map((img: string, i: number) => (
+                <button
+                  class="thumbnail-btn flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent opacity-70 hover:opacity-100 transition-all"
+                  data-image={img}
+                >
+                  <img src={img} alt={`Gallery ${i + 1}`} class="w-full h-full object-cover" />
+                </button>
+              ))}
             </div>
-            {product.data.blueprints?.first && (
-              <div class="aspect-square w-24 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 sm:w-28">
-                <img
-                  src={typeof product.data.blueprints.first === 'string' ? product.data.blueprints.first : product.data.blueprints.first.src}
-                  alt="Product detail"
-                  class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image ring-2 ring-transparent hover:ring-orange-500"
-                  data-image={typeof product.data.blueprints.first === 'string' ? product.data.blueprints.first : product.data.blueprints.first.src}
-                />
-              </div>
-            )}
-            {product.data.blueprints?.second && (
-              <div class="aspect-square w-24 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 sm:w-28">
-                <img
-                  src={typeof product.data.blueprints.second === 'string' ? product.data.blueprints.second : product.data.blueprints.second.src}
-                  alt="Product detail"
-                  class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image ring-2 ring-transparent hover:ring-orange-500"
-                  data-image={typeof product.data.blueprints.second === 'string' ? product.data.blueprints.second : product.data.blueprints.second.src}
-                />
-              </div>
-            )}
-            {product.data.colors?.map((color) => (
-              color.image && (
-                <div class="aspect-square w-24 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 sm:w-28">
-                  <img
-                    src={typeof color.image === 'string' ? color.image : color.image.src}
-                    alt={color.name}
-                    class="h-full w-full object-cover object-center cursor-pointer transition-opacity hover:opacity-75 thumbnail-image ring-2 ring-transparent hover:ring-orange-500"
-                    data-image={typeof color.image === 'string' ? color.image : color.image.src}
-                  />
-                </div>
-              )
-            ))}
-          </div>
+          )}
         </div>
 
         <!-- Product Info -->
-        <div class="flex flex-col justify-center space-y-8">
-          <div>
-            <h1 class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-4xl lg:text-5xl">
-              {product.data.title}
-            </h1>
-            <p class="mt-4 text-base text-neutral-600 dark:text-neutral-300 sm:text-xl">
-              {product.data.description}
-            </p>
-            <p class="mt-6 text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed sm:text-base lg:text-lg">
-              {product.data.main.content}
-            </p>
+        <div class="flex flex-col justify-center">
+          <div class="mb-4">
+            <span class="inline-block rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
+              {product.in_stock ? 'In Stock' : 'Out of Stock'}
+            </span>
           </div>
 
-          <!-- Options (Colors & Sizes) -->
-          {(product.data.colors || product.data.sizes) && (
-            <div class="space-y-6 border-t border-b border-neutral-200 py-6 dark:border-neutral-700">
-              {product.data.colors && (
-                <div>
-                  <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Color</h3>
-                  <div class="mt-2 flex items-center gap-3">
-                    {product.data.colors.map((color, index) => (
-                      <button
-                        type="button"
-                        class={`color-option relative h-10 w-10 rounded-full border-2 focus:outline-none transition-all ${index === 0 ? 'ring-2 ring-orange-500 ring-offset-2 dark:ring-offset-neutral-900 scale-110' : 'border-transparent hover:scale-110'}`}
-                        style={`background-color: ${color.colorCode}`}
-                        data-color={color.name}
-                        data-image={color.image ? (typeof color.image === 'string' ? color.image : color.image.src) : ''}
-                        aria-label={color.name}
-                      >
-                        <span class="sr-only">{color.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+          <h1 class="text-3xl font-bold text-neutral-900 dark:text-white sm:text-4xl lg:text-5xl">
+            {product.title}
+          </h1>
 
-              {product.data.sizes && (
-                <div>
-                  <div class="flex items-center justify-between">
-                    <h3 class="text-sm font-medium text-neutral-900 dark:text-white">Size</h3>
-                    <a href="#" class="text-sm font-medium text-orange-600 hover:text-orange-500 dark:text-orange-400">Size guide</a>
-                  </div>
-                  <div class="mt-2">
-                    <select
-                      id="size-selector"
-                      class="block w-full rounded-lg border-neutral-200 py-3 px-4 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400"
-                    >
-                      <option value="" disabled selected>Select a size</option>
-                      {product.data.sizes.map((size) => (
-                        <option value={size}>{size}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              )}
+          <p class="mt-4 text-lg text-neutral-600 dark:text-neutral-300">
+            {product.description}
+          </p>
+
+          <!-- Price -->
+          <div class="mt-6 flex items-baseline gap-4">
+            <span class="text-4xl font-bold text-orange-600">
+              Rs {product.price?.toLocaleString()}
+            </span>
+            {product.original_price && (
+              <span class="text-xl text-neutral-400 line-through">
+                Rs {product.original_price?.toLocaleString()}
+              </span>
+            )}
+            {product.original_price && (
+              <span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                Save Rs {(product.original_price - product.price).toLocaleString()}
+              </span>
+            )}
+          </div>
+
+          <!-- Sizes -->
+          {sizes.length > 0 && (
+            <div class="mt-8">
+              <h3 class="text-sm font-semibold text-neutral-900 dark:text-white mb-3">Select Size</h3>
+              <div class="flex flex-wrap gap-2">
+                {sizes.map((size: string, index: number) => (
+                  <button
+                    class={`size-btn px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${index === 0 ? 'border-orange-500 bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400' : 'border-neutral-200 text-neutral-700 hover:border-orange-300 dark:border-neutral-600 dark:text-neutral-300'}`}
+                    data-size={size}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
-          <!-- Price and Add to Cart -->
-          <div class="space-y-4">
-            <div class="flex flex-wrap items-center gap-2 sm:gap-4">
-              <span class="text-xl font-bold text-neutral-900 dark:text-white sm:text-2xl lg:text-3xl">₨ {(product.data.main.price || 5500).toLocaleString()}</span>
-              {product.data.main.originalPrice && (
-                <>
-                  <span class="text-sm text-neutral-500 line-through sm:text-base lg:text-lg">₨ {product.data.main.originalPrice.toLocaleString()}</span>
-                  <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200 sm:px-3 sm:py-1 sm:text-sm">
-                    Save {Math.round(((product.data.main.originalPrice - (product.data.main.price || 5500)) / product.data.main.originalPrice) * 100)}%
-                  </span>
-                </>
-              )}
-            </div>
-
+          <!-- Add to Cart -->
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row">
             <button
-              id="add-to-cart-btn"
-              data-id={product.data.main.id}
-              data-title={product.data.title}
-              data-price={product.data.main.price || 50}
-              data-image={product.data.main.imgCard}
-              data-color={product.data.colors ? product.data.colors[0].name : ''}
-              data-size=""
-              class="w-full rounded-xl bg-orange-600 px-6 py-3 text-base font-semibold text-white transition-all hover:bg-orange-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 sm:px-8 sm:py-4 sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              id="add-to-cart"
+              class="flex-1 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-4 text-center font-bold text-white shadow-lg shadow-orange-500/25 transition-all hover:from-orange-600 hover:to-orange-700 hover:shadow-xl"
+              data-product-id={product.id}
+              data-product-title={product.title}
+              data-product-price={product.price}
+              data-product-image={product.main_image}
             >
-              <span class="flex items-center justify-center gap-2">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H19M7 13v8a2 2 0 002 2h10a2 2 0 002-2v-3" />
-                </svg>
-                Add to Cart
-              </span>
+              Add to Cart
             </button>
-
-            <button
-              id="order-whatsapp-btn"
-              class="w-full rounded-xl bg-[#25D366] px-6 py-3 text-base font-semibold text-white transition-all hover:bg-[#20BA5A] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 dark:focus:ring-offset-neutral-900 sm:px-8 sm:py-4 sm:text-lg"
+            <a
+              href={`https://wa.me/923018768666?text=Hi! I'm interested in ${encodeURIComponent(product.title)} (Rs ${product.price})`}
+              target="_blank"
+              class="flex items-center justify-center gap-2 rounded-xl border-2 border-green-500 bg-green-50 px-8 py-4 font-bold text-green-700 transition-all hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400"
             >
-              <span class="flex items-center justify-center gap-2">
-                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
-                </svg>
-                Order on WhatsApp
-              </span>
-            </button>
-
-            <button
-              id="video-btn"
-              class="w-full rounded-xl border-2 border-neutral-200 bg-white px-6 py-3 text-base font-semibold text-neutral-800 transition-all hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-neutral-200 focus:ring-offset-2 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-900 sm:px-8 sm:py-4 sm:text-lg"
-            >
-              <span class="flex items-center justify-center gap-2">
-                <svg class="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                </svg>
-                Check HD Video of {product.data.title}
-              </span>
-            </button>
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Order via WhatsApp
+            </a>
           </div>
 
-          <!-- Video Modal -->
-          <div id="video-modal" class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm transition-opacity duration-300">
-            <div class="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-black shadow-2xl">
-              <button id="close-video-modal" class="absolute right-4 top-4 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 focus:outline-none">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-              <div class="aspect-video w-full">
-                <iframe 
-                  id="video-iframe"
-                  class="h-full w-full" 
-                  src="" 
-                  title="Product Video"
-                  frameborder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowfullscreen
-                ></iframe>
-              </div>
+          <!-- Features -->
+          <div class="mt-8 grid grid-cols-2 gap-4">
+            <div class="flex items-center gap-3 rounded-lg bg-neutral-100 p-3 dark:bg-neutral-800">
+              <svg class="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">100% Genuine Leather</span>
             </div>
-          </div>
-
-          <!-- Key Features -->
-          <div class="space-y-4">
-            <h3 class="text-base font-semibold text-neutral-900 dark:text-white sm:text-lg">Key Features</h3>
-            <div class="grid gap-3">
-              {product.data.descriptionList.slice(0, 3).map((feature) => (
-                <div class="flex items-center gap-3">
-                  <div class="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
-                    <svg class="h-4 w-4 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span class="text-sm text-neutral-700 dark:text-neutral-300 sm:text-base">{feature.title}</span>
-                </div>
-              ))}
+            <div class="flex items-center gap-3 rounded-lg bg-neutral-100 p-3 dark:bg-neutral-800">
+              <svg class="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+              </svg>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Free Shipping</span>
+            </div>
+            <div class="flex items-center gap-3 rounded-lg bg-neutral-100 p-3 dark:bg-neutral-800">
+              <svg class="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Easy Returns</span>
+            </div>
+            <div class="flex items-center gap-3 rounded-lg bg-neutral-100 p-3 dark:bg-neutral-800">
+              <svg class="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+              </svg>
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Handcrafted</span>
             </div>
           </div>
         </div>
@@ -286,365 +207,104 @@ const ogTitle = `${product.data.title} | Handcrafted Leather Sandals | Peshawari
     </div>
   </section>
 
-  <!-- Product Details Tabs -->
+  <!-- Product Description Section -->
+  {product.content && (
+    <section class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-neutral-900 dark:text-white mb-6">About This Product</h2>
+      <div class="prose prose-neutral dark:prose-invert max-w-none">
+        <p class="text-neutral-600 dark:text-neutral-300 text-lg leading-relaxed">
+          {product.content}
+        </p>
+      </div>
+    </section>
+  )}
+
+  <!-- Size Guide -->
   <section class="bg-neutral-50 dark:bg-neutral-800/50">
-    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-      <nav class="flex space-x-8 border-b border-neutral-200 dark:border-neutral-700" aria-label="Tabs" role="tablist">
-        {product.data.tabs.map((tab, index) => (
-          <button
-            id={tab.id}
-            data-target={tab.dataTab}
-            type="button"
-            class={`whitespace-nowrap border-b-2 py-2 px-1 text-sm font-medium transition-colors ${
-              index === 0
-                ? 'border-orange-500 text-orange-600 dark:text-orange-400'
-                : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300'
-            }`}
-            aria-controls={tab.dataTab.slice(1)}
-            role="tab"
-          >
-            {tab.title}
-          </button>
-        ))}
-      </nav>
-
-      <div class="mt-12">
-        <!-- Description Tab -->
-        <div id="tabs-with-card-1" role="tabpanel" class={product.data.tabs[0]?.dataTab === '#tabs-with-card-1' ? '' : 'hidden'}>
-          <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <div>
-              <h2 class="text-3xl font-bold text-neutral-900 dark:text-white lg:text-4xl">
-                {product.data.longDescription.title}
-              </h2>
-              <p class="mt-6 text-lg text-neutral-600 dark:text-neutral-300 leading-relaxed">
-                {product.data.longDescription.subTitle}
-              </p>
-              <div class="mt-8">
-                <a
-                  href={product.data.longDescription.btnURL}
-                  class="inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-6 py-3 text-white transition-colors hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100"
-                >
-                  {product.data.longDescription.btnTitle}
-                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-            <div class="space-y-6">
-              {product.data.descriptionList.map((feature) => (
-                <div class="rounded-lg border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-800">
-                  <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">{feature.title}</h3>
-                  <p class="mt-2 text-neutral-600 dark:text-neutral-300">{feature.subTitle}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <!-- Specifications Tab -->
-        <div id="tabs-with-card-2" role="tabpanel" class="hidden">
-          <div class="grid gap-12 lg:grid-cols-2">
-            <div class="space-y-8">
-              <div>
-                <h3 class="text-2xl font-bold text-neutral-900 dark:text-white">Specifications</h3>
-                <p class="mt-4 text-neutral-600 dark:text-neutral-300">
-                  Detailed specifications and materials used in crafting this traditional footwear.
-                </p>
-              </div>
-
-              <div class="space-y-6">
-                {product.data.specificationsLeft?.map((spec) => (
-                  <div class="flex justify-between items-center py-3 border-b border-neutral-200 dark:border-neutral-700">
-                    <span class="font-medium text-neutral-900 dark:text-white">{spec.title}</span>
-                    <span class="text-neutral-600 dark:text-neutral-300">{spec.subTitle}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {product.data.specificationsRight ? (
-              <div class="space-y-6">
-                {product.data.specificationsRight.filter(spec => spec.title !== 'Warranty').map((spec) => (
-                  <div class="flex justify-between items-center py-3 border-b border-neutral-200 dark:border-neutral-700">
-                    <span class="font-medium text-neutral-900 dark:text-white">{spec.title}</span>
-                    <span class="text-neutral-600 dark:text-neutral-300">{spec.subTitle}</span>
-                  </div>
-                ))}
-              </div>
-            ) : product.data.tableData ? (
-              <div class="rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
-                <div class="overflow-x-auto">
-                  <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
-                    <thead class="bg-neutral-50 dark:bg-neutral-800">
-                      <tr>
-                        {product.data.tableData[0].feature?.map((header) => (
-                          <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider dark:text-neutral-400">
-                            {header}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
-                      {product.data.tableData.map((row) =>
-                        row.description.map((rowData) => (
-                          <tr>
-                            {rowData.map((cellValue) => (
-                              <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-900 dark:text-white">
-                                {cellValue}
-                              </td>
-                            ))}
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </div>
-
-        <!-- Sizing Tab -->
-        <div id="tabs-with-card-3" role="tabpanel" class="hidden">
-          <div class="text-center">
-            <h3 class="text-2xl font-bold text-neutral-900 dark:text-white">Size Guide</h3>
-            <p class="mt-4 text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
-              Our traditional sizing ensures the perfect fit. Use this guide to find your ideal size.
-            </p>
-          </div>
-
-          <div class="mt-12 flex justify-center">
-            <div class="relative">
-              {product.data.blueprints?.first && (
-                <div class="overflow-hidden rounded-xl shadow-2xl">
-                  <img
-                    src={typeof product.data.blueprints.first === 'string' ? product.data.blueprints.first : product.data.blueprints.first.src}
-                    alt="Size guide"
-                    class="w-full max-w-lg"
-                  />
-                </div>
-              )}
-              {product.data.blueprints?.second && (
-                <div class="absolute -bottom-6 -right-6 overflow-hidden rounded-xl shadow-2xl">
-                  <img
-                    src={typeof product.data.blueprints.second === 'string' ? product.data.blueprints.second : product.data.blueprints.second.src}
-                    alt="Size guide detail"
-                    class="w-48"
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+    <div class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-neutral-900 dark:text-white mb-6">Size Guide</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-neutral-200 dark:border-neutral-700">
+              <th class="px-4 py-3 text-left font-semibold text-neutral-900 dark:text-white">UK Size</th>
+              <th class="px-4 py-3 text-left font-semibold text-neutral-900 dark:text-white">US Size</th>
+              <th class="px-4 py-3 text-left font-semibold text-neutral-900 dark:text-white">EU Size</th>
+              <th class="px-4 py-3 text-left font-semibold text-neutral-900 dark:text-white">Foot Length (cm)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
+            <tr><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">7</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">8</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">41</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">25.4</td></tr>
+            <tr><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">8</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">9</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">42</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">26.0</td></tr>
+            <tr><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">9</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">10</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">43</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">26.7</td></tr>
+            <tr><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">10</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">11</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">44</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">27.3</td></tr>
+            <tr><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">11</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">12</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">45</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">28.0</td></tr>
+            <tr><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">12</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">13</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">46</td><td class="px-4 py-3 text-neutral-600 dark:text-neutral-300">28.6</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
 </MainLayout>
 
 <script>
-  import { addToCart } from "@stores/cartStore";
+  import { addCartItem } from "@stores/cartStore";
 
-  const addToCartBtn = document.getElementById("add-to-cart-btn");
-  const whatsappBtn = document.getElementById("order-whatsapp-btn");
-  const sizeSelector = document.getElementById("size-selector") as HTMLSelectElement;
-  const colorOptions = document.querySelectorAll(".color-option");
-
-  // Handle Color Selection
-  colorOptions.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      // Remove active state from all
-      colorOptions.forEach(b => {
-        b.classList.remove("ring-2", "ring-orange-500", "ring-offset-2", "dark:ring-offset-neutral-900", "scale-110");
-        b.classList.add("border-transparent", "hover:scale-110");
+  // Thumbnail gallery click
+  document.querySelectorAll('.thumbnail-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const imageUrl = btn.getAttribute('data-image');
+      const mainImage = document.getElementById('main-product-image') as HTMLImageElement;
+      if (mainImage && imageUrl) {
+        mainImage.src = imageUrl;
+      }
+      // Update active state
+      document.querySelectorAll('.thumbnail-btn').forEach(b => {
+        b.classList.remove('border-orange-500', 'opacity-100');
+        b.classList.add('border-transparent', 'opacity-70');
       });
-
-      // Add active state to clicked
-      btn.classList.remove("border-transparent", "hover:scale-110");
-      btn.classList.add("ring-2", "ring-orange-500", "ring-offset-2", "dark:ring-offset-neutral-900", "scale-110");
-
-      // Update data attributes
-      const color = btn.getAttribute("data-color");
-      const image = btn.getAttribute("data-image");
-
-      if (addToCartBtn) {
-        addToCartBtn.dataset.color = color || "";
-      }
-
-      // Update main image if color has an image
-      const mainImage = document.getElementById("main-product-image") as HTMLImageElement;
-      if (mainImage && image) {
-        mainImage.src = image;
-      }
+      btn.classList.add('border-orange-500', 'opacity-100');
+      btn.classList.remove('border-transparent', 'opacity-70');
     });
   });
 
-  // Handle Size Selection
-  if (sizeSelector) {
-    sizeSelector.addEventListener("change", (e) => {
-      const size = (e.target as HTMLSelectElement).value;
-      if (addToCartBtn) {
-        addToCartBtn.dataset.size = size;
-        // Enable button if size is selected
-        if (size) {
-            addToCartBtn.removeAttribute("disabled");
-            addToCartBtn.classList.remove("opacity-50", "cursor-not-allowed");
-        } else {
-            addToCartBtn.setAttribute("disabled", "true");
-            addToCartBtn.classList.add("opacity-50", "cursor-not-allowed");
-        }
-      }
-    });
-    // Initially disable add to cart if size selector exists and no size is pre-selected
-    if (addToCartBtn && !sizeSelector.value) {
-        addToCartBtn.setAttribute("disabled", "true");
-        addToCartBtn.classList.add("opacity-50", "cursor-not-allowed");
-    }
-  }
-
-  if (addToCartBtn) {
-    addToCartBtn.addEventListener("click", () => {
-      // Check if size is required but not selected
-      if (sizeSelector && !sizeSelector.value) {
-        alert("Please select a size");
-        sizeSelector.focus();
-        return;
-      }
-
-      const item = {
-        id: addToCartBtn.dataset.id || "0",
-        productId: addToCartBtn.dataset.id || "0",
-        title: addToCartBtn.dataset.title || "Product",
-        price: parseFloat(addToCartBtn.dataset.price || "0"),
-        image: addToCartBtn.dataset.image || "",
-        color: addToCartBtn.dataset.color,
-        size: addToCartBtn.dataset.size,
-      };
-
-      addToCart(item);
-
-      // Open cart drawer
-      const cartDrawer = document.getElementById("cart-drawer");
-      if (cartDrawer) {
-        // @ts-ignore
-        window.HSOverlay.open(cartDrawer);
-      }
-    });
-  }
-
-  // WhatsApp order button
-  if (whatsappBtn) {
-    whatsappBtn.addEventListener("click", () => {
-      const productTitle = addToCartBtn?.dataset.title || "Product";
-      const productPrice = addToCartBtn?.dataset.price || "50.00";
-      const color = addToCartBtn?.dataset.color ? `Color: ${addToCartBtn.dataset.color}` : "";
-      const size = addToCartBtn?.dataset.size ? `Size: ${addToCartBtn.dataset.size}` : "";
-      
-      let details = "";
-      if (color || size) {
-        details = `(${[color, size].filter(Boolean).join(", ")})`;
-      }
-
-      const message = `Hi, I'm interested in ordering *${productTitle}* ${details} - Rs ${productPrice}`;
-      const whatsappNumber = "923001234567"; // Replace with your WhatsApp number
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, "_blank");
-    });
-  }
-
-  // Product gallery functionality
-  const mainImage = document.getElementById("main-product-image") as HTMLImageElement;
-  const thumbnails = document.querySelectorAll(".thumbnail-image");
-
-  thumbnails.forEach((thumb) => {
-    thumb.addEventListener("click", () => {
-      const imgSrc = thumb.getAttribute("data-image");
-      if (mainImage && imgSrc) {
-        mainImage.src = imgSrc;
-      }
+  // Size selection
+  let selectedSize = '';
+  document.querySelectorAll('.size-btn').forEach((btn, index) => {
+    if (index === 0) selectedSize = btn.getAttribute('data-size') || '';
+    btn.addEventListener('click', () => {
+      selectedSize = btn.getAttribute('data-size') || '';
+      document.querySelectorAll('.size-btn').forEach(b => {
+        b.classList.remove('border-orange-500', 'bg-orange-50', 'text-orange-700', 'dark:bg-orange-900/20', 'dark:text-orange-400');
+        b.classList.add('border-neutral-200', 'text-neutral-700', 'dark:border-neutral-600', 'dark:text-neutral-300');
+      });
+      btn.classList.add('border-orange-500', 'bg-orange-50', 'text-orange-700', 'dark:bg-orange-900/20', 'dark:text-orange-400');
+      btn.classList.remove('border-neutral-200', 'text-neutral-700', 'dark:border-neutral-600', 'dark:text-neutral-300');
     });
   });
 
-  // Video Modal functionality
-  const videoBtn = document.getElementById("video-btn");
-  const videoModal = document.getElementById("video-modal");
-  const closeVideoBtn = document.getElementById("close-video-modal");
-  const videoIframe = document.getElementById("video-iframe") as HTMLIFrameElement;
-  
-  // Dummy video URL (Peshawari Chappal making or showcase)
-  const videoUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"; // Rick Roll placeholder, replace with actual video
+  // Add to cart
+  const addToCartBtn = document.getElementById('add-to-cart');
+  addToCartBtn?.addEventListener('click', () => {
+    const productId = addToCartBtn.getAttribute('data-product-id');
+    const productTitle = addToCartBtn.getAttribute('data-product-title');
+    const productPrice = parseFloat(addToCartBtn.getAttribute('data-product-price') || '0');
+    const productImage = addToCartBtn.getAttribute('data-product-image');
 
-  if (videoBtn && videoModal && closeVideoBtn && videoIframe) {
-    videoBtn.addEventListener("click", () => {
-      videoModal.classList.remove("hidden");
-      videoModal.classList.add("flex");
-      videoIframe.src = videoUrl;
-      document.body.style.overflow = "hidden"; // Prevent scrolling
-    });
-
-    const closeModal = () => {
-      videoModal.classList.add("hidden");
-      videoModal.classList.remove("flex");
-      videoIframe.src = ""; // Stop video
-      document.body.style.overflow = ""; // Restore scrolling
-    };
-
-    closeVideoBtn.addEventListener("click", closeModal);
-
-    // Close on click outside
-    videoModal.addEventListener("click", (e) => {
-      if (e.target === videoModal) {
-        closeModal();
-      }
-    });
-
-    // Close on Escape key
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !videoModal.classList.contains("hidden")) {
-        closeModal();
-      }
-    });
-  }
-</script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const tabButtons = document.querySelectorAll("[data-target]");
-
-    function setActiveTab(activeButton: Element) {
-      tabButtons.forEach((btn) => {
-        const isActive = btn === activeButton;
-        const tabId = btn.getAttribute("data-target");
-
-        // Update button styles
-        btn.classList.toggle("border-orange-500", isActive);
-        btn.classList.toggle("text-orange-600", isActive);
-        btn.classList.toggle("dark:text-orange-400", isActive);
-        btn.classList.toggle("border-transparent", !isActive);
-        btn.classList.toggle("text-neutral-500", !isActive);
-        btn.classList.toggle("dark:text-neutral-400", !isActive);
-
-        // Show/hide content
-        if (tabId) {
-          const contentElement = document.querySelector(tabId);
-          if (contentElement) {
-            contentElement.classList.toggle("hidden", !isActive);
-          }
-        }
-      });
+    if (!selectedSize) {
+      alert('Please select a size');
+      return;
     }
 
-    // Set first tab as active by default
-    if (tabButtons.length > 0) {
-      setActiveTab(tabButtons[0]);
-    }
-
-    // Add click handlers
-    tabButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        setActiveTab(button);
-      });
+    addCartItem({
+      id: `${productId}-${selectedSize}`,
+      name: productTitle || 'Product',
+      price: productPrice,
+      quantity: 1,
+      size: selectedSize,
+      image: productImage || '',
     });
+
+    alert('Added to cart!');
   });
 </script>
