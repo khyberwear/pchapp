@@ -1,55 +1,58 @@
 import type { APIRoute } from 'astro';
-import { getAll, initializeDatabase } from '../../../lib/db';
+import { supabase } from '../../../lib/db';
 
 export const prerender = false;
 
-// Initialize database on first load
-let dbInitialized = false;
-
 export const GET: APIRoute = async ({ request }) => {
     try {
-        // Initialize database if not already done
-        if (!dbInitialized) {
-            try {
-                await initializeDatabase();
-                dbInitialized = true;
-            } catch (initError) {
-                console.error('Database initialization error:', initError);
-            }
-        }
         // Get auth header (basic check - in production use proper auth)
-        const authHeader = request.headers.get('authorization');
+        // const authHeader = request.headers.get('authorization');
 
         // Simple auth check - could be enhanced
         // For now, we'll allow access if user is logged in via localStorage
         // This is checked on the client side before calling this API
 
         // Fetch all orders from database, newest first
-        const orders = await getAll(
-            `SELECT 
-        id,
-        order_number,
-        customer_name,
-        customer_email,
-        customer_phone,
-        shipping_address,
-        shipping_city,
-        shipping_postal_code,
-        items,
-        total,
-        status,
-        created_at
-      FROM orders
-      ORDER BY created_at DESC
-      LIMIT 100`
-        );
+        const { data: orders, error } = await supabase
+            .from('orders')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(100);
+
+        if (error) {
+            throw error;
+        }
+
+        if (!orders) {
+            return new Response(
+                JSON.stringify({ orders: [] }),
+                { status: 200 }
+            );
+        }
 
         // Parse items JSON for each order
-        const ordersWithParsedItems = orders.map((order: any) => ({
-            ...order,
-            items: JSON.parse(order.items),
-            date: order.created_at,
-        }));
+        // Supabase might return items as string (if stored as text) or JSON object (if stored as JSONB)
+        // detailed in db schema it is TEXT, so we likely need to parse if it comes back as string.
+        // However, if the user put JSON in, Supabase client might auto-parse JSON columns but 'items' is defined as TEXT in original SQL.
+        // We will safely handle both.
+
+        const ordersWithParsedItems = orders.map((order: any) => {
+            let parsedItems = order.items;
+            if (typeof order.items === 'string') {
+                try {
+                    parsedItems = JSON.parse(order.items);
+                } catch (e) {
+                    console.error('Failed to parse items for order', order.order_number, e);
+                    parsedItems = []; // value fallback
+                }
+            }
+
+            return {
+                ...order,
+                items: parsedItems,
+                date: order.created_at,
+            };
+        });
 
         return new Response(
             JSON.stringify({ orders: ordersWithParsedItems }),
