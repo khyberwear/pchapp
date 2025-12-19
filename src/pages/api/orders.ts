@@ -1,37 +1,13 @@
 import type { APIRoute } from 'astro';
-import { executeQuery, initializeDatabase } from '../../lib/db';
+import { supabase } from '../../lib/db';
 import { sendAdminNotification, sendCustomerConfirmation } from '../../lib/email';
 
 export const prerender = false;
 
 // Force deployment update
 
-// Initialize database on first load
-let dbInitialized = false;
-
 export const POST: APIRoute = async ({ request }) => {
     try {
-        // Initialize database if not already done
-        if (!dbInitialized) {
-            try {
-                await initializeDatabase();
-                dbInitialized = true;
-                console.log('Database initialized successfully');
-            } catch (initError) {
-                console.error('Database initialization error:', initError);
-                return new Response(
-                    JSON.stringify({
-                        error: 'Database initialization failed',
-                        details: initError instanceof Error ? initError.message : 'Unknown error'
-                    }),
-                    {
-                        status: 500,
-                        headers: { 'Content-Type': 'application/json' }
-                    }
-                );
-            }
-        }
-
         const data = await request.json();
 
         // Generate order number
@@ -71,34 +47,30 @@ export const POST: APIRoute = async ({ request }) => {
         const fullShippingAddress = `${shippingAddress}\n${shippingCity}, ${shippingPostalCode}\n${shippingCountry}\nPhone: ${customerPhone}\nDelivery: ${deliveryMethod}\nPayment: ${paymentMethod}\nNotes: ${orderNotes}`;
 
         try {
-            await executeQuery(
-                `INSERT INTO orders (
-                order_number,
-                customer_name,
-                customer_email,
-                customer_phone,
-                shipping_address,
-                shipping_city,
-                shipping_postal_code,
-                items,
-                total,
-                status
-              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [
-                    orderNumber,
-                    customerName,
-                    customerEmail,
-                    customerPhone || '',
-                    fullShippingAddress,
-                    shippingCity || '',
-                    shippingPostalCode || '',
-                    JSON.stringify(items),
-                    total,
-                    'pending',
-                ]
-            );
+            const { error: dbError } = await supabase
+                .from('orders')
+                .insert([
+                    {
+                        order_number: orderNumber,
+                        customer_name: customerName,
+                        customer_email: customerEmail,
+                        customer_phone: customerPhone || '',
+                        shipping_address: fullShippingAddress,
+                        shipping_city: shippingCity || '',
+                        shipping_postal_code: shippingPostalCode || '',
+                        items: JSON.stringify(items),
+                        total: total,
+                        status: 'pending'
+                    }
+                ]);
+
+            if (dbError) {
+                console.error('Database insert error:', dbError);
+                throw dbError;
+            }
+
         } catch (dbError) {
-            console.error('Database insert error:', dbError);
+            console.error('Database insert exception:', dbError);
             return new Response(
                 JSON.stringify({
                     error: 'Failed to save order to database',
