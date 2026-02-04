@@ -217,9 +217,8 @@ export async function sendOrderStatusEmail(data: OrderStatusEmailData) {
 
 // Send admin notification
 export async function sendAdminNotification(orderData: OrderEmailData) {
-    const adminEmail = import.meta.env.ADMIN_EMAIL || 'mail@webspires.co.uk';
-
-    const ownerEmail = import.meta.env.OWNER_EMAIL;
+    const adminEmail = import.meta.env.ADMIN_EMAIL || (typeof process !== 'undefined' ? process.env.ADMIN_EMAIL : '') || 'khyberwearstore@gmail.com';
+    const ownerEmail = import.meta.env.OWNER_EMAIL || (typeof process !== 'undefined' ? process.env.OWNER_EMAIL : '') || '';
 
     const recipients = [
         {
