@@ -4,6 +4,11 @@ import { OG, SEO, SITE } from "@data/constants";
 import faviconSvgSrc from "@images/icon.svg";
 import faviconSrc from "@images/icon.png";
 
+import { getSiteSettings } from "@/lib/settings";
+
+const settings = await getSiteSettings();
+const faviconUrl = settings.favicon_url || "/favicon.png";
+
 // Default properties for the Meta component. These values are used if props are not provided.
 // 'meta' sets a default description meta tag to describe the page content.
 // 'structuredData' defines default structured data in JSON-LD format to enhance search engine understanding of the page (for SEO purposes).
@@ -139,13 +144,13 @@ const appleTouchIcon = await getImage({
 <link rel="sitemap" href="/sitemap.xml" />
 
 {/* Links for favicons */}
-<link href="/favicon.png?v=2" rel="icon" type="image/png" sizes="32x32" />
-<link href="/favicon.png?v=2" rel="shortcut icon" type="image/png" />
-<link href="/favicon.png?v=2" rel="apple-touch-icon" type="image/png" sizes="180x180" />
-<link href="/favicon.png?v=2" rel="icon" type="image/png" sizes="16x16" />
-<link href="/favicon.png?v=2" rel="icon" type="image/png" sizes="32x32" />
-<link href="/favicon.png?v=2" rel="icon" type="image/png" sizes="192x192" />
-<link href="/favicon.png?v=2" rel="icon" type="image/png" sizes="512x512" />
+<link href={`${faviconUrl}?v=2`} rel="icon" type="image/png" sizes="32x32" />
+<link href={`${faviconUrl}?v=2`} rel="shortcut icon" type="image/png" />
+<link href={`${faviconUrl}?v=2`} rel="apple-touch-icon" type="image/png" sizes="180x180" />
+<link href={`${faviconUrl}?v=2`} rel="icon" type="image/png" sizes="16x16" />
+<link href={`${faviconUrl}?v=2`} rel="icon" type="image/png" sizes="32x32" />
+<link href={`${faviconUrl}?v=2`} rel="icon" type="image/png" sizes="192x192" />
+<link href={`${faviconUrl}?v=2`} rel="icon" type="image/png" sizes="512x512" />
 <meta name="mobile-web-app-capable" content="yes" />
 
 {/* Set theme color */}
