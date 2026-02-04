@@ -105,15 +105,13 @@ export const POST: APIRoute = async ({ request }) => {
             shippingAddress: `${shippingAddress}, ${shippingCity} ${shippingPostalCode}, ${shippingCountry}`,
         };
 
-        // Send emails (don't await to avoid blocking the response)
+        // Send emails
+        // We await them but catch errors so the response still goes through
         try {
-            await Promise.all([
-                sendAdminNotification(emailData),
-                sendCustomerConfirmation(emailData),
-            ]);
+            await sendAdminNotification(emailData);
+            await sendCustomerConfirmation(emailData);
         } catch (emailError) {
             console.error('Email sending error:', emailError);
-            // Don't fail the order if email fails
         }
 
         return new Response(

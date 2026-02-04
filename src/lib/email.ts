@@ -153,7 +153,7 @@ function getStatusEmailContent(status: string, data: OrderStatusEmailData) {
 }
 
 // Send order status update email
-export async function sendOrderStatusEmail(data: OrderStatusEmailData) {
+export async function sendOrderStatusEmail(data: OrderStatusEmailData): Promise<void> {
     const emailContent = getStatusEmailContent(data.status, data);
 
     const email = {
@@ -178,19 +178,17 @@ export async function sendOrderStatusEmail(data: OrderStatusEmailData) {
         },
     };
 
-    try {
-        const callback = function (error: any, data: any, response: any) {
+    return new Promise((resolve, reject) => {
+        emailsApi.emailsPost(email, (error: any, result: any) => {
             if (error) {
                 console.error('Error sending status update email:', error);
+                reject(error);
             } else {
                 console.log('Order status email sent successfully');
+                resolve();
             }
-        };
-        emailsApi.emailsPost(email, callback);
-    } catch (error) {
-        console.error('Failed to send order status email:', error);
-        throw error;
-    }
+        });
+    });
 }
 
 // Send admin notification
@@ -265,19 +263,17 @@ export async function sendAdminNotification(orderData: OrderEmailData) {
         },
     };
 
-    try {
-        const callback = function (error: any, data: any, response: any) {
+    return new Promise((resolve, reject) => {
+        emailsApi.emailsPost(emailContent, (error: any, result: any) => {
             if (error) {
                 console.error('Error sending admin email:', error);
+                reject(error);
             } else {
                 console.log('Admin notification sent successfully');
+                resolve();
             }
-        };
-        emailsApi.emailsPost(emailContent, callback);
-    } catch (error) {
-        console.error('Failed to send admin notification:', error);
-        throw error;
-    }
+        });
+    });
 }
 
 // Send customer confirmation
@@ -396,17 +392,15 @@ export async function sendCustomerConfirmation(orderData: OrderEmailData) {
         },
     };
 
-    try {
-        const callback = function (error: any, data: any, response: any) {
+    return new Promise((resolve, reject) => {
+        emailsApi.emailsPost(emailContent, (error: any, result: any) => {
             if (error) {
                 console.error('Error sending customer email:', error);
+                reject(error);
             } else {
                 console.log('Customer confirmation sent successfully');
+                resolve();
             }
-        };
-        emailsApi.emailsPost(emailContent, callback);
-    } catch (error) {
-        console.error('Failed to send customer confirmation:', error);
-        throw error;
-    }
+        });
+    });
 }
