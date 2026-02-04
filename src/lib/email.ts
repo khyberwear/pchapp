@@ -178,14 +178,14 @@ export async function sendOrderStatusEmail(data: OrderStatusEmailData): Promise<
         },
     };
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
         emailsApi.emailsPost(email, (error: any, result: any) => {
             if (error) {
                 console.error('Error sending status update email:', error);
                 reject(error);
             } else {
                 console.log('Order status email sent successfully');
-                resolve(undefined);
+                resolve();
             }
         });
     });
@@ -263,14 +263,14 @@ export async function sendAdminNotification(orderData: OrderEmailData) {
         },
     };
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
         emailsApi.emailsPost(emailContent, (error: any, result: any) => {
             if (error) {
                 console.error('Error sending admin email:', error);
                 reject(error);
             } else {
                 console.log('Admin notification sent successfully');
-                resolve(undefined);
+                resolve();
             }
         });
     });
@@ -392,14 +392,14 @@ export async function sendCustomerConfirmation(orderData: OrderEmailData) {
         },
     };
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
         emailsApi.emailsPost(emailContent, (error: any, result: any) => {
             if (error) {
                 console.error('Error sending customer email:', error);
                 reject(error);
             } else {
                 console.log('Customer confirmation sent successfully');
-                resolve(undefined);
+                resolve();
             }
         });
     });
