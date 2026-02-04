@@ -22,6 +22,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
 export async function getSiteSettings(): Promise<SiteSettings> {
     try {
+        if (!supabase) return DEFAULT_SETTINGS;
+
         const { data, error } = await supabase
             .from('site_settings')
             .select('key, value');

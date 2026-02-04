@@ -4,17 +4,19 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || (typeof process !== 'undefined' ? process.env.PUBLIC_SUPABASE_URL : '') || '';
 const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || (typeof process !== 'undefined' ? process.env.PUBLIC_SUPABASE_ANON_KEY : '') || '';
 
-if (!supabaseUrl || !supabaseKey) {
-  console.error('Missing Supabase credentials');
-}
+const isBuild = !supabaseUrl || !supabaseKey;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// Initialize Supabase client
+export const supabase = !isBuild
+  ? createClient(supabaseUrl, supabaseKey)
+  : (null as any);
 
 // Initialize Supabase Admin client (Service Role) - use ONLY in server-side API routes
-const supabaseServiceKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-export const supabaseAdmin = supabaseServiceKey
+const supabaseServiceKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY || (typeof process !== 'undefined' ? process.env.SUPABASE_SERVICE_ROLE_KEY : '') || '';
+
+export const supabaseAdmin = (supabaseUrl && supabaseServiceKey)
   ? createClient(supabaseUrl, supabaseServiceKey)
-  : supabase; // Fallback to anon client (will fail for protected RLS)
+  : supabase; // Fallback to anon or null
 
 // Deprecated: Helper function to execute queries - keeping for type compatibility during migration if needed, 
 // but calls should be replaced.
