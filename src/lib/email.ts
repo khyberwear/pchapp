@@ -45,40 +45,44 @@ interface OrderStatusEmailData {
 function getStatusEmailContent(status: string, data: OrderStatusEmailData) {
     const itemsList = data.items
         .map(item => `<tr>
-            <td style="padding: 12px; border-bottom: 1px solid #eee;">${item.title}</td>
-            <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
-            <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: right;">Rs ${(item.price * item.quantity).toLocaleString()}</td>
+            <td style="padding: 16px 0; border-bottom: 1px solid #f3f4f6;">
+                <div style="font-weight: 600; color: #111827; font-size: 15px;">${item.title}</div>
+                <div style="font-size: 13px; color: #6b7280; margin-top: 2px;">Qty: ${item.quantity}</div>
+            </td>
+            <td style="padding: 16px 0; border-bottom: 1px solid #f3f4f6; text-align: right; vertical-align: top;">
+                <div style="font-weight: 600; color: #111827; font-size: 15px;">Rs ${(item.price * item.quantity).toLocaleString()}</div>
+            </td>
         </tr>`)
         .join('');
 
     const statusConfig: Record<string, { subject: string; icon: string; color: string; title: string; message: string }> = {
         processing: {
-            subject: `Your Order #${data.orderNumber} is Being Processed`,
+            subject: `Update: Order #${data.orderNumber} is being processed`,
             icon: '📦',
-            color: '#3b82f6',
-            title: 'Order Processing',
-            message: 'Great news! Your order is now being processed. Our team is carefully preparing your items for shipment.',
+            color: '#f97316',
+            title: 'Processing Your Order',
+            message: 'Your order is now being prepared by our artisans. We\'ll let you know as soon as it\'s ready for shipment.',
         },
         dispatched: {
-            subject: `Your Order #${data.orderNumber} Has Been Dispatched!`,
+            subject: `Great news: Order #${data.orderNumber} is on its way`,
             icon: '🚚',
             color: '#8b5cf6',
             title: 'Order Dispatched',
-            message: 'Exciting news! Your order has been dispatched and is on its way to you. You should receive it soon!',
+            message: 'Your handcrafted chappals have been dispatched and are currently in transit. They should reach you shortly.',
         },
         completed: {
-            subject: `Your Order #${data.orderNumber} Has Been Delivered`,
-            icon: '✅',
-            color: '#22c55e',
-            title: 'Order Completed',
-            message: 'Your order has been successfully delivered! We hope you love your new items. Thank you for shopping with us!',
+            subject: `Delivered: Order #${data.orderNumber}`,
+            icon: '✨',
+            color: '#10b981',
+            title: 'Order Delivered',
+            message: 'Your order has been successfully delivered. We hope you enjoy the craftsmanship and comfort of your new footwear.',
         },
         cancelled: {
-            subject: `Your Order #${data.orderNumber} Has Been Cancelled`,
-            icon: '❌',
-            color: '#ef4444',
+            subject: `Notice: Order #${data.orderNumber} has been cancelled`,
+            icon: '✕',
+            color: '#6b7280',
             title: 'Order Cancelled',
-            message: 'Your order has been cancelled. If you did not request this cancellation or have any questions, please contact our support team.',
+            message: 'Your order has been cancelled as requested or due to availability. If you have any questions, our support team is here to help.',
         },
     };
 
@@ -91,81 +95,55 @@ function getStatusEmailContent(status: string, data: OrderStatusEmailData) {
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    </style>
 </head>
-<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5;">
-    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
-        <!-- Header -->
-        <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); padding: 40px 30px; text-align: center;">
-            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Peshawari Chappal</h1>
+<body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #fafafa; -webkit-font-smoothing: antialiased;">
+    <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+        <!-- Logo -->
+        <div style="padding: 40px 40px 20px; text-align: center;">
+            <div style="font-size: 24px; font-weight: 700; letter-spacing: -0.025em; color: #111827; text-transform: uppercase;">Peshawari Chappal</div>
         </div>
         
-        <!-- Status Banner -->
-        <div style="background-color: ${config.color}; padding: 30px; text-align: center;">
-            <div style="font-size: 48px; margin-bottom: 10px;">${config.icon}</div>
-            <h2 style="color: #ffffff; margin: 0; font-size: 24px;">${config.title}</h2>
-        </div>
-        
-        <!-- Content -->
-        <div style="padding: 40px 30px;">
-            <p style="font-size: 16px; color: #333; margin: 0 0 20px;">Dear ${data.customerName},</p>
-            <p style="font-size: 16px; color: #666; margin: 0 0 30px; line-height: 1.6;">${config.message}</p>
-            
-            <!-- Order Details Box -->
-            <div style="background-color: #f9fafb; border-radius: 12px; padding: 25px; margin-bottom: 30px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                    <span style="color: #6b7280; font-size: 14px;">Order Number</span>
-                    <span style="color: #111827; font-weight: 600; font-size: 14px;">#${data.orderNumber}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                    <span style="color: #6b7280; font-size: 14px;">Status</span>
-                    <span style="background-color: ${config.color}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span style="color: #6b7280; font-size: 14px;">Shipping Address</span>
-                    <span style="color: #111827; font-size: 14px; text-align: right; max-width: 200px;">${data.shippingAddress}</span>
-                </div>
+        <!-- Status Indicator -->
+        <div style="padding: 0 40px 40px; text-align: center;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background-color: ${config.color}15; color: ${config.color}; border-radius: 50%; font-size: 32px; margin-bottom: 24px;">
+                ${config.icon}
             </div>
-            
-            <!-- Order Items -->
-            <h3 style="color: #111827; font-size: 18px; margin: 0 0 15px; font-weight: 600;">Order Items</h3>
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                <thead>
-                    <tr style="background-color: #f3f4f6;">
-                        <th style="padding: 12px; text-align: left; font-size: 14px; color: #6b7280;">Item</th>
-                        <th style="padding: 12px; text-align: center; font-size: 14px; color: #6b7280;">Qty</th>
-                        <th style="padding: 12px; text-align: right; font-size: 14px; color: #6b7280;">Price</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #111827; letter-spacing: -0.5px;">${config.title}</h1>
+            <p style="margin: 12px 0 0; font-size: 15px; color: #6b7280; line-height: 1.6;">Hello ${data.customerName}, ${config.message.toLowerCase().charAt(0) + config.message.slice(1)}</p>
+        </div>
+        
+        <!-- Order Summary -->
+        <div style="padding: 0 40px 40px;">
+            <div style="background-color: #f9fafb; border-radius: 12px; padding: 24px;">
+                <div style="font-size: 12px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;">Order Details</div>
+                <table style="width: 100%; border-collapse: collapse;">
                     ${itemsList}
-                </tbody>
-                <tfoot>
                     <tr>
-                        <td colspan="2" style="padding: 15px 12px; font-weight: 600; font-size: 16px;">Total</td>
-                        <td style="padding: 15px 12px; text-align: right; font-weight: 700; font-size: 18px; color: #f97316;">Rs ${data.total.toLocaleString()}</td>
+                        <td style="padding-top: 20px; font-weight: 700; color: #111827; font-size: 16px;">Total</td>
+                        <td style="padding-top: 20px; text-align: right; font-weight: 700; color: #f97316; font-size: 18px;">Rs ${data.total.toLocaleString()}</td>
                     </tr>
-                </tfoot>
-            </table>
-            
-            ${status === 'cancelled' ? `
-            <div style="background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                <p style="color: #991b1b; margin: 0; font-size: 14px;">If you have any questions about this cancellation, please contact our support team.</p>
+                </table>
             </div>
-            ` : ''}
             
-            ${status === 'completed' ? `
-            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center;">
-                <p style="color: #166534; margin: 0 0 10px; font-size: 14px;">We'd love to hear your feedback!</p>
-                <p style="color: #166534; margin: 0; font-size: 14px;">Thank you for choosing Peshawari Chappal.</p>
+            <div style="margin-top: 32px; padding: 0 4px;">
+                <div style="font-size: 13px; color: #9ca3af; margin-bottom: 4px;">Order Number</div>
+                <div style="font-size: 15px; color: #111827; font-weight: 600;">#${data.orderNumber}</div>
+                
+                <div style="margin-top: 20px; font-size: 13px; color: #9ca3af; margin-bottom: 4px;">Shipping Address</div>
+                <div style="font-size: 15px; color: #111827; line-height: 1.5;">${data.shippingAddress}</div>
             </div>
-            ` : ''}
         </div>
         
         <!-- Footer -->
-        <div style="background-color: #1f2937; padding: 30px; text-align: center;">
-            <p style="color: #9ca3af; margin: 0 0 10px; font-size: 14px;">Questions? Contact us at support@peshawari-chappal.com</p>
-            <p style="color: #6b7280; margin: 0; font-size: 12px;">© ${new Date().getFullYear()} Peshawari Chappal. All rights reserved.</p>
+        <div style="padding: 40px; background-color: #111827; text-align: center;">
+            <div style="color: #ffffff; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Need help with your order?</div>
+            <div style="color: #9ca3af; font-size: 13px;">Reply to this email or contact us at khyberwearstore@gmail.com</div>
+            <div style="margin-top: 32px; border-top: 1px solid #1f2937; pt: 32px; font-size: 12px; color: #4b5563;">
+                 © ${new Date().getFullYear()} Peshawari Chappal Store. Traditional Excellence.
+            </div>
         </div>
     </div>
 </body>
@@ -305,14 +283,96 @@ export async function sendAdminNotification(orderData: OrderEmailData) {
 // Send customer confirmation
 export async function sendCustomerConfirmation(orderData: OrderEmailData) {
     const itemsList = orderData.items
-        .map(item => {
-            const variantInfo = [item.color ? `Color: ${item.color}` : '', item.size ? `Size: ${item.size}` : ''].filter(Boolean).join(', ');
-            return `- ${item.title} ${variantInfo ? `(${variantInfo})` : ''} x ${item.quantity} = Rs ${item.price * item.quantity}`;
-        })
-        .join('\n');
+        .map(item => `<tr>
+            <td style="padding: 16px 0; border-bottom: 1px solid #f3f4f6;">
+                <div style="font-weight: 600; color: #111827; font-size: 15px;">${item.title}</div>
+                <div style="font-size: 13px; color: #6b7280; margin-top: 2px;">Qty: ${item.quantity} ${item.color ? `· ${item.color}` : ''} ${item.size ? `· Size ${item.size}` : ''}</div>
+            </td>
+            <td style="padding: 16px 0; border-bottom: 1px solid #f3f4f6; text-align: right; vertical-align: top;">
+                <div style="font-weight: 600; color: #111827; font-size: 15px;">Rs ${(item.price * item.quantity).toLocaleString()}</div>
+            </td>
+        </tr>`)
+        .join('');
 
-    const deliveryLabel = orderData.deliveryMethod === 'express' ? 'Express Delivery' : 'Normal Delivery';
+    const deliveryLabel = orderData.deliveryMethod === 'express' ? 'Express Delivery' : 'Standard Delivery';
     const paymentLabel = orderData.paymentMethod === 'bank' ? 'Bank Transfer' : 'Cash on Delivery';
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    </style>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #fafafa; -webkit-font-smoothing: antialiased;">
+    <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+        <!-- Logo -->
+        <div style="padding: 40px 40px 20px; text-align: center;">
+            <div style="font-size: 24px; font-weight: 700; letter-spacing: -0.025em; color: #111827; text-transform: uppercase;">Peshawari Chappal</div>
+        </div>
+        
+        <!-- Welcome Hero -->
+        <div style="padding: 0 40px 40px; text-align: center;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background-color: #f9731615; color: #f97316; border-radius: 50%; font-size: 32px; margin-bottom: 24px;">
+                ✨
+            </div>
+            <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #111827; letter-spacing: -0.5px;">Thank You for Your Order</h1>
+            <p style="margin: 12px 0 0; font-size: 15px; color: #6b7280; line-height: 1.6;">Hello ${orderData.customerName}, we've received your order and our artisans are ready to begin working on your handcrafted footwear.</p>
+        </div>
+        
+        <!-- Order Summary -->
+        <div style="padding: 0 40px 40px;">
+            <div style="background-color: #f9fafb; border-radius: 12px; padding: 24px;">
+                <div style="font-size: 12px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;">Order Summary</div>
+                <table style="width: 100%; border-collapse: collapse;">
+                    ${itemsList}
+                    <tr>
+                        <td style="padding: 20px 0 8px; font-size: 14px; color: #6b7280;">Subtotal</td>
+                        <td style="padding: 20px 0 8px; text-align: right; font-size: 14px; color: #111827;">Rs ${orderData.subtotal.toLocaleString()}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; font-size: 14px; color: #6b7280;">Delivery (${deliveryLabel})</td>
+                        <td style="padding: 8px 0; text-align: right; font-size: 14px; color: #111827;">Rs ${orderData.deliveryCost.toLocaleString()}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 16px; font-weight: 700; color: #111827; font-size: 16px;">Total</td>
+                        <td style="padding-top: 16px; text-align: right; font-weight: 700; color: #f97316; font-size: 18px;">Rs ${orderData.total.toLocaleString()}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div style="margin-top: 32px; padding: 0 4px;">
+                <div style="font-size: 13px; color: #9ca3af; margin-bottom: 4px;">Order Number</div>
+                <div style="font-size: 15px; color: #111827; font-weight: 600;">#${orderData.orderNumber}</div>
+                
+                <div style="margin-top: 20px; font-size: 13px; color: #9ca3af; margin-bottom: 4px;">Payment Method</div>
+                <div style="font-size: 15px; color: #111827; font-weight: 600;">${paymentLabel}</div>
+
+                <div style="margin-top: 20px; font-size: 13px; color: #9ca3af; margin-bottom: 4px;">Shipping Address</div>
+                <div style="font-size: 15px; color: #111827; line-height: 1.5;">${orderData.shippingAddress}</div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div style="padding: 0 40px 40px;">
+            <div style="font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 12px;">What happens next?</div>
+            <p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 1.5;">Our team is now processing your order. Once your items are handcrafted and ready for shipment, we'll send you another email with your tracking details.</p>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding: 40px; background-color: #111827; text-align: center;">
+            <div style="color: #ffffff; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Questions about your order?</div>
+            <div style="color: #9ca3af; font-size: 13px;">Feel free to contact us at khyberwearstore@gmail.com</div>
+            <div style="margin-top: 32px; border-top: 1px solid #1f2937; padding-top: 32px; font-size: 12px; color: #4b5563;">
+                 © ${new Date().getFullYear()} Peshawari Chappal Store. Traditional Excellence.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+    `;
 
     const emailContent = {
         Recipients: [
@@ -328,32 +388,11 @@ export async function sendCustomerConfirmation(orderData: OrderEmailData) {
                 {
                     ContentType: 'HTML',
                     Charset: 'utf-8',
-                    Content: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2 style="color: #333;">Thank You for Your Order! ✅</h2>
-              <p>Dear ${orderData.customerName},</p>
-              <p>Your order has been received and is being processed.</p>
-              <hr style="border: 1px solid #eee;">
-              <p><strong>Order Number:</strong> ${orderData.orderNumber}</p>
-              <h3>Order Summary:</h3>
-              <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${itemsList}</pre>
-              <p><strong>Subtotal:</strong> Rs ${orderData.subtotal}</p>
-              <p><strong>Delivery Cost:</strong> Rs ${orderData.deliveryCost} (${deliveryLabel})</p>
-              <h3 style="color: #ff6b35;">Total: Rs ${orderData.total}</h3>
-              <hr style="border: 1px solid #eee;">
-              <h3>Delivery Details:</h3>
-              <p><strong>Address:</strong> ${orderData.shippingAddress}</p>
-              <p><strong>Phone:</strong> ${orderData.customerPhone}</p>
-              <p><strong>Payment Method:</strong> ${paymentLabel}</p>
-              <hr style="border: 1px solid #eee;">
-              <p style="color: #666;">We'll notify you once your order ships. Thank you for shopping with Peshawari Chappal!</p>
-              <p style="color: #666; font-size: 12px;">Order placed on ${new Date().toLocaleString()}</p>
-            </div>
-          `,
+                    Content: htmlContent,
                 },
             ],
             From: 'noreply@webspires.co.uk',
-            Subject: `Order Confirmation #${orderData.orderNumber} - Peshawari Chappal`,
+            Subject: `Confirming your order #${orderData.orderNumber}`,
         },
     };
 
