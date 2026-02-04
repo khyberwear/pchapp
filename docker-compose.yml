@@ -2,7 +2,7 @@ services:
   app:
     build: .
     ports:
-      - "4321:4321"
+      - "4322:4321"
     env_file:
       - .env
     restart: always
