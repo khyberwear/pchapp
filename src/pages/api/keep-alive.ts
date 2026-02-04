@@ -3,7 +3,16 @@ import { supabase } from '../../lib/db';
 
 export const prerender = false;
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ request }) => {
+    // Basic security check: Only allow if triggered by Vercel Cron or manual local test
+    const authHeader = request.headers.get('Authorization');
+    const isVercelCron = request.headers.get('x-vercel-cron') === '1';
+    const isLocal = process.env.NODE_ENV === 'development';
+
+    if (!isVercelCron && !isLocal) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    }
+
     try {
         // Perform a simple query to keep the Supabase project active
         const { data, error } = await supabase
