@@ -58,9 +58,9 @@ CREATE POLICY "Allow service role update" ON public.site_settings FOR ALL USING 
     for (const setting of defaultSettings) {
         const { error } = await supabase.from('site_settings').upsert(setting);
         if (error) {
-            console.error(\`Error inserting \${setting.key}:\`, error.message);
+            console.error(`Error inserting ${setting.key}:`, error.message);
         } else {
-            console.log(\`✓ \${setting.key} initialized\`);
+            console.log(`✓ ${setting.key} initialized`);
         }
     }
 
