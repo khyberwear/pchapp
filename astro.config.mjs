@@ -2,13 +2,15 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import compressor from "astro-compressor";
-import vercel from "@astrojs/vercel";
+import node from "@astrojs/node";
 import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  adapter: vercel(),
+  adapter: node({
+    mode: "standalone",
+  }),
   site: "https://peshawarichappal.store",
   image: {
     domains: ["images.unsplash.com"],
