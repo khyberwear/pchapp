@@ -14,10 +14,34 @@ export interface CartItem {
 export const $cart = map<Record<string, CartItem>>({});
 
 // Load cart from localStorage
-if (typeof localStorage !== 'undefined') {
-    const savedCart = localStorage.getItem('cart');
+if (typeof localStorage !== "undefined") {
+    const savedCart = localStorage.getItem("cart");
     if (savedCart) {
-        $cart.set(JSON.parse(savedCart));
+        try {
+            const parsed = JSON.parse(savedCart);
+            if (Array.isArray(parsed)) {
+                // Migrate array to object format
+                const migrated: Record<string, CartItem> = {};
+                parsed.forEach((item: any) => {
+                    const id = item.id || `migrated-${Math.random()}`;
+                    migrated[id] = {
+                        id: id,
+                        productId: item.productId || item.id,
+                        title: item.title || item.name || "Product",
+                        price: item.price || 0,
+                        quantity: item.quantity || 1,
+                        image: item.image || "",
+                        color: item.color,
+                        size: item.size,
+                    };
+                });
+                $cart.set(migrated);
+            } else {
+                $cart.set(parsed);
+            }
+        } catch (e) {
+            console.error("Failed to parse cart", e);
+        }
     }
 }
 

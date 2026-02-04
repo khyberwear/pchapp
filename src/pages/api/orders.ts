@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { supabase } from '../../lib/db';
+import { supabaseAdmin } from '../../lib/db';
 import { sendAdminNotification, sendCustomerConfirmation } from '../../lib/email';
 
 export const prerender = false;
@@ -47,7 +47,7 @@ export const POST: APIRoute = async ({ request }) => {
         const fullShippingAddress = `${shippingAddress}\n${shippingCity}, ${shippingPostalCode}\n${shippingCountry}\nPhone: ${customerPhone}\nDelivery: ${deliveryMethod}\nPayment: ${paymentMethod}\nNotes: ${orderNotes}`;
 
         try {
-            const { error: dbError } = await supabase
+            const { error: dbError } = await supabaseAdmin
                 .from('orders')
                 .insert([
                     {
@@ -58,15 +58,15 @@ export const POST: APIRoute = async ({ request }) => {
                         shipping_address: fullShippingAddress,
                         shipping_city: shippingCity || '',
                         shipping_postal_code: shippingPostalCode || '',
-                        items: JSON.stringify(items),
+                        items: items, // Pass directly as object for jsonb
                         total: total,
                         status: 'pending'
                     }
                 ]);
 
             if (dbError) {
-                console.error('Database insert error:', dbError);
-                throw dbError;
+                console.error('Supabase Error:', dbError);
+                throw new Error(dbError.message);
             }
 
         } catch (dbError) {
@@ -131,8 +131,9 @@ export const POST: APIRoute = async ({ request }) => {
         console.error('Order creation error:', error);
         return new Response(
             JSON.stringify({
-                error: 'Failed to create order',
-                details: error instanceof Error ? error.message : 'Unknown error'
+                error: 'Internal Server Error',
+                details: error instanceof Error ? error.message : 'Unknown error',
+                stack: error instanceof Error ? error.stack : undefined
             }),
             {
                 status: 500,

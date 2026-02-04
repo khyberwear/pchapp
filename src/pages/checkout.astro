@@ -311,11 +311,12 @@ const pageTitle = `Checkout | ${SITE.title}`;
           clearCart();
           window.location.href = `/thank-you?orderNumber=${result.orderNumber}`;
         } else {
-          alert(`Order failed: ${result.error}`);
+          console.error("Order failed server-side:", result);
+          alert(`Order failed: ${result.error || result.details || "Unknown server error"}`);
         }
       } catch (error) {
         console.error("Order submission error:", error);
-        alert("Failed to place order. Please try again.");
+        alert(`Failed to place order: ${error instanceof Error ? error.message : "Please try again."}`);
       }
     });
   }

@@ -286,114 +286,84 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
   </section>
 </MainLayout>
 
-<script is:inline>
-  // Wait for page to fully load
-  window.addEventListener('load', function() {
-    var mainImage = document.getElementById('main-image');
-    var thumbButtons = document.querySelectorAll('.thumb-btn');
-    var sizeButtons = document.querySelectorAll('.size-option');
-    var sizeDisplay = document.getElementById('selected-size-display');
-    var addToCartBtn = document.getElementById('add-to-cart-btn');
+<script>
+  import { addToCart } from "@stores/cartStore";
 
-    var selectedSize = sizeButtons.length > 0 ? sizeButtons[0].getAttribute('data-size') : '';
+  // Handle gallery thumbnails
+  const mainImage = document.getElementById('main-image') as HTMLImageElement;
+  const thumbButtons = document.querySelectorAll('.thumb-btn');
+  const sizeButtons = document.querySelectorAll('.size-option');
+  const sizeDisplay = document.getElementById('selected-size-display');
+  const addToCartBtn = document.getElementById('add-to-cart-btn');
 
-    // Gallery thumbnail click
-    for (var i = 0; i < thumbButtons.length; i++) {
-      thumbButtons[i].addEventListener('click', function(e) {
-        var btn = e.currentTarget;
-        var imgSrc = btn.getAttribute('data-src');
-        console.log('Clicked thumbnail:', imgSrc);
-        
-        if (mainImage && imgSrc) {
-          mainImage.src = imgSrc;
-        }
-        
-        // Update active styles - remove from all
-        for (var j = 0; j < thumbButtons.length; j++) {
-          thumbButtons[j].classList.remove('border-orange-500', 'ring-2', 'ring-orange-500/30');
-          thumbButtons[j].classList.add('border-neutral-200');
-        }
-        // Add to clicked
-        btn.classList.add('border-orange-500', 'ring-2', 'ring-orange-500/30');
-        btn.classList.remove('border-neutral-200');
+  let selectedSize = sizeButtons.length > 0 ? sizeButtons[0].getAttribute('data-size') : '';
+
+  thumbButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const imgSrc = btn.getAttribute('data-src');
+      if (mainImage && imgSrc) mainImage.src = imgSrc;
+      
+      thumbButtons.forEach(b => {
+        b.classList.remove('border-orange-500', 'ring-2', 'ring-orange-500/30');
+        b.classList.add('border-neutral-200');
       });
-    }
-
-    // Size selection
-    for (var k = 0; k < sizeButtons.length; k++) {
-      sizeButtons[k].addEventListener('click', function(e) {
-        var btn = e.currentTarget;
-        selectedSize = btn.getAttribute('data-size') || '';
-        
-        if (sizeDisplay) {
-          sizeDisplay.textContent = 'Size: ' + selectedSize;
-        }
-        
-        // Update active styles - remove from all
-        for (var m = 0; m < sizeButtons.length; m++) {
-          sizeButtons[m].classList.remove('border-orange-500', 'bg-orange-500', 'text-white', 'shadow-lg', 'shadow-orange-500/30');
-          sizeButtons[m].classList.add('border-neutral-200', 'text-neutral-700');
-        }
-        // Add to clicked
-        btn.classList.add('border-orange-500', 'bg-orange-500', 'text-white', 'shadow-lg', 'shadow-orange-500/30');
-        btn.classList.remove('border-neutral-200', 'text-neutral-700');
-      });
-    }
-
-    // Add to cart
-    if (addToCartBtn) {
-      addToCartBtn.addEventListener('click', function() {
-        var productId = addToCartBtn.getAttribute('data-product-id');
-        var productTitle = addToCartBtn.getAttribute('data-product-title');
-        var productPrice = parseFloat(addToCartBtn.getAttribute('data-product-price') || '0');
-        var productImage = addToCartBtn.getAttribute('data-product-image');
-
-        if (!selectedSize && sizeButtons.length > 0) {
-          alert('Please select a size');
-          return;
-        }
-
-        // Add to cart using localStorage
-        var cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        var itemId = selectedSize ? productId + '-' + selectedSize : productId;
-        var existingIndex = -1;
-        
-        for (var n = 0; n < cart.length; n++) {
-          if (cart[n].id === itemId) {
-            existingIndex = n;
-            break;
-          }
-        }
-        
-        if (existingIndex >= 0) {
-          cart[existingIndex].quantity += 1;
-        } else {
-          cart.push({
-            id: itemId,
-            name: productTitle || 'Product',
-            price: productPrice,
-            quantity: 1,
-            size: selectedSize,
-            image: productImage || ''
-          });
-        }
-        
-        localStorage.setItem('cart', JSON.stringify(cart));
-        
-        // Dispatch event for cart update
-        window.dispatchEvent(new CustomEvent('cart-updated'));
-
-        // Visual feedback
-        var originalText = addToCartBtn.innerHTML;
-        addToCartBtn.innerHTML = '<span class="flex items-center justify-center gap-2"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Added!</span>';
-        addToCartBtn.style.background = 'linear-gradient(to right, #22c55e, #16a34a)';
-        
-        setTimeout(function() {
-          addToCartBtn.innerHTML = originalText;
-          addToCartBtn.style.background = '';
-        }, 1500);
-      });
-    }
+      btn.classList.add('border-orange-500', 'ring-2', 'ring-orange-500/30');
+      btn.classList.remove('border-neutral-200');
+    });
   });
+
+  sizeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedSize = btn.getAttribute('data-size') || '';
+      if (sizeDisplay) sizeDisplay.textContent = 'Size: ' + selectedSize;
+      
+      sizeButtons.forEach(b => {
+        b.classList.remove('border-orange-500', 'bg-orange-500', 'text-white', 'shadow-lg', 'shadow-orange-500/30');
+        b.classList.add('border-neutral-200', 'text-neutral-700');
+      });
+      btn.classList.add('border-orange-500', 'bg-orange-500', 'text-white', 'shadow-lg', 'shadow-orange-500/30');
+      btn.classList.remove('border-neutral-200', 'text-neutral-700');
+    });
+  });
+
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener('click', () => {
+      const productId = addToCartBtn.getAttribute('data-product-id')!;
+      const productTitle = addToCartBtn.getAttribute('data-product-title')!;
+      const productPrice = parseFloat(addToCartBtn.getAttribute('data-product-price') || '0');
+      const productImage = addToCartBtn.getAttribute('data-product-image')!;
+
+      if (!selectedSize && sizeButtons.length > 0) {
+        alert('Please select a size');
+        return;
+      }
+
+      addToCart({
+        id: productId,
+        productId: productId,
+        title: productTitle,
+        price: productPrice,
+        image: productImage,
+        size: selectedSize || undefined,
+      });
+
+      // Show the cart drawer (assuming preline or similar is used for hs-overlay)
+      // @ts-ignore
+      if (window.HSOverlay) {
+        // @ts-ignore
+        window.HSOverlay.open('#cart-drawer');
+      }
+
+      // Visual feedback
+      const originalContent = addToCartBtn.innerHTML;
+      addToCartBtn.innerHTML = '<span class="flex items-center justify-center gap-2"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Added!</span>';
+      (addToCartBtn as HTMLElement).style.background = 'linear-gradient(to right, #22c55e, #16a34a)';
+      
+      setTimeout(() => {
+        addToCartBtn.innerHTML = originalContent;
+        (addToCartBtn as HTMLElement).style.background = '';
+      }, 1500);
+    });
+  }
 </script>
 

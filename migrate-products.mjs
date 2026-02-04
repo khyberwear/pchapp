@@ -8,8 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Supabase config
-const supabaseUrl = 'https://cvsjftmgqwoelfistjcg.supabase.co';
-const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2c2pmdG1ncXdvZWxmaXN0amNnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjEwMzEyNiwiZXhwIjoyMDgxNjc5MTI2fQ.ReMeoFvPTEYmkpFPmpWvVde7FZTcYYvqV5o3t_-PQhU';
+const supabaseUrl = 'https://dcjikhmeidfzbeozqvlw.supabase.co';
+const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjamlraG1laWRmemJlb3pxdmx3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NDUyOTUzNiwiZXhwIjoyMDgwMTA1NTM2fQ.DB-3YC-BxdpVeWyMAZLuy6rbqY6-9R_Eh205iJ605sQ';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
@@ -70,6 +70,18 @@ function parseFrontmatter(content) {
                     // Object or array or multiline
                     result[key] = value === '|' ? '' : [];
                     if (value !== '|') currentArray = key;
+                } else if (value.startsWith('[') && value.endsWith(']')) {
+                    try {
+                        result[key] = JSON.parse(value);
+                    } catch (e) {
+                        result[key] = value.replace(/^["']|["']$/g, '');
+                    }
+                } else if (value.startsWith('{') && value.endsWith('}')) {
+                    try {
+                        result[key] = JSON.parse(value);
+                    } catch (e) {
+                        result[key] = value.replace(/^["']|["']$/g, '');
+                    }
                 } else {
                     result[key] = value.replace(/^["']|["']$/g, '');
                 }
