@@ -185,7 +185,7 @@ export async function sendOrderStatusEmail(data: OrderStatusEmailData): Promise<
                 reject(error);
             } else {
                 console.log('Order status email sent successfully');
-                resolve();
+                resolve(undefined);
             }
         });
     });
@@ -270,7 +270,7 @@ export async function sendAdminNotification(orderData: OrderEmailData) {
                 reject(error);
             } else {
                 console.log('Admin notification sent successfully');
-                resolve();
+                resolve(undefined);
             }
         });
     });
@@ -399,7 +399,7 @@ export async function sendCustomerConfirmation(orderData: OrderEmailData) {
                 reject(error);
             } else {
                 console.log('Customer confirmation sent successfully');
-                resolve();
+                resolve(undefined);
             }
         });
     });
