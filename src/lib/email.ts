@@ -2,7 +2,7 @@ import * as ElasticEmail from '@elasticemail/elasticemail-client';
 
 const defaultClient = ElasticEmail.ApiClient.instance;
 const apikey = defaultClient.authentications['apikey'];
-apikey.apiKey = import.meta.env.ELASTIC_EMAIL_API_KEY || '';
+apikey.apiKey = import.meta.env.ELASTIC_EMAIL_API_KEY || (typeof process !== 'undefined' ? process.env.ELASTIC_EMAIL_API_KEY : '') || '';
 
 const emailsApi = new ElasticEmail.EmailsApi();
 
