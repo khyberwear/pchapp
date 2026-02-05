@@ -3,7 +3,7 @@ import { supabaseAdmin as supabase } from '../../../lib/db';
 
 export const prerender = false;
 
-// GET - List all categories
+// GET - List all categories with product counts
 export const GET: APIRoute = async () => {
     try {
         const { data: categories, error } = await supabase
@@ -13,8 +13,32 @@ export const GET: APIRoute = async () => {
 
         if (error) throw error;
 
+        // Get product counts for each category
+        const { data: products, error: productsError } = await supabase
+            .from('products')
+            .select('category');
+
+        console.log('Products fetched:', products?.length, 'Error:', productsError);
+        console.log('Product categories:', products?.map((p: any) => p.category));
+
+        const productCounts: Record<string, number> = {};
+        (products || []).forEach((p: any) => {
+            if (p.category) {
+                productCounts[p.category] = (productCounts[p.category] || 0) + 1;
+            }
+        });
+
+        console.log('Product counts:', productCounts);
+        console.log('Category names:', categories?.map((c: any) => c.name));
+
+        // Add product_count to each category
+        const categoriesWithCounts = (categories || []).map((cat: any) => ({
+            ...cat,
+            product_count: productCounts[cat.name] || 0
+        }));
+
         return new Response(
-            JSON.stringify({ categories: categories || [] }),
+            JSON.stringify({ categories: categoriesWithCounts }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {

@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro";
-import { supabase } from "@lib/db";
+import { supabaseAdmin as supabase } from "../../../lib/db";
+
+export const prerender = false;
 
 export const GET: APIRoute = async () => {
   try {
