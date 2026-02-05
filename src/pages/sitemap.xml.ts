@@ -16,11 +16,20 @@ export const GET: APIRoute = async () => {
     .select('slug, updated_at')
     .eq('in_stock', true);
 
-  // Get all published blog posts from Supabase
-  const { data: blogPosts } = await supabase
-    .from('blogs')
-    .select('slug, updated_at')
-    .eq('published', true);
+  // Get all published blog posts from Supabase (with error handling)
+  let blogPosts: any[] = [];
+  try {
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('slug, updated_at')
+      .eq('published', true);
+    if (!error && data) {
+      blogPosts = data;
+    }
+  } catch (e) {
+    // blogs table might not exist yet
+    console.log('Blogs table not found, skipping blog posts in sitemap');
+  }
 
   // Get all categories from Supabase
   const { data: categories } = await supabase
