@@ -30,6 +30,7 @@ export const GET: APIRoute = async () => {
 export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
+        console.log('Inserting category data:', body);
         const { name, slug, description, image_url, meta_title, meta_description } = body;
 
         const { data, error } = await supabase
@@ -38,16 +39,22 @@ export const POST: APIRoute = async ({ request }) => {
             .select()
             .single();
 
-        if (error) throw error;
+        if (error) {
+            console.error('Supabase Error (POST):', error);
+            return new Response(
+                JSON.stringify({ error: error.message, details: error }),
+                { status: 500, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
 
         return new Response(
             JSON.stringify({ success: true, category: data }),
             { status: 201, headers: { 'Content-Type': 'application/json' } }
         );
-    } catch (error) {
-        console.error('Error creating category:', error);
+    } catch (error: any) {
+        console.error('Catch Error (POST):', error);
         return new Response(
-            JSON.stringify({ error: 'Failed to create category' }),
+            JSON.stringify({ error: error.message || 'Failed to create category' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
     }
@@ -57,6 +64,7 @@ export const POST: APIRoute = async ({ request }) => {
 export const PUT: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
+        console.log('Updating category data:', body);
         const { id, ...updateData } = body;
 
         if (!id) {
@@ -73,16 +81,22 @@ export const PUT: APIRoute = async ({ request }) => {
             .select()
             .single();
 
-        if (error) throw error;
+        if (error) {
+            console.error('Supabase Error (PUT):', error);
+            return new Response(
+                JSON.stringify({ error: error.message, details: error }),
+                { status: 500, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
 
         return new Response(
             JSON.stringify({ success: true, category: data }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
-    } catch (error) {
-        console.error('Error updating category:', error);
+    } catch (error: any) {
+        console.error('Catch Error (PUT):', error);
         return new Response(
-            JSON.stringify({ error: 'Failed to update category' }),
+            JSON.stringify({ error: error.message || 'Failed to update category' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
     }

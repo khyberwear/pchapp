@@ -167,12 +167,13 @@ const pageTitle = `Category Management | ${SITE.title}`;
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-        if (!res.ok) throw new Error('Failed');
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || 'Failed');
         modal.classList.add('hidden');
         backdrop.classList.add('hidden');
         loadCategories();
       } catch (err) {
-        alert('Error saving category. Make sure you have added the columns to Supabase.');
+        alert('Error: ' + err.message);
       }
     };
   }
