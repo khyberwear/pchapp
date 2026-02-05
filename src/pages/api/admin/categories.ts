@@ -30,19 +30,30 @@ export const GET: APIRoute = async () => {
 export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
-        console.log('Inserting category data:', body);
+        console.log('POST /api/admin/categories - Body:', body);
         const { name, slug, description, image_url, meta_title, meta_description } = body;
 
         const { data, error } = await supabase
             .from('categories')
-            .insert([{ name, slug, description, image_url, meta_title, meta_description }])
+            .insert([{
+                name,
+                slug,
+                description,
+                image_url: image_url || null,
+                meta_title: meta_title || null,
+                meta_description: meta_description || null
+            }])
             .select()
             .single();
 
         if (error) {
             console.error('Supabase Error (POST):', error);
             return new Response(
-                JSON.stringify({ error: error.message, details: error }),
+                JSON.stringify({
+                    error: error.message,
+                    details: error,
+                    hint: 'Check if columns image_url, meta_title, and meta_description exist in categories table'
+                }),
                 { status: 500, headers: { 'Content-Type': 'application/json' } }
             );
         }
@@ -54,7 +65,7 @@ export const POST: APIRoute = async ({ request }) => {
     } catch (error: any) {
         console.error('Catch Error (POST):', error);
         return new Response(
-            JSON.stringify({ error: error.message || 'Failed to create category' }),
+            JSON.stringify({ error: error.message || 'Failed to create category', stack: error.stack }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
     }
@@ -64,7 +75,7 @@ export const POST: APIRoute = async ({ request }) => {
 export const PUT: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
-        console.log('Updating category data:', body);
+        console.log('PUT /api/admin/categories - Body:', body);
         const { id, ...updateData } = body;
 
         if (!id) {
@@ -73,6 +84,11 @@ export const PUT: APIRoute = async ({ request }) => {
                 { status: 400, headers: { 'Content-Type': 'application/json' } }
             );
         }
+
+        // Ensure optional fields are handled correctly
+        if (updateData.image_url === '') updateData.image_url = null;
+        if (updateData.meta_title === '') updateData.meta_title = null;
+        if (updateData.meta_description === '') updateData.meta_description = null;
 
         const { data, error } = await supabase
             .from('categories')
@@ -84,7 +100,11 @@ export const PUT: APIRoute = async ({ request }) => {
         if (error) {
             console.error('Supabase Error (PUT):', error);
             return new Response(
-                JSON.stringify({ error: error.message, details: error }),
+                JSON.stringify({
+                    error: error.message,
+                    details: error,
+                    hint: 'Check if columns image_url, meta_title, and meta_description exist in categories table'
+                }),
                 { status: 500, headers: { 'Content-Type': 'application/json' } }
             );
         }
@@ -96,7 +116,7 @@ export const PUT: APIRoute = async ({ request }) => {
     } catch (error: any) {
         console.error('Catch Error (PUT):', error);
         return new Response(
-            JSON.stringify({ error: error.message || 'Failed to update category' }),
+            JSON.stringify({ error: error.message || 'Failed to update category', stack: error.stack }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
     }
