@@ -53,19 +53,19 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-16">
       
       <!-- Breadcrumb -->
-      <nav class="mb-8">
-        <ol class="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+      <nav class="mb-8 overflow-x-auto">
+        <ol class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
           <li><a href="/" class="hover:text-orange-500">Home</a></li>
           <li>/</li>
           <li><a href="/products" class="hover:text-orange-500">Products</a></li>
           {product.category && (
             <>
               <li>/</li>
-              <li><a href={`/categories/${product.category.toLowerCase()}`} class="hover:text-orange-500">{product.category}</a></li>
+              <li><a href={`/categories/${product.category.toLowerCase()}`} class="hover:text-orange-500 truncate">{product.category}</a></li>
             </>
           )}
           <li>/</li>
-          <li class="text-neutral-900 dark:text-white font-medium">{product.title}</li>
+          <li class="text-neutral-900 dark:text-white font-medium truncate">{product.title}</li>
         </ol>
       </nav>
 
@@ -81,18 +81,11 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
               alt={product.title}
               class="h-full w-full object-cover"
             />
-            {/* Stock Badge */}
-            <div class="absolute top-4 left-4">
-              <span class={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold shadow-lg ${product.in_stock ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
-                <span class={`h-2 w-2 rounded-full ${product.in_stock ? 'bg-green-200' : 'bg-red-200'} animate-pulse`}></span>
-                {product.in_stock ? 'In Stock' : 'Out of Stock'}
-              </span>
-            </div>
             {/* Discount Badge */}
-            {product.original_price && (
+            {product.original_price && parseInt(product.original_price) > parseInt(product.price) && (
               <div class="absolute top-4 right-4">
-                <span class="rounded-full bg-orange-500 px-4 py-2 text-sm font-bold text-white shadow-lg">
-                  {Math.round((1 - product.price / product.original_price) * 100)}% OFF
+                <span class="rounded-full bg-orange-500 px-3 py-1 text-xs font-bold text-white shadow-lg">
+                  {Math.round((1 - parseInt(product.price) / parseInt(product.original_price)) * 100)}% OFF
                 </span>
               </div>
             )}
@@ -212,7 +205,7 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
             <a
               href={`https://wa.me/923018768666?text=Hi! I want to order ${encodeURIComponent(product.title)} (Rs ${product.price})`}
               target="_blank"
-              class="flex-1 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 px-8 py-4 text-center font-bold text-white shadow-lg shadow-green-500/30 transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+              class="flex-1 rounded-2xl bg-[#25D366] px-8 py-4 text-center font-bold text-white shadow-lg shadow-[#25D366]/40 transition-all hover:bg-[#20ba5a] hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
             >
               <span class="flex items-center justify-center gap-2">
                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

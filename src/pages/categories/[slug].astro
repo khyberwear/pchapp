@@ -1,68 +1,39 @@
 ---
 // Import necessary components
 import MainLayout from "@/layouts/MainLayout.astro";
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
+import { supabase } from "@/lib/db";
 
-// 1. Generate a new path for every collection entry
-export async function getStaticPaths() {
-  const categories = [
-    {
-      slug: "zalmi",
-      title: "Zalmi Collection",
-      description: "Modern and stylish Zalmi Chappals, perfect for the contemporary fashion statement."
-    },
-    {
-      slug: "norozi",
-      title: "Norozi Collection",
-      description: "Rugged and robust with a thick tire sole. Built for durability and tough terrain."
-    },
-    {
-      slug: "panjedar",
-      title: "Panjedar Collection",
-      description: "Distinctive open-toe design with intricate stitching. A unique style statement."
-    },
-    {
-      slug: "charsadda",
-      title: "Charsadda Collection",
-      description: "Simple, lightweight, and stylish. A perfect blend of tradition and casual wear."
-    },
-    {
-      slug: "peshawari-chappal",
-      title: "Peshawari Chappal",
-      description: "The timeless classic. Hand-stitched leather sandals known for their elegance and comfort."
-    }
-  ];
+// Make this page dynamic instead of static
+export const prerender = false;
 
-  return categories.map((category) => ({
-    params: { slug: category.slug },
-    props: { category },
-  }));
+// Get the slug from the URL
+const { slug } = Astro.params;
+
+// Fetch the category from Supabase
+const { data: categoryData } = await supabase
+  .from('categories')
+  .select('*')
+  .eq('slug', slug)
+  .single();
+
+// If category not found, handle it
+if (!categoryData) {
+  return new Response('Category not found', { status: 404 });
 }
 
-// 2. Get the category prop
-const { category } = Astro.props;
+const category = {
+  id: categoryData.id,
+  slug: categoryData.slug,
+  title: categoryData.name,
+  description: categoryData.description
+};
 
-// 3. Fetch and filter products
-const allProducts = await getCollection("products", ({ id }) => id.startsWith("en/"));
-
-// Match products by category field (case-insensitive) or title if category is missing
-let products = allProducts.filter((product) => {
-  const productCategory = product.data.category?.toLowerCase();
-  const slug = category.slug.toLowerCase();
-  
-  // Direct category match
-  if (productCategory === slug) return true;
-  
-  // Special handling for "peshawari-chappal" slug to include general products or specific ones
-  if (slug === 'peshawari-chappal' && !productCategory) return true;
-  
-  // Fallback to title check if no category is assigned
-  if (!productCategory && product.data.title.toLowerCase().includes(slug)) return true;
-  
-  return false;
-});
+// Fetch products for this category by name
+const { data: products } = await supabase
+  .from('products')
+  .select('*')
+  .eq('category', category.title);
 
 const pageTitle = `${category.title} | ${SITE.title}`;
 ---
@@ -83,27 +54,27 @@ const pageTitle = `${category.title} | ${SITE.title}`;
       </div>
     </div>
 
-    {products.length > 0 ? (
+    {products && products.length > 0 ? (
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {products.map((product) => (
-          <a href={`/products/${product.id.replace(/^en\//, "")}`} class="group relative bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+        {products.map((product: any) => (
+          <a href={`/products/${product.slug}`} class="group relative bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
             <div class="aspect-square overflow-hidden">
               <img 
-                src={typeof product.data.main.imgCard === 'string' ? product.data.main.imgCard : product.data.main.imgCard.src}
-                alt={product.data.main.imgAlt}
+                src={product.card_image || product.main_image || "https://via.placeholder.com/300"}
+                alt={product.title}
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
             </div>
             <div class="p-5">
               <h3 class="text-lg font-bold text-neutral-800 dark:text-neutral-200 group-hover:text-yellow-600 dark:group-hover:text-yellow-500 transition-colors">
-                {product.data.title}
+                {product.title}
               </h3>
-              <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">{product.data.description}</p>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">{product.long_description || product.description}</p>
               <div class="mt-4 flex items-center justify-between">
                 <div class="flex flex-col">
-                  <span class="text-lg font-bold text-neutral-900 dark:text-white">₨ {(product.data.main.price || 5500).toLocaleString()}</span>
-                  {product.data.main.originalPrice && (
-                    <span class="text-xs text-neutral-500 line-through">₨ {product.data.main.originalPrice.toLocaleString()}</span>
+                  <span class="text-lg font-bold text-neutral-900 dark:text-white">₨ {parseInt(product.price).toLocaleString()}</span>
+                  {product.original_price && (
+                    <span class="text-xs text-neutral-500 line-through">₨ {parseInt(product.original_price).toLocaleString()}</span>
                   )}
                 </div>
                 <span class="text-yellow-600 dark:text-yellow-500 font-bold text-sm">View Details</span>

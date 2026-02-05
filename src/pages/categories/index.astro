@@ -1,65 +1,50 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
 import { SITE } from "@data/constants";
-import zalmiImage from "@images/zalmi1.jpg";
-import noroziImage from "@images/Norozi-Chappal-12-1-jpg.webp";
-import { getCollection } from "astro:content";
+import { supabase } from "@/lib/db";
 
 const pageTitle = `Collections | ${SITE.title}`;
 const description = "Explore our wide range of authentic Peshawari Chappals by collection. From classic Charsadda to modern Zalmi styles.";
 
-// Fetch all products
-const allProducts = await getCollection("products", ({ id }) => id.startsWith("en/"));
+// Fetch categories from Supabase
+const { data: categoriesData, error } = await supabase
+  .from('categories')
+  .select('*')
+  .order('id', { ascending: true });
 
-// Helper to get count
-const getCount = (slug: string) => {
-  const normalizedSlug = slug.toLowerCase();
-  return allProducts.filter(p => {
-    const pCat = p.data.category?.toLowerCase();
-    
-    // Direct category match
-    if (pCat === normalizedSlug) return true;
-    
-    // Fallback to title check for legacy or unclassified
-    if (!pCat && p.data.title.toLowerCase().includes(normalizedSlug)) return true;
-    
-    // Special handling for general category
-    if (normalizedSlug === 'peshawari-chappal' && !pCat) return true;
-    
-    return false;
+// Fetch products to count by category
+const { data: productsData } = await supabase
+  .from('products')
+  .select('*');
+
+// Map categories and add product counts
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  image_url?: string;
+  slug: string;
+}
+
+interface Product {
+  id: number;
+  category: string;
+}
+
+const categories = (categoriesData as Category[] || []).map((cat: Category) => {
+  // Match products by category name
+  const count = (productsData as Product[] || []).filter((p: Product) => {
+    return p.category === cat.name;
   }).length;
-};
-
-const categories = [
-  {
-    title: "Zalmi Collection",
-    description: "The modern face of Peshawari tradition. Sleek, stylish, and built for the spotlight.",
-    image: zalmiImage,
-    slug: "zalmi",
-    count: getCount('zalmi')
-  },
-  {
-    title: "Norozi Chappal",
-    description: "Rugged and robust with a thick tire sole. Built for durability and tough terrain.",
-    image: noroziImage,
-    slug: "norozi",
-    count: getCount('norozi')
-  },
-  {
-    title: "Panjedar Chappal",
-    description: "Distinctive open-toe design with intricate stitching. A unique style statement.",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&h=600&fit=crop",
-    slug: "panjedar",
-    count: getCount('panjedar')
-  },
-  {
-    title: "Charsadda Chappal",
-    description: "Simple, lightweight, and stylish. A perfect blend of tradition and casual wear.",
-    image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=600&fit=crop",
-    slug: "charsadda",
-    count: getCount('charsadda')
-  }
-];
+  return {
+    id: cat.id,
+    title: cat.name,
+    description: cat.description,
+    image: cat.image_url || "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=600&fit=crop",
+    slug: cat.slug,
+    count: count
+  };
+});
 ---
 
 <MainLayout title={pageTitle} customDescription={description}>
@@ -92,7 +77,7 @@ const categories = [
   <!-- Collections Grid -->
   <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
     <div class="grid gap-6 sm:grid-cols-2 lg:gap-8">
-      {categories.map((category) => (
+      {categories.map((category: typeof categories[0]) => (
         <a 
           href={`/categories/${category.slug}`}
           class="group relative block overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800 shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-xl aspect-[4/3]"
@@ -101,7 +86,7 @@ const categories = [
           <div class="absolute inset-0 h-full w-full">
             <img 
               class="h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" 
-              src={typeof category.image === 'string' ? category.image : category.image.src} 
+              src={category.image} 
               alt={category.title} 
             />
             <!-- Gradient Overlay -->
