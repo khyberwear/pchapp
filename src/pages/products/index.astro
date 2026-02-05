@@ -19,7 +19,7 @@ const { data: categoriesData } = await supabase
   .not('category', 'is', null)
   .order('category');
 
-const uniqueCategories = [...new Set(categoriesData?.map(c => c.category))].filter(Boolean);
+const uniqueCategories = [...new Set(categoriesData?.map((c: any) => c.category))].filter(Boolean);
 
 // Fetch products from Supabase
 let query = supabase
