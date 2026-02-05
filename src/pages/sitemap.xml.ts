@@ -28,13 +28,15 @@ export const GET: APIRoute = async () => {
     // Get all products from Supabase
     let allProducts: any[] = [];
     try {
-      const { data: products } = await supabase
+      const { data: products, error } = await supabase
         .from('products')
-        .select('slug, updated_at')
-        .eq('in_stock', true);
-      allProducts = products || [];
+        .select('slug, updated_at');
+      if (!error && products) {
+        allProducts = products;
+      }
+      console.log('Sitemap - Products fetched:', allProducts.length);
     } catch (e) {
-      console.log('Error fetching products for sitemap');
+      console.log('Error fetching products for sitemap', e);
     }
 
     // Get all categories from Supabase
