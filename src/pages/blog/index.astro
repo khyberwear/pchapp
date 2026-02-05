@@ -2,7 +2,7 @@
 export const prerender = false;
 
 import MainLayout from "@/layouts/MainLayout.astro";
-import { supabase } from "@lib/db";
+import { supabaseAdmin as supabase } from "../../lib/db";
 import { SITE } from "@data/constants";
 
 // Fetch all published blogs from Supabase
