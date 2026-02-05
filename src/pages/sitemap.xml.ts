@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro";
-import { getCollection } from "astro:content";
 import { createClient } from "@supabase/supabase-js";
 
 const site = "https://peshawarichappal.store";
@@ -17,13 +16,22 @@ export const GET: APIRoute = async () => {
     .select('slug, updated_at')
     .eq('in_stock', true);
 
-  // Get all blog posts (still from content collection)
-  const blogPosts = await getCollection("blog", ({ id }) => id.startsWith("en/"));
+  // Get all published blog posts from Supabase
+  const { data: blogPosts } = await supabase
+    .from('blogs')
+    .select('slug, updated_at')
+    .eq('published', true);
+
+  // Get all categories from Supabase
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('slug');
 
   // Static pages with their priority and change frequency
   const staticPages = [
     { url: "/", priority: "1.0", changefreq: "daily" },
     { url: "/products", priority: "0.9", changefreq: "daily" },
+    { url: "/categories", priority: "0.9", changefreq: "daily" },
     { url: "/services", priority: "0.8", changefreq: "weekly" },
     { url: "/blog", priority: "0.8", changefreq: "weekly" },
     { url: "/contact", priority: "0.7", changefreq: "monthly" },
@@ -34,6 +42,8 @@ export const GET: APIRoute = async () => {
   const today = new Date().toISOString().split('T')[0];
 
   const allProducts = products || [];
+  const allBlogPosts = blogPosts || [];
+  const allCategories = categories || [];
 
   // Build XML sitemap
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -55,6 +65,18 @@ ${staticPages
       )
       .join("\n")}
 
+  <!-- Category Pages -->
+${allCategories
+      .map(
+        (category: any) => `  <url>
+    <loc>${site}/categories/${category.slug}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`
+      )
+      .join("\n")}
+
   <!-- Product Pages -->
 ${allProducts
       .map(
@@ -68,11 +90,11 @@ ${allProducts
       .join("\n")}
 
   <!-- Blog Posts -->
-${blogPosts
+${allBlogPosts
       .map(
-        (post) => `  <url>
-    <loc>${site}/blog/${post.id.replace(/^en\//, "")}</loc>
-    <lastmod>${post.data.pubDate ? new Date(post.data.pubDate).toISOString().split('T')[0] : today}</lastmod>
+        (post: any) => `  <url>
+    <loc>${site}/blog/${post.slug}</loc>
+    <lastmod>${post.updated_at ? new Date(post.updated_at).toISOString().split('T')[0] : today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`
