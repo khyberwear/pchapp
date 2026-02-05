@@ -5,6 +5,10 @@ const site = "https://peshawarichappal.store";
 
 export const GET: APIRoute = async () => {
   try {
+    console.log('=== Sitemap Generation Started ===');
+    console.log('SUPABASE_URL:', import.meta.env.PUBLIC_SUPABASE_URL ? 'Set' : 'NOT SET');
+    console.log('SUPABASE_KEY:', import.meta.env.PUBLIC_SUPABASE_ANON_KEY ? 'Set' : 'NOT SET');
+    
     // Create Supabase client
     const supabase = createClient(
       import.meta.env.PUBLIC_SUPABASE_URL || '',
@@ -28,15 +32,17 @@ export const GET: APIRoute = async () => {
     // Get all products from Supabase
     let allProducts: any[] = [];
     try {
+      console.log('Fetching products...');
       const { data: products, error } = await supabase
         .from('products')
         .select('slug, updated_at');
+      console.log('Products response - Error:', error, 'Count:', products?.length);
       if (!error && products) {
         allProducts = products;
       }
       console.log('Sitemap - Products fetched:', allProducts.length);
-    } catch (e) {
-      console.log('Error fetching products for sitemap', e);
+    } catch (e: any) {
+      console.log('Error fetching products for sitemap:', e.message);
     }
 
     // Get all categories from Supabase
@@ -127,8 +133,8 @@ ${allBlogPosts
         "Cache-Control": "public, max-age=3600",
       },
     });
-  } catch (error) {
-    console.error('Sitemap generation error:', error);
+  } catch (error: any) {
+    console.error('=== Sitemap generation error ===', error?.message || error);
     // Return a basic sitemap on error
     const today = new Date().toISOString().split('T')[0];
     const basicXml = `<?xml version="1.0" encoding="UTF-8"?>
