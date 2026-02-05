@@ -106,12 +106,22 @@ const pageTitle = `Category Management | ${SITE.title}`;
 </MainLayout>
 
 <script>
-  let allCategories = [];
+  interface Category {
+    id: number;
+    name: string;
+    slug: string;
+    description?: string;
+    image_url?: string;
+    meta_title?: string;
+    meta_description?: string;
+  }
+
+  let allCategories: Category[] = [];
 
   const tableBody = document.getElementById('categories-table-body');
   const modal = document.getElementById('category-modal');
   const backdrop = document.getElementById('modal-backdrop');
-  const form = document.getElementById('category-form');
+  const form = document.getElementById('category-form') as HTMLFormElement | null;
 
   document.addEventListener('DOMContentLoaded', () => {
     const savedUser = localStorage.getItem('user');
@@ -120,77 +130,97 @@ const pageTitle = `Category Management | ${SITE.title}`;
       return;
     }
 
-    document.getElementById('auth-loading').classList.add('hidden');
-    document.getElementById('admin-content').classList.remove('hidden');
+    const authLoading = document.getElementById('auth-loading');
+    const adminContent = document.getElementById('admin-content');
+    
+    if (authLoading) authLoading.classList.add('hidden');
+    if (adminContent) adminContent.classList.remove('hidden');
 
     loadCategories();
     setupListeners();
   });
 
   function setupListeners() {
-    document.getElementById('add-category-btn').onclick = () => {
-      form.reset();
-      document.getElementById('cat-id').value = '';
-      modal.classList.remove('hidden');
-      backdrop.classList.remove('hidden');
-    };
-    
-    document.getElementById('cancel-btn').onclick = document.getElementById('close-modal-btn').onclick = () => {
-      modal.classList.add('hidden');
-      backdrop.classList.add('hidden');
-    };
+    const addBtn = document.getElementById('add-category-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const closeBtn = document.getElementById('close-modal-btn');
+    const catNameInput = document.getElementById('cat-name') as HTMLInputElement | null;
+    const catIdInput = document.getElementById('cat-id') as HTMLInputElement | null;
+    const catSlugInput = document.getElementById('cat-slug') as HTMLInputElement | null;
 
-    document.getElementById('cat-name').oninput = (e) => {
-      const id = document.getElementById('cat-id').value;
-      if (!id) {
-        document.getElementById('cat-slug').value = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      }
-    };
-
-    form.onsubmit = async (e) => {
-      e.preventDefault();
-      const id = document.getElementById('cat-id').value;
-      const data = {
-        name: document.getElementById('cat-name').value,
-        slug: document.getElementById('cat-slug').value,
-        description: document.getElementById('cat-description').value,
-        image_url: document.getElementById('cat-image').value,
-        meta_title: document.getElementById('cat-meta-title').value,
-        meta_description: document.getElementById('cat-meta-desc').value,
+    if (addBtn) {
+      addBtn.onclick = () => {
+        if (form) form.reset();
+        if (catIdInput) catIdInput.value = '';
+        if (modal) modal.classList.remove('hidden');
+        if (backdrop) backdrop.classList.remove('hidden');
       };
-
-      if (id) data.id = parseInt(id);
-
-      try {
-        const res = await fetch('/api/admin/categories', {
-          method: id ? 'PUT' : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        const result = await res.json();
-        if (!res.ok) throw new Error(result.error || 'Failed');
-        modal.classList.add('hidden');
-        backdrop.classList.add('hidden');
-        loadCategories();
-      } catch (err) {
-        alert('Error: ' + err.message);
-      }
+    }
+    
+    const closeModal = () => {
+      if (modal) modal.classList.add('hidden');
+      if (backdrop) backdrop.classList.add('hidden');
     };
+
+    if (cancelBtn) cancelBtn.onclick = closeModal;
+    if (closeBtn) closeBtn.onclick = closeModal;
+
+    if (catNameInput) {
+      catNameInput.oninput = (e: Event) => {
+        const target = e.target as HTMLInputElement;
+        const id = catIdInput?.value;
+        if (!id && catSlugInput) {
+          catSlugInput.value = target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        }
+      };
+    }
+
+    if (form) {
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+        const id = (document.getElementById('cat-id') as HTMLInputElement)?.value;
+        const data: any = {
+          name: (document.getElementById('cat-name') as HTMLInputElement)?.value,
+          slug: (document.getElementById('cat-slug') as HTMLInputElement)?.value,
+          description: (document.getElementById('cat-description') as HTMLTextAreaElement)?.value,
+          image_url: (document.getElementById('cat-image') as HTMLInputElement)?.value,
+          meta_title: (document.getElementById('cat-meta-title') as HTMLInputElement)?.value,
+          meta_description: (document.getElementById('cat-meta-desc') as HTMLTextAreaElement)?.value,
+        };
+
+        if (id) data.id = parseInt(id);
+
+        try {
+          const res = await fetch('/api/admin/categories', {
+            method: id ? 'PUT' : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const result = await res.json();
+          if (!res.ok) throw new Error(result.error || 'Failed');
+          closeModal();
+          loadCategories();
+        } catch (err: any) {
+          alert('Error: ' + err.message);
+        }
+      };
+    }
   }
 
   async function loadCategories() {
-    tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr>';
+    if (tableBody) tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr>';
     try {
       const res = await fetch('/api/admin/categories');
       const data = await res.json();
       allCategories = data.categories || [];
       renderCategories();
     } catch (err) {
-      tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">Error loading</td></tr>';
+      if (tableBody) tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">Error loading</td></tr>';
     }
   }
 
   function renderCategories() {
+    if (!tableBody) return;
     tableBody.innerHTML = allCategories.map(cat => `
       <tr class="hover:bg-neutral-800/50 transition-colors">
         <td class="px-6 py-4">
@@ -208,23 +238,23 @@ const pageTitle = `Category Management | ${SITE.title}`;
     `).join('');
   }
 
-  window.editCategory = (id) => {
+  (window as any).editCategory = (id: number) => {
     const cat = allCategories.find(c => c.id === id);
     if (!cat) return;
     
-    document.getElementById('cat-id').value = cat.id;
-    document.getElementById('cat-name').value = cat.name || '';
-    document.getElementById('cat-slug').value = cat.slug || '';
-    document.getElementById('cat-description').value = cat.description || '';
-    document.getElementById('cat-image').value = cat.image_url || '';
-    document.getElementById('cat-meta-title').value = cat.meta_title || '';
-    document.getElementById('cat-meta-desc').value = cat.meta_description || '';
+    (document.getElementById('cat-id') as HTMLInputElement).value = cat.id.toString();
+    (document.getElementById('cat-name') as HTMLInputElement).value = cat.name || '';
+    (document.getElementById('cat-slug') as HTMLInputElement).value = cat.slug || '';
+    (document.getElementById('cat-description') as HTMLTextAreaElement).value = cat.description || '';
+    (document.getElementById('cat-image') as HTMLInputElement).value = cat.image_url || '';
+    (document.getElementById('cat-meta-title') as HTMLInputElement).value = cat.meta_title || '';
+    (document.getElementById('cat-meta-desc') as HTMLTextAreaElement).value = cat.meta_description || '';
     
-    modal.classList.remove('hidden');
-    backdrop.classList.remove('hidden');
+    if (modal) modal.classList.remove('hidden');
+    if (backdrop) backdrop.classList.remove('hidden');
   };
 
-  window.deleteCategory = async (id) => {
+  (window as any).deleteCategory = async (id: number) => {
     if (!confirm('Are you sure? This will not delete products in this category.')) return;
     try {
       await fetch('/api/admin/categories', {
