@@ -9,24 +9,29 @@ import { SITE } from "@data/constants";
 export async function getStaticPaths() {
   const categories = [
     {
-      slug: "peshawari-chappal",
-      title: "Peshawari Chappal",
-      description: "The timeless classic. Hand-stitched leather sandals known for their elegance and comfort."
+      slug: "zalmi",
+      title: "Zalmi Collection",
+      description: "Modern and stylish Zalmi Chappals, perfect for the contemporary fashion statement."
     },
     {
       slug: "norozi",
-      title: "Norozi Chappal",
+      title: "Norozi Collection",
       description: "Rugged and robust with a thick tire sole. Built for durability and tough terrain."
     },
     {
+      slug: "panjedar",
+      title: "Panjedar Collection",
+      description: "Distinctive open-toe design with intricate stitching. A unique style statement."
+    },
+    {
       slug: "charsadda",
-      title: "Charsadda Chappal",
+      title: "Charsadda Collection",
       description: "Simple, lightweight, and stylish. A perfect blend of tradition and casual wear."
     },
     {
-      slug: "panjedar",
-      title: "Panjedar Chappal",
-      description: "Distinctive open-toe design with intricate stitching. A unique style statement."
+      slug: "peshawari-chappal",
+      title: "Peshawari Chappal",
+      description: "The timeless classic. Hand-stitched leather sandals known for their elegance and comfort."
     }
   ];
 
@@ -42,16 +47,22 @@ const { category } = Astro.props;
 // 3. Fetch and filter products
 const allProducts = await getCollection("products", ({ id }) => id.startsWith("en/"));
 
-let products: CollectionEntry<"products">[] = [];
-if (category.slug === "peshawari-chappal") {
-  products = allProducts.filter((product) => product.data.title.toLowerCase().includes("zalmi"));
-} else if (category.slug === "norozi") {
-  products = allProducts.filter((product) => product.data.title.toLowerCase().includes("norozi"));
-} else if (category.slug === "charsadda") {
-  products = allProducts.filter((product) => product.data.title.toLowerCase().includes("charsadda"));
-} else if (category.slug === "panjedar") {
-  products = allProducts.filter((product) => product.data.title.toLowerCase().includes("panjedar"));
-}
+// Match products by category field (case-insensitive) or title if category is missing
+let products = allProducts.filter((product) => {
+  const productCategory = product.data.category?.toLowerCase();
+  const slug = category.slug.toLowerCase();
+  
+  // Direct category match
+  if (productCategory === slug) return true;
+  
+  // Special handling for "peshawari-chappal" slug to include general products or specific ones
+  if (slug === 'peshawari-chappal' && !productCategory) return true;
+  
+  // Fallback to title check if no category is assigned
+  if (!productCategory && product.data.title.toLowerCase().includes(slug)) return true;
+  
+  return false;
+});
 
 const pageTitle = `${category.title} | ${SITE.title}`;
 ---

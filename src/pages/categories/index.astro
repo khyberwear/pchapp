@@ -13,25 +13,30 @@ const allProducts = await getCollection("products", ({ id }) => id.startsWith("e
 
 // Helper to get count
 const getCount = (slug: string) => {
-  // For now, we'll match based on simple logic or tags if available. 
-  // Since we don't have explicit category tags in the schema yet, 
-  // we'll simulate it or match by title/description for this demo.
-  // In a real app, you'd filter by product.data.category === slug
-  
-  // For this specific request: "show only zalmi product" for Peshawari
-  if (slug === 'peshawari-chappal') return allProducts.filter(p => p.data.title.toLowerCase().includes('zalmi')).length;
-  if (slug === 'norozi') return allProducts.filter(p => p.data.title.toLowerCase().includes('norozi')).length;
-  
-  return 0; // Placeholder for others as we don't have products for them yet
+  const normalizedSlug = slug.toLowerCase();
+  return allProducts.filter(p => {
+    const pCat = p.data.category?.toLowerCase();
+    
+    // Direct category match
+    if (pCat === normalizedSlug) return true;
+    
+    // Fallback to title check for legacy or unclassified
+    if (!pCat && p.data.title.toLowerCase().includes(normalizedSlug)) return true;
+    
+    // Special handling for general category
+    if (normalizedSlug === 'peshawari-chappal' && !pCat) return true;
+    
+    return false;
+  }).length;
 };
 
 const categories = [
   {
-    title: "Peshawari Chappal",
-    description: "The timeless classic. Hand-stitched leather sandals known for their elegance and comfort.",
+    title: "Zalmi Collection",
+    description: "The modern face of Peshawari tradition. Sleek, stylish, and built for the spotlight.",
     image: zalmiImage,
-    slug: "peshawari-chappal",
-    count: getCount('peshawari-chappal')
+    slug: "zalmi",
+    count: getCount('zalmi')
   },
   {
     title: "Norozi Chappal",
@@ -41,18 +46,18 @@ const categories = [
     count: getCount('norozi')
   },
   {
-    title: "Charsadda Chappal",
-    description: "Simple, lightweight, and stylish. A perfect blend of tradition and casual wear.",
-    image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=600&fit=crop",
-    slug: "charsadda",
-    count: 0
-  },
-  {
     title: "Panjedar Chappal",
     description: "Distinctive open-toe design with intricate stitching. A unique style statement.",
     image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&h=600&fit=crop",
     slug: "panjedar",
-    count: 0
+    count: getCount('panjedar')
+  },
+  {
+    title: "Charsadda Chappal",
+    description: "Simple, lightweight, and stylish. A perfect blend of tradition and casual wear.",
+    image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=600&fit=crop",
+    slug: "charsadda",
+    count: getCount('charsadda')
   }
 ];
 ---

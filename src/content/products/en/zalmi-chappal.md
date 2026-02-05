@@ -67,4 +67,5 @@ tableData:
 blueprints:
   first: "@images/zalmi2.jpg"
   second: "@images/zalmi3.jpg"
+category: "Zalmi"
 ---

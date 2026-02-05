@@ -62,4 +62,5 @@ colors:
     image: "@images/Brown-Panjedar-1-1.jpg"
     colorCode: "#8B4513"
 sizes: ["7", "8", "9", "10", "11", "12"]
+category: "Panjedar"
 ---

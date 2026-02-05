@@ -158,6 +158,7 @@ function convertProduct(filename, frontmatter) {
         long_description: longDescription,
         features: features,
         specifications: specifications,
+        category: frontmatter.category || null,
         in_stock: true
     };
 }

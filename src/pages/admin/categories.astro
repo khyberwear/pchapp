@@ -1,0 +1,239 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { SITE } from "@data/constants";
+
+const pageTitle = `Category Management | ${SITE.title}`;
+---
+
+<MainLayout title={pageTitle}>
+  <!-- Auth Guard -->
+  <div id="auth-loading" class="flex min-h-[60vh] items-center justify-center">
+    <div class="text-center">
+      <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-orange-500 border-t-transparent"></div>
+      <p class="mt-4 text-neutral-600 dark:text-neutral-400">Checking authentication...</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="admin-content" class="hidden">
+    <section class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+      <div class="mb-8">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white sm:text-3xl">Category Management</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-neutral-400">Add or remove product categories</p>
+          </div>
+          <div class="flex gap-3">
+            <a href="/admin" class="inline-flex items-center gap-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700">
+              Dashboard
+            </a>
+            <button id="add-category-btn" class="inline-flex items-center gap-x-2 rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-600">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+              Add Category
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories List -->
+      <div class="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800 overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+          <thead class="bg-gray-50 dark:bg-neutral-800">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase text-gray-500">Name</th>
+              <th scope="col" class="px-6 py-3 text-start text-xs font-semibold uppercase text-gray-500">Slug</th>
+              <th scope="col" class="px-6 py-3 text-end text-xs font-semibold uppercase text-gray-500">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="categories-table-body" class="divide-y divide-gray-200 dark:divide-neutral-700">
+            <!-- Loaded via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal -->
+  <div id="category-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center p-4">
+    <div class="relative w-full max-w-md bg-white border shadow-lg rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
+      <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+        <h3 class="font-bold text-gray-800 dark:text-white">Add/Edit Category</h3>
+        <button type="button" id="close-modal-btn" class="text-gray-400 hover:text-gray-500 dark:text-neutral-500 dark:hover:text-neutral-400">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <form id="category-form" class="p-4 space-y-4">
+        <input type="hidden" id="cat-id" />
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300">Name *</label>
+            <input type="text" id="cat-name" required class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300">Slug *</label>
+            <input type="text" id="cat-slug" required class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300">Description</label>
+          <textarea id="cat-description" rows="2" class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300">Image URL</label>
+          <input type="text" id="cat-image" placeholder="https://..." class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white" />
+        </div>
+        <div class="pt-2 border-t border-gray-200 dark:border-neutral-700">
+          <p class="text-xs font-bold uppercase text-gray-500 dark:text-neutral-500 mb-2">SEO Settings</p>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300">Meta Title</label>
+              <input type="text" id="cat-meta-title" class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300">Meta Description</label>
+              <textarea id="cat-meta-desc" rows="2" class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" id="cancel-btn" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700">Cancel</button>
+          <button type="submit" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none transition-colors">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="modal-backdrop" class="hidden fixed inset-0 z-[70] bg-gray-900/50 dark:bg-neutral-900/80"></div>
+</MainLayout>
+
+<script>
+  let allCategories = [];
+
+  const tableBody = document.getElementById('categories-table-body');
+  const modal = document.getElementById('category-modal');
+  const backdrop = document.getElementById('modal-backdrop');
+  const form = document.getElementById('category-form');
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedUser = localStorage.getItem('user');
+    if (!savedUser || JSON.parse(savedUser).role !== 'admin') {
+      window.location.href = '/login';
+      return;
+    }
+
+    document.getElementById('auth-loading').classList.add('hidden');
+    document.getElementById('admin-content').classList.remove('hidden');
+
+    loadCategories();
+    setupListeners();
+  });
+
+  function setupListeners() {
+    document.getElementById('add-category-btn').onclick = () => {
+      form.reset();
+      document.getElementById('cat-id').value = '';
+      modal.classList.remove('hidden');
+      backdrop.classList.remove('hidden');
+    };
+    
+    document.getElementById('cancel-btn').onclick = document.getElementById('close-modal-btn').onclick = () => {
+      modal.classList.add('hidden');
+      backdrop.classList.add('hidden');
+    };
+
+    document.getElementById('cat-name').oninput = (e) => {
+      const id = document.getElementById('cat-id').value;
+      if (!id) {
+        document.getElementById('cat-slug').value = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
+    };
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('cat-id').value;
+      const data = {
+        name: document.getElementById('cat-name').value,
+        slug: document.getElementById('cat-slug').value,
+        description: document.getElementById('cat-description').value,
+        image_url: document.getElementById('cat-image').value,
+        meta_title: document.getElementById('cat-meta-title').value,
+        meta_description: document.getElementById('cat-meta-desc').value,
+      };
+
+      if (id) data.id = parseInt(id);
+
+      try {
+        const res = await fetch('/api/admin/categories', {
+          method: id ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error('Failed');
+        modal.classList.add('hidden');
+        backdrop.classList.add('hidden');
+        loadCategories();
+      } catch (err) {
+        alert('Error saving category. Make sure you have added the columns to Supabase.');
+      }
+    };
+  }
+
+  async function loadCategories() {
+    tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr>';
+    try {
+      const res = await fetch('/api/admin/categories');
+      const data = await res.json();
+      allCategories = data.categories || [];
+      renderCategories();
+    } catch (err) {
+      tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">Error loading</td></tr>';
+    }
+  }
+
+  function renderCategories() {
+    tableBody.innerHTML = allCategories.map(cat => `
+      <tr class="hover:bg-neutral-800/50 transition-colors">
+        <td class="px-6 py-4">
+          <div class="flex items-center gap-3">
+            ${cat.image_url ? `<img src="${cat.image_url}" class="w-8 h-8 rounded object-cover" />` : '<div class="w-8 h-8 rounded bg-neutral-800 flex items-center justify-center text-[10px] text-neutral-500">No img</div>'}
+            <span class="text-sm font-medium text-white">${cat.name}</span>
+          </div>
+        </td>
+        <td class="px-6 py-4 text-sm text-neutral-400">${cat.slug}</td>
+        <td class="px-6 py-4 text-end space-x-3">
+          <button onclick="editCategory(${cat.id})" class="text-orange-500 hover:text-orange-400 text-sm font-medium">Edit</button>
+          <button onclick="deleteCategory(${cat.id})" class="text-red-500 hover:text-red-400 text-sm font-medium">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  window.editCategory = (id) => {
+    const cat = allCategories.find(c => c.id === id);
+    if (!cat) return;
+    
+    document.getElementById('cat-id').value = cat.id;
+    document.getElementById('cat-name').value = cat.name || '';
+    document.getElementById('cat-slug').value = cat.slug || '';
+    document.getElementById('cat-description').value = cat.description || '';
+    document.getElementById('cat-image').value = cat.image_url || '';
+    document.getElementById('cat-meta-title').value = cat.meta_title || '';
+    document.getElementById('cat-meta-desc').value = cat.meta_description || '';
+    
+    modal.classList.remove('hidden');
+    backdrop.classList.remove('hidden');
+  };
+
+  window.deleteCategory = async (id) => {
+    if (!confirm('Are you sure? This will not delete products in this category.')) return;
+    try {
+      await fetch('/api/admin/categories', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      loadCategories();
+    } catch (err) {
+      alert('Error deleting');
+    }
+  };
+</script>

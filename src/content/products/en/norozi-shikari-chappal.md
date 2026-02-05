@@ -78,4 +78,5 @@ tableData:
 blueprints:
   first: "@images/Norozi-Chappal1-31-jpg.webp"
   second: "@images/Norozi-Chappal2-31-jpg.webp"
+category: "Norozi"
 ---

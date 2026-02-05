@@ -136,9 +136,18 @@ const pageTitle = `Products Management | ${SITE.title}`;
             <input type="text" id="video_url" name="video_url" placeholder="https://www.youtube.com/watch?v=..." class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white" />
           </div>
 
-          <div>
-            <label for="sizes" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Sizes (comma separated)</label>
-            <input type="text" id="sizes" name="sizes" placeholder="7, 8, 9, 10, 11, 12" class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white" />
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="sizes" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Sizes (comma separated)</label>
+              <input type="text" id="sizes" name="sizes" placeholder="7, 8, 9, 10, 11, 12" class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white" />
+            </div>
+            <div>
+              <label for="category" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Category</label>
+              <select id="category" name="category" class="w-full rounded-lg border border-gray-200 py-2 px-3 text-sm focus:border-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">
+                <option value="">None</option>
+                <!-- Dynamically populated -->
+              </select>
+            </div>
           </div>
 
           <div>
@@ -185,6 +194,7 @@ const pageTitle = `Products Management | ${SITE.title}`;
 
 <script>
   let allProducts: any[] = [];
+  let allCategories: any[] = [];
   let editingProductId: number | null = null;
 
   const productsGrid = document.getElementById('products-grid');
@@ -210,6 +220,7 @@ const pageTitle = `Products Management | ${SITE.title}`;
     document.getElementById('admin-content')?.classList.remove('hidden');
 
     loadProducts();
+    loadCategories();
     setupEventListeners();
   });
 
@@ -258,6 +269,25 @@ const pageTitle = `Products Management | ${SITE.title}`;
     }
   }
 
+  async function loadCategories() {
+    try {
+      const response = await fetch('/api/admin/categories');
+      const data = await response.json();
+      allCategories = data.categories || [];
+      renderCategoryOptions();
+    } catch (error) {
+      console.error('Error loading categories:', error);
+    }
+  }
+
+  function renderCategoryOptions() {
+    const categorySelect = document.getElementById('category') as HTMLSelectElement;
+    if (!categorySelect) return;
+
+    categorySelect.innerHTML = '<option value="">None</option>' + 
+      allCategories.map(cat => `<option value="${cat.name}">${cat.name}</option>`).join('');
+  }
+
   function updateStats() {
     const total = allProducts.length;
     const inStock = allProducts.filter(p => p.in_stock).length;
@@ -304,7 +334,10 @@ const pageTitle = `Products Management | ${SITE.title}`;
                 ${product.in_stock ? 'Stock' : 'Out'}
               </span>
             </div>
-            <p class="text-xs text-gray-500 dark:text-neutral-400 truncate">${product.slug}</p>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="text-xs text-gray-500 dark:text-neutral-400 truncate">${product.slug}</span>
+              ${product.category ? `<span class="text-[10px] bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 px-1 py-0.5 rounded uppercase font-bold">${product.category}</span>` : ''}
+            </div>
           </div>
           <div class="flex items-center justify-between mt-2">
             <div class="flex items-center gap-1">
@@ -340,6 +373,7 @@ const pageTitle = `Products Management | ${SITE.title}`;
       (document.getElementById('gallery_images') as HTMLTextAreaElement).value = (product.gallery_images || []).join('\n');
       (document.getElementById('video_url') as HTMLInputElement).value = product.video_url || '';
       (document.getElementById('sizes') as HTMLInputElement).value = (product.sizes || []).join(', ');
+      (document.getElementById('category') as HTMLSelectElement).value = product.category || '';
       (document.getElementById('content') as HTMLTextAreaElement).value = product.content || '';
       (document.getElementById('in_stock') as HTMLInputElement).checked = product.in_stock !== false;
     } else {
@@ -385,6 +419,7 @@ const pageTitle = `Products Management | ${SITE.title}`;
       gallery_images: galleryInput ? galleryInput.split('\n').map(s => s.trim()).filter(s => s) : [],
       video_url: (document.getElementById('video_url') as HTMLInputElement).value || null,
       sizes: sizesInput ? sizesInput.split(',').map(s => s.trim()) : [],
+      category: (document.getElementById('category') as HTMLSelectElement).value || null,
       content: (document.getElementById('content') as HTMLTextAreaElement).value || null,
       in_stock: (document.getElementById('in_stock') as HTMLInputElement).checked,
     };

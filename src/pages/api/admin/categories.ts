@@ -3,60 +3,57 @@ import { supabaseAdmin as supabase } from '../../../lib/db';
 
 export const prerender = false;
 
-// GET - List all products
+// GET - List all categories
 export const GET: APIRoute = async () => {
     try {
-        const { data: products, error } = await supabase
-            .from('products')
+        const { data: categories, error } = await supabase
+            .from('categories')
             .select('*')
-            .order('created_at', { ascending: false });
+            .order('name', { ascending: true });
 
-        if (error) {
-            throw error;
-        }
+        if (error) throw error;
 
         return new Response(
-            JSON.stringify({ products: products || [] }),
+            JSON.stringify({ categories: categories || [] }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching categories:', error);
         return new Response(
-            JSON.stringify({ error: 'Failed to fetch products' }),
+            JSON.stringify({ error: 'Failed to fetch categories' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
     }
 };
 
-// POST - Create new product
+// POST - Create new category
 export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
+        const { name, slug, description, image_url, meta_title, meta_description } = body;
 
         const { data, error } = await supabase
-            .from('products')
-            .insert([body])
+            .from('categories')
+            .insert([{ name, slug, description, image_url, meta_title, meta_description }])
             .select()
             .single();
 
-        if (error) {
-            throw error;
-        }
+        if (error) throw error;
 
         return new Response(
-            JSON.stringify({ success: true, product: data }),
+            JSON.stringify({ success: true, category: data }),
             { status: 201, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
-        console.error('Error creating product:', error);
+        console.error('Error creating category:', error);
         return new Response(
-            JSON.stringify({ error: 'Failed to create product' }),
+            JSON.stringify({ error: 'Failed to create category' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
     }
 };
 
-// PUT - Update product
+// PUT - Update category
 export const PUT: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
@@ -64,67 +61,60 @@ export const PUT: APIRoute = async ({ request }) => {
 
         if (!id) {
             return new Response(
-                JSON.stringify({ error: 'Product ID is required' }),
+                JSON.stringify({ error: 'Category ID is required' }),
                 { status: 400, headers: { 'Content-Type': 'application/json' } }
             );
         }
 
         const { data, error } = await supabase
-            .from('products')
-            .update({ ...updateData, updated_at: new Date().toISOString() })
+            .from('categories')
+            .update(updateData)
             .eq('id', id)
             .select()
             .single();
 
-        if (error) {
-            throw error;
-        }
+        if (error) throw error;
 
         return new Response(
-            JSON.stringify({ success: true, product: data }),
+            JSON.stringify({ success: true, category: data }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
-        console.error('Error updating product:', error);
+        console.error('Error updating category:', error);
         return new Response(
-            JSON.stringify({ error: 'Failed to update product' }),
+            JSON.stringify({ error: 'Failed to update category' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
     }
 };
 
-// DELETE - Delete product
+// DELETE - Delete category
 export const DELETE: APIRoute = async ({ request }) => {
     try {
         const { id } = await request.json();
 
         if (!id) {
             return new Response(
-                JSON.stringify({ error: 'Product ID is required' }),
+                JSON.stringify({ error: 'Category ID is required' }),
                 { status: 400, headers: { 'Content-Type': 'application/json' } }
             );
         }
 
-        console.log('Attempting to delete product with ID:', id);
         const { error } = await supabase
-            .from('products')
+            .from('categories')
             .delete()
             .eq('id', id);
 
-        if (error) {
-            console.error('Supabase delete error:', error);
-            throw error;
-        }
-        console.log('Product deleted successfully from Supabase');
+        if (error) throw error;
 
         return new Response(
             JSON.stringify({ success: true }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
-        console.error('Error deleting product:', error);
+        console.error('Error deleting category:', error);
         return new Response(
-            JSON.stringify({ error: 'Failed to delete product' }),
+            JSON.stringify({ error: 'Failed to delete category' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
     }
