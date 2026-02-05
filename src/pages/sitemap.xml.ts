@@ -3,17 +3,108 @@ import { createClient } from "@supabase/supabase-js";
 
 const site = "https://peshawarichappal.store";
 
+// Cache interface
+interface SitemapCache {
+  products: Array<{ slug: string; updated_at: string | null }>;
+  categories: Array<{ slug: string }>;
+  blogs: Array<{ slug: string; updated_at: string | null }>;
+  generatedAt: number;
+}
+
+// Global cache (in-memory)
+let sitemapCache: SitemapCache | null = null;
+const CACHE_DURATION = 1 * 60 * 60 * 1000; // 1 hour
+
+async function generateSitemapCache(): Promise<SitemapCache> {
+  console.log('=== Generating Sitemap Cache ===');
+  
+  const supabase = createClient(
+    import.meta.env.PUBLIC_SUPABASE_URL || '',
+    import.meta.env.PUBLIC_SUPABASE_ANON_KEY || ''
+  );
+
+  // Fetch products
+  let products: Array<{ slug: string; updated_at: string | null }> = [];
+  try {
+    console.log('Fetching products...');
+    const { data, error } = await supabase
+      .from('products')
+      .select('slug, updated_at');
+    if (!error && data) {
+      products = data;
+      console.log('✓ Products cached:', products.length);
+    } else {
+      console.log('✗ Products error:', error?.message);
+    }
+  } catch (e: any) {
+    console.log('✗ Products exception:', e.message);
+  }
+
+  // Fetch categories
+  let categories: Array<{ slug: string }> = [];
+  try {
+    console.log('Fetching categories...');
+    const { data, error } = await supabase
+      .from('categories')
+      .select('slug');
+    if (!error && data) {
+      categories = data;
+      console.log('✓ Categories cached:', categories.length);
+    } else {
+      console.log('✗ Categories error:', error?.message);
+    }
+  } catch (e: any) {
+    console.log('✗ Categories exception:', e.message);
+  }
+
+  // Fetch blogs
+  let blogs: Array<{ slug: string; updated_at: string | null }> = [];
+  try {
+    console.log('Fetching blogs...');
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('slug, updated_at')
+      .eq('published', true);
+    if (!error && data) {
+      blogs = data;
+      console.log('✓ Blogs cached:', blogs.length);
+    } else {
+      console.log('✗ Blogs error:', error?.message);
+    }
+  } catch (e: any) {
+    console.log('✗ Blogs exception (table may not exist yet):', e.message);
+  }
+
+  const cache: SitemapCache = {
+    products,
+    categories,
+    blogs,
+    generatedAt: Date.now(),
+  };
+
+  console.log('=== Cache Generated Successfully ===');
+  return cache;
+}
+
+async function getSitemapCache(): Promise<SitemapCache> {
+  const now = Date.now();
+  
+  // Return cache if valid
+  if (sitemapCache && (now - sitemapCache.generatedAt) < CACHE_DURATION) {
+    console.log('✓ Using cached sitemap data');
+    return sitemapCache;
+  }
+
+  // Generate new cache
+  sitemapCache = await generateSitemapCache();
+  return sitemapCache;
+}
+
 export const GET: APIRoute = async () => {
   try {
-    console.log('=== Sitemap Generation Started ===');
-    console.log('SUPABASE_URL:', import.meta.env.PUBLIC_SUPABASE_URL ? 'Set' : 'NOT SET');
-    console.log('SUPABASE_KEY:', import.meta.env.PUBLIC_SUPABASE_ANON_KEY ? 'Set' : 'NOT SET');
-    
-    // Create Supabase client
-    const supabase = createClient(
-      import.meta.env.PUBLIC_SUPABASE_URL || '',
-      import.meta.env.PUBLIC_SUPABASE_ANON_KEY || ''
-    );
+    // Get data from cache
+    const cache = await getSitemapCache();
+    const { products, categories, blogs } = cache;
 
     // Static pages with their priority and change frequency
     const staticPages = [
@@ -28,47 +119,6 @@ export const GET: APIRoute = async () => {
 
     // Generate current date in W3C format
     const today = new Date().toISOString().split('T')[0];
-
-    // Get all products from Supabase
-    let allProducts: any[] = [];
-    try {
-      console.log('Fetching products...');
-      const { data: products, error } = await supabase
-        .from('products')
-        .select('slug, updated_at');
-      console.log('Products response - Error:', error, 'Count:', products?.length);
-      if (!error && products) {
-        allProducts = products;
-      }
-      console.log('Sitemap - Products fetched:', allProducts.length);
-    } catch (e: any) {
-      console.log('Error fetching products for sitemap:', e.message);
-    }
-
-    // Get all categories from Supabase
-    let allCategories: any[] = [];
-    try {
-      const { data: categories } = await supabase
-        .from('categories')
-        .select('slug');
-      allCategories = categories || [];
-    } catch (e) {
-      console.log('Error fetching categories for sitemap');
-    }
-
-    // Get all published blog posts from Supabase
-    let allBlogPosts: any[] = [];
-    try {
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('slug, updated_at')
-        .eq('published', true);
-      if (!error && data) {
-        allBlogPosts = data;
-      }
-    } catch (e) {
-      console.log('Blogs table not found, skipping blog posts in sitemap');
-    }
 
     // Build XML sitemap
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -90,7 +140,7 @@ ${staticPages
       .join("\n")}
 
   <!-- Category Pages -->
-${allCategories
+${categories
       .map(
         (category: any) => `  <url>
     <loc>${site}/categories/${category.slug}</loc>
@@ -102,7 +152,7 @@ ${allCategories
       .join("\n")}
 
   <!-- Product Pages -->
-${allProducts
+${products
       .map(
         (product: any) => `  <url>
     <loc>${site}/products/${product.slug}</loc>
@@ -114,7 +164,7 @@ ${allProducts
       .join("\n")}
 
   <!-- Blog Posts -->
-${allBlogPosts
+${blogs
       .map(
         (post: any) => `  <url>
     <loc>${site}/blog/${post.slug}</loc>
