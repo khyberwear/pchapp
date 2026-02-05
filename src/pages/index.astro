@@ -10,15 +10,32 @@ import heroImage from "@images/hero-image.avif";
 import faqs from "@data/faqs.json";
 import { supabase } from "@/lib/db";
 
-// Get products from Supabase for the featured section
-const { data: supabaseProducts } = await supabase
-  .from('products')
-  .select('*')
-  .eq('in_stock', true)
-  .order('created_at', { ascending: false })
-  .limit(4);
+// Define category order
+const categoryOrder = [
+  "Peshawari Chappal",
+  "Charsadda Chappal",
+  "Kaptaan Chappal",
+  "Zalmi Chappal",
+  "Men Shawls",
+  "Women Shawls"
+];
 
-const products = supabaseProducts || [];
+// Fetch products for each category (4 items each)
+const categoryProducts: Record<string, any[]> = {};
+
+for (const category of categoryOrder) {
+  const { data } = await supabase
+    .from('products')
+    .select('*')
+    .eq('category', category)
+    .eq('in_stock', true)
+    .order('created_at', { ascending: false })
+    .limit(4);
+  
+  if (data && data.length > 0) {
+    categoryProducts[category] = data;
+  }
+}
 
 const avatarSrcs: Array<string> = [
   "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80",
@@ -122,53 +139,69 @@ const testimonials = [
   </section>
 
   <!-- Featured Products Section -->
-  <section class="py-16">
+  <section class="py-10 sm:py-16">
     <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12">
-        <div>
-          <span class="inline-block px-4 py-1 mb-4 text-sm font-medium text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-900/30 dark:text-yellow-400">
-            Our Collection
-          </span>
-          <h2 class="text-3xl font-bold text-neutral-800 dark:text-neutral-200 md:text-4xl">
-            Featured Chappals
-          </h2>
-          <p class="mt-2 text-neutral-600 dark:text-neutral-400">
-            Discover our most popular handcrafted styles
-          </p>
-        </div>
-        <a href="/products" class="mt-4 sm:mt-0 inline-flex items-center gap-2 text-yellow-600 hover:text-yellow-700 dark:text-yellow-500 dark:hover:text-yellow-400 font-medium transition-colors">
-          View All Products
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
-        </a>
-      </div>
       
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {products.map((product: any) => (
-          <a href={`/products/${product.slug}`} class="group relative bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-            <div class="aspect-square overflow-hidden">
-              <img 
-                src={product.main_image || product.card_image || '/placeholder.jpg'}
-                alt={product.title}
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
+      {Object.entries(categoryProducts).map(([category, products]) => (
+        <div class="mb-12 sm:mb-16 last:mb-0">
+          <!-- Category Header -->
+          <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-6 sm:mb-8">
+            <div>
+              <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-200">
+                {category}
+              </h2>
+              <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                Explore our {category.toLowerCase()} collection
+              </p>
             </div>
-            <div class="p-5">
-              <h3 class="text-lg font-bold text-neutral-800 dark:text-neutral-200 group-hover:text-yellow-600 dark:group-hover:text-yellow-500 transition-colors">
-                {product.title}
-              </h3>
-              <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">{product.description}</p>
-              <div class="mt-4 flex items-center justify-between">
-                <span class="text-lg font-bold text-neutral-900 dark:text-white">Rs {product.price?.toLocaleString()}</span>
-                <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
+            <a href={`/products?category=${encodeURIComponent(category)}`} class="mt-3 sm:mt-0 inline-flex items-center gap-1 text-sm text-orange-600 hover:text-orange-700 dark:text-orange-500 dark:hover:text-orange-400 font-medium transition-colors">
+              View All
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+          
+          <!-- Products Grid -->
+          <div class="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-4">
+            {products.map((product: any) => (
+              <a href={`/products/${product.slug}`} class="group relative bg-white dark:bg-neutral-800 rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+                <div class="relative aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-700">
+                  <img 
+                    src={product.main_image || product.card_image || '/placeholder.jpg'}
+                    alt={product.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  {product.original_price && parseInt(product.original_price) > parseInt(product.price) && (
+                    <div class="absolute top-2 right-2">
+                      <span class="rounded-full bg-orange-500 px-2 py-0.5 text-[10px] sm:text-xs font-bold text-white">
+                        {Math.round((1 - parseInt(product.price) / parseInt(product.original_price)) * 100)}% OFF
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div class="p-2.5 sm:p-4">
+                  <h3 class="text-xs sm:text-sm font-semibold text-neutral-800 dark:text-white line-clamp-2 leading-tight group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                    {product.title}
+                  </h3>
+                  <div class="mt-1.5 sm:mt-2 flex items-baseline gap-1.5 sm:gap-2 flex-wrap">
+                    <span class="text-sm sm:text-lg font-bold text-neutral-900 dark:text-white">
+                      Rs {parseInt(product.price).toLocaleString()}
+                    </span>
+                    {product.original_price && (
+                      <span class="text-[10px] sm:text-xs text-neutral-400 line-through">
+                        Rs {parseInt(product.original_price).toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+
     </div>
   </section>
 
