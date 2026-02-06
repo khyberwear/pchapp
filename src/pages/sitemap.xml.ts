@@ -11,7 +11,7 @@ interface SitemapCache {
   generatedAt: number;
 }
 
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours (increased for stability)
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour (reduced for better freshness)
 
 async function getSitemapCache(): Promise<SitemapCache> {
   const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || process.env.PUBLIC_SUPABASE_URL || '';

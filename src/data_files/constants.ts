@@ -3,7 +3,7 @@ import ogImageSrc from "@images/social.png";
 
 
 export const SITE = {
-  title: "Peshawari Chappal | Authentic Handcrafted Leather Sandals Pakistan",
+  title: "Peshawari Chappal | Handcrafted Leather Sandals",
   tagline: "Authentic Handcrafted Footwear",
   description: "Shop authentic Peshawari Chappals handcrafted with premium leather. Traditional Pakistani sandals for men. Free shipping across Pakistan. Order online now!",
   description_short: "Authentic handcrafted Peshawari Chappals made with premium leather.",

@@ -22,6 +22,9 @@ const { data: categoriesData } = await supabase
 
 const uniqueCategories = [...new Set(categoriesData?.map((c: any) => c.category))].filter(Boolean);
 
+const { data: allCatData } = await supabase.from('categories').select('name, slug');
+const categorySlugs = Object.fromEntries(allCatData?.map((c: any) => [c.name, c.slug]) || []);
+
 // Fetch products from Supabase
 let query = supabase
   .from('products')
@@ -164,9 +167,9 @@ const ogTitle = "Peshawari Chappal Collection | Handcrafted Leather Sandals";
               <div class="p-2.5 sm:p-4">
                 {/* Category */}
                 {product.category && (
-                  <span class="text-[10px] sm:text-xs font-medium text-orange-600 dark:text-orange-400 uppercase tracking-wide">
+                  <a href={`/categories/${categorySlugs[product.category] || product.category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} class="text-[10px] sm:text-xs font-medium text-orange-600 dark:text-orange-400 uppercase tracking-wide hover:underline z-10 relative">
                     {product.category}
-                  </span>
+                  </a>
                 )}
                 
                 {/* Title */}

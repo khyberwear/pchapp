@@ -38,7 +38,7 @@ const ogDescription = customDescription || OG.description;
 // Define the metadata for your website and individual pages
 const URL = `${Astro.site}`; // Set the website URL in astro.config.mjs
 const author = SITE.author;
-const canonical = Astro.url.href;
+const canonical = Astro.url.href.replace(/\/$/, "");
 const basePath = Astro.url.pathname;
 const socialImageRes = await getImage({
   src: OG.image,

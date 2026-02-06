@@ -20,6 +20,9 @@ const categoryOrder = [
   "Women Shawls"
 ];
 
+const { data: allCategories } = await supabase.from('categories').select('name, slug');
+const categorySlugs = Object.fromEntries(allCategories?.map((c: any) => [c.name, c.slug]) || []);
+
 // Fetch products for each category (4 items each)
 const categoryProducts: Record<string, any[]> = {};
 
@@ -154,7 +157,7 @@ const testimonials = [
                 Explore our {category.toLowerCase()} collection
               </p>
             </div>
-            <a href={`/products?category=${encodeURIComponent(category)}`} class="mt-3 sm:mt-0 inline-flex items-center gap-1 text-sm text-orange-600 hover:text-orange-700 dark:text-orange-500 dark:hover:text-orange-400 font-medium transition-colors">
+            <a href={`/categories/${categorySlugs[category] || category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} class="mt-3 sm:mt-0 inline-flex items-center gap-1 text-sm text-orange-600 hover:text-orange-700 dark:text-orange-500 dark:hover:text-orange-400 font-medium transition-colors">
               View All
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
