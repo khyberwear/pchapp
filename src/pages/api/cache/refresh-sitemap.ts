@@ -11,15 +11,15 @@ interface SitemapCache {
   generatedAt: number;
 }
 
-// Global cache (shared with sitemap.xml.ts)
-let sitemapCache: SitemapCache | null = null;
+// Global cache - NO LONGER USED, we use DB
+// let sitemapCache: SitemapCache | null = null;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
     // Simple auth check - verify the request has auth header
     const authHeader = request.headers.get('Authorization');
     const secretKey = import.meta.env.CACHE_REFRESH_SECRET || 'your-secret-key';
-    
+
     if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
@@ -27,7 +27,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    console.log('=== Refreshing Sitemap Cache ===');
+    console.log('=== Refreshing Sitemap Cache (DB) ===');
 
     const supabase = createClient(
       import.meta.env.PUBLIC_SUPABASE_URL || '',
@@ -77,19 +77,33 @@ export const POST: APIRoute = async ({ request }) => {
       console.log('✗ Blogs error:', e.message);
     }
 
-    sitemapCache = {
+    const newCacheData = {
       products,
       categories,
       blogs,
       generatedAt: Date.now(),
     };
 
-    console.log('=== Cache Refreshed Successfully ===');
+    // Save to DB
+    const { error: insertError } = await supabase
+      .from('sitemap_cache')
+      .insert([
+        {
+          data: newCacheData,
+          created_at: new Date().toISOString()
+        }
+      ]);
+
+    if (insertError) {
+      throw new Error(insertError.message);
+    }
+
+    console.log('=== Cache Refreshed Successfully in DB ===');
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'Sitemap cache refreshed',
+        message: 'Sitemap cache refreshed in DB',
         stats: {
           products: products.length,
           categories: categories.length,
