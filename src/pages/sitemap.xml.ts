@@ -14,10 +14,10 @@ interface SitemapCache {
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours (increased for stability)
 
 async function getSitemapCache(): Promise<SitemapCache> {
-  const supabase = createClient(
-    import.meta.env.PUBLIC_SUPABASE_URL || '',
-    import.meta.env.PUBLIC_SUPABASE_ANON_KEY || ''
-  );
+  const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || process.env.PUBLIC_SUPABASE_URL || '';
+  const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || process.env.PUBLIC_SUPABASE_ANON_KEY || '';
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
   const now = Date.now();
 

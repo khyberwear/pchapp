@@ -29,10 +29,10 @@ export const POST: APIRoute = async ({ request }) => {
 
     console.log('=== Refreshing Sitemap Cache (DB) ===');
 
-    const supabase = createClient(
-      import.meta.env.PUBLIC_SUPABASE_URL || '',
-      import.meta.env.PUBLIC_SUPABASE_ANON_KEY || ''
-    );
+    const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || process.env.PUBLIC_SUPABASE_URL || '';
+    const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || process.env.PUBLIC_SUPABASE_ANON_KEY || '';
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Fetch products
     let products: Array<{ slug: string; updated_at: string | null }> = [];
