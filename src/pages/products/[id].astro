@@ -117,19 +117,18 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
             </div>
           )}
 
-          <!-- Video Link -->
+          <!-- Video Button -->
           {product.video_url && (
-            <a
-              href={product.video_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-4 font-semibold text-white shadow-lg shadow-red-500/25 transition-all hover:shadow-xl hover:scale-[1.02]"
+            <button
+              id="open-video-btn"
+              data-video-url={product.video_url}
+              class="flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-4 font-semibold text-white shadow-lg shadow-red-500/25 transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full"
             >
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
               Watch HD Video
-            </a>
+            </button>
           )}
         </div>
 
@@ -306,6 +305,131 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
       </div>
     </div>
   </section>
+
+  <!-- Video Modal -->
+  {product.video_url && (
+    <div id="video-modal" class="video-modal" aria-hidden="true">
+      <div class="video-modal__backdrop" id="video-modal-backdrop"></div>
+      <div class="video-modal__container">
+        <div class="video-modal__header">
+          <h3 class="video-modal__title">{product.title}</h3>
+          <button id="close-video-btn" class="video-modal__close" aria-label="Close video">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="video-modal__body" id="video-modal-body">
+          <!-- Video content injected by JS -->
+        </div>
+      </div>
+    </div>
+  )}
+
+  <style>
+    .video-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .video-modal.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .video-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .video-modal__container {
+      position: relative;
+      width: 100%;
+      max-width: 56rem;
+      background: #1a1a1a;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .video-modal.is-open .video-modal__container {
+      transform: scale(1) translateY(0);
+    }
+    .video-modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.875rem 1.25rem;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .video-modal__title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #e5e5e5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: 1rem;
+    }
+    .video-modal__close {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      background: #2a2a2a;
+      color: #a3a3a3;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .video-modal__close:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+    .video-modal__body {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+    .video-modal__body iframe,
+    .video-modal__body video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    @media (max-width: 640px) {
+      .video-modal {
+        padding: 0;
+        align-items: flex-end;
+      }
+      .video-modal__container {
+        max-width: 100%;
+        border-radius: 1rem 1rem 0 0;
+        transform: translateY(100%);
+      }
+      .video-modal.is-open .video-modal__container {
+        transform: translateY(0);
+      }
+      .video-modal__body {
+        aspect-ratio: 16 / 10;
+      }
+    }
+  </style>
 </MainLayout>
 
 <script>
@@ -387,5 +511,83 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
       }, 1500);
     });
   }
+
+  // ========================
+  // VIDEO MODAL
+  // ========================
+  const openVideoBtn = document.getElementById('open-video-btn');
+  const videoModal = document.getElementById('video-modal');
+  const videoModalBody = document.getElementById('video-modal-body');
+  const closeVideoBtn = document.getElementById('close-video-btn');
+  const videoBackdrop = document.getElementById('video-modal-backdrop');
+
+  function getEmbedUrl(url: string): { type: 'iframe' | 'video'; src: string } {
+    // YouTube regular: youtube.com/watch?v=ID or youtu.be/ID
+    const ytRegex = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/([\w-]+))/;
+    const ytMatch = url.match(ytRegex);
+    if (ytMatch) {
+      const videoId = ytMatch[1] || new URL(url).searchParams.get('v');
+      return { type: 'iframe', src: `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0` };
+    }
+
+    // YouTube Shorts: youtube.com/shorts/ID
+    const ytShortsRegex = /youtube\.com\/shorts\/([\w-]+)/;
+    const ytShortsMatch = url.match(ytShortsRegex);
+    if (ytShortsMatch) {
+      return { type: 'iframe', src: `https://www.youtube.com/embed/${ytShortsMatch[1]}?autoplay=1&rel=0` };
+    }
+
+    // Vimeo: vimeo.com/ID
+    const vimeoRegex = /vimeo\.com\/(\d+)/;
+    const vimeoMatch = url.match(vimeoRegex);
+    if (vimeoMatch) {
+      return { type: 'iframe', src: `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1` };
+    }
+
+    // Dailymotion: dailymotion.com/video/ID
+    const dmRegex = /dailymotion\.com\/video\/([\w]+)/;
+    const dmMatch = url.match(dmRegex);
+    if (dmMatch) {
+      return { type: 'iframe', src: `https://www.dailymotion.com/embed/video/${dmMatch[1]}?autoplay=1` };
+    }
+
+    // Direct video file (mp4, webm, ogg, mov)
+    if (/\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url)) {
+      return { type: 'video', src: url };
+    }
+
+    // Fallback: try iframe embed
+    return { type: 'iframe', src: url };
+  }
+
+  function openModal() {
+    if (!openVideoBtn || !videoModal || !videoModalBody) return;
+    const videoUrl = openVideoBtn.getAttribute('data-video-url') || '';
+    const embed = getEmbedUrl(videoUrl);
+
+    if (embed.type === 'video') {
+      videoModalBody.innerHTML = `<video controls autoplay playsinline><source src="${embed.src}" type="video/mp4">Your browser does not support the video tag.</video>`;
+    } else {
+      videoModalBody.innerHTML = `<iframe src="${embed.src}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    }
+
+    videoModal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    if (!videoModal || !videoModalBody) return;
+    videoModal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    // Stop playback after animation
+    setTimeout(() => { videoModalBody.innerHTML = ''; }, 350);
+  }
+
+  openVideoBtn?.addEventListener('click', openModal);
+  closeVideoBtn?.addEventListener('click', closeModal);
+  videoBackdrop?.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoModal?.classList.contains('is-open')) closeModal();
+  });
 </script>
 
