@@ -20,7 +20,7 @@ const { data: categoriesData } = await supabase
   .not('category', 'is', null)
   .order('category');
 
-const uniqueCategories = [...new Set(categoriesData?.map((c: any) => c.category))].filter(Boolean);
+const uniqueCategories = [...new Set(categoriesData?.map((c: any) => c.category))].filter(Boolean) as string[];
 
 const { data: allCatData } = await supabase.from('categories').select('name, slug');
 const categorySlugs = Object.fromEntries(allCatData?.map((c: any) => [c.name, c.slug]) || []);
