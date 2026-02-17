@@ -60,7 +60,7 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
   }}
 >
   <section class="bg-white dark:bg-neutral-900 overflow-x-hidden">
-    <div class="mx-auto max-w-7xl px-3 py-6 sm:px-6 lg:px-8 lg:py-16">
+    <div class="mx-auto max-w-7xl px-3 py-6 sm:px-6 lg:px-8 lg:py-16 overflow-hidden">
       
       <!-- Breadcrumb -->
       <nav class="mb-4 sm:mb-8 w-full overflow-x-auto">
@@ -79,12 +79,12 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
         </ol>
       </nav>
 
-      <div class="grid gap-5 sm:gap-8 lg:grid-cols-2 lg:gap-12">
+      <div class="grid gap-5 sm:gap-8 lg:grid-cols-2 lg:gap-12 w-full">
         
         <!-- Left: Product Images -->
-        <div class="space-y-3 sm:space-y-4">
+        <div class="space-y-3 sm:space-y-4 min-w-0">
           <!-- Main Image -->
-          <div class="relative aspect-square overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-100 dark:bg-neutral-800 shadow-lg sm:shadow-2xl lg:max-h-[520px]">
+          <div class="relative w-full aspect-square overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-100 dark:bg-neutral-800 shadow-lg sm:shadow-2xl lg:max-h-[520px]">
             <img
               id="main-image"
               src={product.main_image || '/placeholder.jpg'}
