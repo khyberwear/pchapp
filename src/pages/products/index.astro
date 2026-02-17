@@ -49,7 +49,7 @@ const { data: products, error } = await query;
 const allProducts = products || [];
 
 const title = activeCategory && activeCategory !== 'All' ? `${activeCategory} Collection` : "Our Collection";
-const subTitle = "Explore our handcrafted collection of authentic Peshawari Chappals. From classic Charsadda designs to modern Zalmi styles, each pair is crafted with premium leather by skilled artisans for comfort and durability.";
+const subTitle = "Explore our handcrafted collection of authentic Peshawari Chappals. Each pair is crafted with premium leather by skilled artisans.";
 
 const testimonials = [
   {
@@ -93,111 +93,155 @@ const ogTitle = "Peshawari Chappal Collection | Handcrafted Leather Sandals";
     description: metaDescription,
   }}
 >
-  <section class="bg-white dark:bg-neutral-900">
-    <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
-      
-      <!-- Header -->
-      <div class="mb-12 text-center">
-        <span class="inline-block px-4 py-1 mb-4 text-sm font-medium text-orange-700 bg-orange-100 rounded-full dark:bg-orange-900/30 dark:text-orange-400">
-          Our Collection
+
+  <!-- Hero Banner -->
+  <section class="products-hero">
+    <div class="products-hero__inner">
+      <div class="products-hero__content">
+        <span class="products-hero__badge">
+          <svg class="products-hero__badge-icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" /></svg>
+          Handcrafted Collection
         </span>
-        <h1 class="text-3xl font-bold text-neutral-900 dark:text-white sm:text-4xl lg:text-5xl">
-          {title}
-        </h1>
-        <p class="mt-4 text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
-          {subTitle}
-        </p>
+        <h1 class="products-hero__title">{title}</h1>
+        <p class="products-hero__subtitle">{subTitle}</p>
       </div>
+    </div>
+  </section>
 
-      <!-- Sort Filter -->
-      <div class="mb-6 sm:mb-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <p class="text-sm text-neutral-500 dark:text-neutral-400">
-          Showing <span class="font-semibold text-neutral-900 dark:text-white">{allProducts.length}</span> products
-        </p>
-        <div class="flex items-center gap-2 w-full sm:w-auto">
-          <span class="text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap">Sort by:</span>
-          <select 
-            id="sort-select"
-            class="flex-1 sm:flex-none px-3 py-2 text-sm bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-700 dark:text-neutral-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 cursor-pointer"
+  <!-- Main Products Section -->
+  <section class="products-section">
+    <div class="products-container">
+
+      <!-- Filters & Sort Bar -->
+      <div class="products-toolbar">
+        <!-- Category Pills -->
+        <div class="products-categories">
+          <a 
+            href="/products" 
+            class:list={["products-category-pill", { "products-category-pill--active": !activeCategory || activeCategory === 'All' }]}
           >
-            <option value="newest" selected={sortBy === 'newest'}>New First</option>
-            <option value="price-low" selected={sortBy === 'price-low'}>Price: Low to High</option>
-            <option value="price-high" selected={sortBy === 'price-high'}>Price: High to Low</option>
-          </select>
-        </div>
-      </div>
-
-      <script>
-        document.getElementById('sort-select')?.addEventListener('change', (e) => {
-          const target = e.target as HTMLSelectElement;
-          const url = new URL(window.location.href);
-          url.searchParams.set('sort', target.value);
-          window.location.href = url.toString();
-        });
-      </script>
-
-      <!-- Products Grid -->
-      {allProducts.length > 0 ? (
-        <div class="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
-          {allProducts.map((product: any) => (
+            All Products
+          </a>
+          {uniqueCategories.map((cat: string) => (
             <a 
-              href={`/products/${product.slug}`} 
-              class="group relative bg-white dark:bg-neutral-800 rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+              href={`/products?category=${encodeURIComponent(cat)}${sortBy !== 'newest' ? `&sort=${sortBy}` : ''}`}
+              class:list={["products-category-pill", { "products-category-pill--active": activeCategory === cat }]}
             >
-              {/* Image */}
-              <div class="relative aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-700">
-                <img 
-                  src={product.main_image || product.card_image || '/placeholder.jpg'}
-                  alt={product.title}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-                
-                {/* Discount Badge */}
-                {product.original_price && parseInt(product.original_price) > parseInt(product.price) && (
-                  <div class="absolute top-2 right-2">
-                    <span class="rounded-full bg-orange-500 px-2 py-0.5 text-[10px] sm:text-xs font-bold text-white">
-                      {Math.round((1 - parseInt(product.price) / parseInt(product.original_price)) * 100)}% OFF
-                    </span>
-                  </div>
-                )}
-              </div>
-              
-              {/* Content */}
-              <div class="p-2.5 sm:p-4">
-                {/* Category */}
-                {product.category && (
-                  <a href={`/categories/${categorySlugs[product.category] || product.category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} class="text-[10px] sm:text-xs font-medium text-orange-600 dark:text-orange-400 uppercase tracking-wide hover:underline z-10 relative">
-                    {product.category}
-                  </a>
-                )}
-                
-                {/* Title */}
-                <h3 class="mt-0.5 sm:mt-1 text-xs sm:text-sm font-semibold text-neutral-800 dark:text-white line-clamp-2 leading-tight group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                  {product.title}
-                </h3>
-                
-                {/* Price */}
-                <div class="mt-1.5 sm:mt-2 flex items-baseline gap-1.5 sm:gap-2 flex-wrap">
-                  <span class="text-sm sm:text-lg font-bold text-neutral-900 dark:text-white">
-                    Rs {parseInt(product.price).toLocaleString()}
-                  </span>
-                  {product.original_price && (
-                    <span class="text-[10px] sm:text-xs text-neutral-400 line-through">
-                      Rs {parseInt(product.original_price).toLocaleString()}
-                    </span>
-                  )}
-                </div>
-              </div>
+              {cat}
             </a>
           ))}
         </div>
+
+        <!-- Sort & Count -->
+        <div class="products-sort-bar">
+          <p class="products-count">
+            <span class="products-count__number">{allProducts.length}</span> products found
+          </p>
+          <div class="products-sort">
+            <label for="sort-select" class="products-sort__label">
+              <svg class="products-sort__icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" /></svg>
+              Sort by:
+            </label>
+            <select id="sort-select" class="products-sort__select">
+              <option value="newest" selected={sortBy === 'newest'}>Newest First</option>
+              <option value="price-low" selected={sortBy === 'price-low'}>Price: Low to High</option>
+              <option value="price-high" selected={sortBy === 'price-high'}>Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      {allProducts.length > 0 ? (
+        <div class="products-grid">
+          {allProducts.map((product: any, index: number) => {
+            const discount = product.original_price && parseInt(product.original_price) > parseInt(product.price) 
+              ? Math.round((1 - parseInt(product.price) / parseInt(product.original_price)) * 100) 
+              : 0;
+            return (
+              <a 
+                href={`/products/${product.slug}`} 
+                class="product-card"
+                style={`animation-delay: ${index * 60}ms`}
+              >
+                {/* Image Container */}
+                <div class="product-card__image-wrap">
+                  <img 
+                    src={product.main_image || product.card_image || '/placeholder.jpg'}
+                    alt={product.title}
+                    class="product-card__image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  
+                  {/* Overlay on Hover */}
+                  <div class="product-card__overlay">
+                    <span class="product-card__view-btn">
+                      <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="product-card__view-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                      View Details
+                    </span>
+                  </div>
+
+                  {/* Discount Badge */}
+                  {discount > 0 && (
+                    <div class="product-card__badge">
+                      <span class="product-card__badge-text">-{discount}%</span>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Content */}
+                <div class="product-card__content">
+                  {/* Category */}
+                  {product.category && (
+                    <span class="product-card__category">{product.category}</span>
+                  )}
+                  
+                  {/* Title */}
+                  <h3 class="product-card__title">{product.title}</h3>
+                  
+                  {/* Price Row */}
+                  <div class="product-card__price-row">
+                    <span class="product-card__price">
+                      Rs {parseInt(product.price).toLocaleString()}
+                    </span>
+                    {product.original_price && parseInt(product.original_price) > parseInt(product.price) && (
+                      <span class="product-card__original-price">
+                        Rs {parseInt(product.original_price).toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Color Options Preview */}
+                  {product.colors && Array.isArray(product.colors) && product.colors.length > 0 && (
+                    <div class="product-card__colors">
+                      {product.colors.slice(0, 4).map((color: any) => (
+                        <span 
+                          class="product-card__color-dot" 
+                          style={`background-color: ${color.code || color}`}
+                          title={color.name || ''}
+                        />
+                      ))}
+                      {product.colors.length > 4 && (
+                        <span class="product-card__color-more">+{product.colors.length - 4}</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
       ) : (
-        <div class="text-center py-20">
-          <svg class="mx-auto h-16 w-16 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-          </svg>
-          <p class="mt-4 text-xl text-neutral-500">No products available</p>
+        <div class="products-empty">
+          <div class="products-empty__icon-wrap">
+            <svg class="products-empty__icon" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+            </svg>
+          </div>
+          <h3 class="products-empty__title">No Products Found</h3>
+          <p class="products-empty__text">We couldn't find any products matching your criteria. Try a different category or check back later.</p>
+          <a href="/products" class="products-empty__btn">View All Products</a>
         </div>
       )}
     </div>
@@ -218,3 +262,548 @@ const ogTitle = "Peshawari Chappal Collection | Handcrafted Leather Sandals";
     testimonials={testimonials}
   />
 </MainLayout>
+
+<script>
+  document.getElementById('sort-select')?.addEventListener('change', (e) => {
+    const target = e.target as HTMLSelectElement;
+    const url = new URL(window.location.href);
+    url.searchParams.set('sort', target.value);
+    window.location.href = url.toString();
+  });
+</script>
+
+<style>
+  /* ===================================
+     HERO SECTION
+     =================================== */
+  .products-hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d1f0e 50%, #1a1a1a 100%);
+    padding: 3.5rem 1rem 3rem;
+  }
+  .products-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(234, 88, 12, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(251, 191, 36, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .products-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(234, 88, 12, 0.3), transparent);
+  }
+  .products-hero__inner {
+    max-width: 72rem;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .products-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(234, 88, 12, 0.15);
+    border: 1px solid rgba(234, 88, 12, 0.3);
+    color: #fb923c;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    margin-bottom: 1rem;
+  }
+  .products-hero__badge-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+  .products-hero__title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .products-hero__subtitle {
+    max-width: 38rem;
+    margin: 0 auto;
+    color: #a3a3a3;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 768px) {
+    .products-hero {
+      padding: 5rem 2rem 4rem;
+    }
+    .products-hero__title {
+      font-size: 3rem;
+    }
+    .products-hero__subtitle {
+      font-size: 1.1rem;
+    }
+  }
+
+  /* ===================================
+     PRODUCTS SECTION
+     =================================== */
+  .products-section {
+    background: #fafafa;
+    padding: 2rem 0 4rem;
+  }
+  :global(.dark) .products-section {
+    background: #171717;
+  }
+  .products-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  @media (min-width: 640px) {
+    .products-container {
+      padding: 0 1.5rem;
+    }
+  }
+
+  /* ===================================
+     TOOLBAR
+     =================================== */
+  .products-toolbar {
+    margin-bottom: 2rem;
+  }
+
+  /* Category Pills */
+  .products-categories {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .products-categories::-webkit-scrollbar {
+    display: none;
+  }
+  .products-category-pill {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.825rem;
+    font-weight: 500;
+    white-space: nowrap;
+    background: #fff;
+    color: #525252;
+    border: 1px solid #e5e5e5;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+  :global(.dark) .products-category-pill {
+    background: #262626;
+    color: #a3a3a3;
+    border-color: #404040;
+  }
+  .products-category-pill:hover {
+    border-color: #ea580c;
+    color: #ea580c;
+    background: #fff7ed;
+  }
+  :global(.dark) .products-category-pill:hover {
+    border-color: #ea580c;
+    color: #fb923c;
+    background: rgba(234, 88, 12, 0.1);
+  }
+  .products-category-pill--active {
+    background: linear-gradient(135deg, #ea580c, #f97316) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+    box-shadow: 0 2px 8px rgba(234, 88, 12, 0.3);
+  }
+
+  /* Sort Bar */
+  .products-sort-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid #e5e5e5;
+  }
+  :global(.dark) .products-sort-bar {
+    border-color: #333;
+  }
+  .products-count {
+    font-size: 0.875rem;
+    color: #737373;
+  }
+  .products-count__number {
+    font-weight: 700;
+    color: #171717;
+  }
+  :global(.dark) .products-count__number {
+    color: #f5f5f5;
+  }
+  .products-sort {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .products-sort__label {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: #737373;
+    white-space: nowrap;
+  }
+  .products-sort__icon {
+    width: 1rem;
+    height: 1rem;
+  }
+  .products-sort__select {
+    padding: 0.4rem 2rem 0.4rem 0.75rem;
+    font-size: 0.825rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d4d4d4;
+    background: #fff;
+    color: #404040;
+    cursor: pointer;
+    transition: all 0.2s;
+    appearance: auto;
+  }
+  :global(.dark) .products-sort__select {
+    background: #262626;
+    border-color: #404040;
+    color: #d4d4d4;
+  }
+  .products-sort__select:focus {
+    outline: none;
+    border-color: #ea580c;
+    box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+  }
+
+  /* ===================================
+     PRODUCTS GRID
+     =================================== */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .products-grid {
+      gap: 1.25rem;
+    }
+  }
+  @media (min-width: 768px) {
+    .products-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .products-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  /* ===================================
+     PRODUCT CARD
+     =================================== */
+  .product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    text-decoration: none;
+    border: 1px solid #f0f0f0;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: cardFadeIn 0.5s ease forwards;
+    opacity: 0;
+  }
+  :global(.dark) .product-card {
+    background: #1f1f1f;
+    border-color: #2a2a2a;
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    border-color: #ea580c;
+  }
+  :global(.dark) .product-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border-color: #ea580c;
+  }
+
+  @keyframes cardFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Card Image */
+  .product-card__image-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f5f5f5;
+  }
+  :global(.dark) .product-card__image-wrap {
+    background: #2a2a2a;
+  }
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .product-card:hover .product-card__image {
+    transform: scale(1.08);
+  }
+
+  /* Overlay */
+  .product-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 1.25rem;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .product-card:hover .product-card__overlay {
+    opacity: 1;
+  }
+  .product-card__view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.95);
+    color: #171717;
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+    transform: translateY(8px);
+    transition: transform 0.3s ease;
+  }
+  .product-card:hover .product-card__view-btn {
+    transform: translateY(0);
+  }
+  .product-card__view-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  /* Badge */
+  .product-card__badge {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 2;
+  }
+  .product-card__badge-text {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.4rem;
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
+  }
+
+  /* Card Content */
+  .product-card__content {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  @media (min-width: 640px) {
+    .product-card__content {
+      padding: 1rem 1.1rem 1.1rem;
+    }
+  }
+
+  .product-card__category {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #ea580c;
+    margin-bottom: 0.25rem;
+  }
+  :global(.dark) .product-card__category {
+    color: #fb923c;
+  }
+
+  .product-card__title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #262626;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+  :global(.dark) .product-card__title {
+    color: #f5f5f5;
+  }
+  .product-card:hover .product-card__title {
+    color: #ea580c;
+  }
+  :global(.dark) .product-card:hover .product-card__title {
+    color: #fb923c;
+  }
+  @media (min-width: 640px) {
+    .product-card__title {
+      font-size: 0.9rem;
+    }
+  }
+
+  /* Price */
+  .product-card__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+  .product-card__price {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #171717;
+    letter-spacing: -0.01em;
+  }
+  :global(.dark) .product-card__price {
+    color: #fff;
+  }
+  @media (min-width: 640px) {
+    .product-card__price {
+      font-size: 1.1rem;
+    }
+  }
+  .product-card__original-price {
+    font-size: 0.7rem;
+    color: #a3a3a3;
+    text-decoration: line-through;
+  }
+  @media (min-width: 640px) {
+    .product-card__original-price {
+      font-size: 0.8rem;
+    }
+  }
+
+  /* Color Dots */
+  .product-card__colors {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid #f0f0f0;
+  }
+  :global(.dark) .product-card__colors {
+    border-color: #333;
+  }
+  .product-card__color-dot {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #d4d4d4;
+    flex-shrink: 0;
+  }
+  :global(.dark) .product-card__color-dot {
+    border-color: #1f1f1f;
+    box-shadow: 0 0 0 1px #555;
+  }
+  .product-card__color-more {
+    font-size: 0.65rem;
+    color: #737373;
+    font-weight: 500;
+  }
+
+  /* ===================================
+     EMPTY STATE
+     =================================== */
+  .products-empty {
+    text-align: center;
+    padding: 5rem 1rem;
+  }
+  .products-empty__icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background: #f5f5f5;
+    margin-bottom: 1.5rem;
+  }
+  :global(.dark) .products-empty__icon-wrap {
+    background: #262626;
+  }
+  .products-empty__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: #a3a3a3;
+  }
+  .products-empty__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #262626;
+    margin-bottom: 0.5rem;
+  }
+  :global(.dark) .products-empty__title {
+    color: #f5f5f5;
+  }
+  .products-empty__text {
+    font-size: 0.9rem;
+    color: #737373;
+    max-width: 24rem;
+    margin: 0 auto 1.5rem;
+  }
+  .products-empty__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.5rem;
+    border-radius: 0.5rem;
+    background: #ea580c;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .products-empty__btn:hover {
+    background: #c2410c;
+  }
+</style>
