@@ -59,7 +59,7 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
     },
   }}
 >
-  <section class="bg-white dark:bg-neutral-900">
+  <section class="bg-white dark:bg-neutral-900 overflow-x-hidden">
     <div class="mx-auto max-w-7xl px-3 py-6 sm:px-6 lg:px-8 lg:py-16">
       
       <!-- Breadcrumb -->
@@ -118,7 +118,7 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
         </div>
 
         <!-- Right: Product Details -->
-        <div class="flex flex-col">
+        <div class="flex flex-col min-w-0">
           <!-- Category Badge -->
           {product.category && (
             <div class="mb-2 sm:mb-4">
