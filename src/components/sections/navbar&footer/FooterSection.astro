@@ -25,7 +25,7 @@ const supportLinks = [
 const socialLinks = {
   facebook: settings.facebook_url || "https://www.facebook.com/",
   instagram: settings.instagram_url || "https://www.instagram.com/",
-  whatsapp: `https://wa.me/${settings.whatsapp_number.replace(/\D/g, '')}` || "https://wa.me/923001234567",
+  whatsapp: settings.whatsapp_number ? `https://wa.me/${settings.whatsapp_number.replace(/\D/g, '')}` : "https://wa.me/923001234567",
 };
 
 const contactInfo = {

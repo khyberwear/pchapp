@@ -125,3 +125,19 @@ CREATE POLICY "Enable all access for service role" ON public.blogs FOR ALL USING
 CREATE INDEX IF NOT EXISTS idx_blogs_slug ON public.blogs(slug);
 CREATE INDEX IF NOT EXISTS idx_blogs_published ON public.blogs(published);
 CREATE INDEX IF NOT EXISTS idx_blogs_created_at ON public.blogs(created_at DESC);
+
+-- Create Site Settings Table
+CREATE TABLE IF NOT EXISTS public.site_settings (
+    key text PRIMARY KEY,
+    value text,
+    updated_at timestamp with time zone DEFAULT now()
+);
+
+-- Enable RLS
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+
+-- Policies for Site Settings
+CREATE POLICY "Enable public read access" ON public.site_settings FOR SELECT USING (true);
+CREATE POLICY "Enable insert for authenticated users only" ON public.site_settings FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Enable update for authenticated users only" ON public.site_settings FOR UPDATE USING (auth.role() = 'authenticated');
+
