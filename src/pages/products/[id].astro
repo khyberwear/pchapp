@@ -60,10 +60,10 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
   }}
 >
   <section class="bg-white dark:bg-neutral-900 overflow-x-hidden">
-    <div class="mx-auto max-w-7xl px-3 py-6 sm:px-6 lg:px-8 lg:py-16 overflow-hidden">
+    <div class="mx-auto max-w-7xl px-3 py-6 sm:px-6 lg:px-8 lg:py-16 w-full max-w-[100vw]">
       
       <!-- Breadcrumb -->
-      <nav class="mb-4 sm:mb-8 w-full overflow-x-auto">
+      <nav class="mb-4 sm:mb-8 w-full overflow-x-auto pb-1">
         <ol class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
           <li><a href="/" class="hover:text-orange-500">Home</a></li>
           <li>/</li>
@@ -79,10 +79,10 @@ const allImages = [product.main_image, ...galleryImages].filter(Boolean);
         </ol>
       </nav>
 
-      <div class="grid gap-5 sm:gap-8 lg:grid-cols-2 lg:gap-12 w-full">
+      <div class="grid gap-5 sm:gap-8 lg:grid-cols-2 lg:gap-12 w-full max-w-full">
         
         <!-- Left: Product Images -->
-        <div class="space-y-3 sm:space-y-4 min-w-0">
+        <div class="space-y-3 sm:space-y-4 min-w-0 max-w-full">
           <!-- Main Image -->
           <div class="relative w-full aspect-square overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-100 dark:bg-neutral-800 shadow-lg sm:shadow-2xl lg:max-h-[520px]">
             <img
